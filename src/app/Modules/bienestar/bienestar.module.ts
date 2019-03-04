@@ -8,7 +8,10 @@ import { RequisitoComponent } from './componentAdmin/requisito/requisito.compone
 import { MaterialModule } from 'src/global/global.module';
 
 @NgModule({
-  declarations: [ReportesComponent, PrincipalComponent, AdminComponent, RequisitoComponent],
+  declarations: [ReportesComponent,
+    PrincipalComponent,
+    AdminComponent,
+    RequisitoComponent],
   imports: [CommonModule,
     BienestarRoutingModule,
     MaterialModule],

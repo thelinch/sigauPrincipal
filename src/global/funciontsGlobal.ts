@@ -8,7 +8,21 @@ export class functionsGlobal {
     M.Modal.getInstance($("#" + id)).open()
 
   }
-  static iniciarModal(){
+  static iniciarModal() {
     M.Modal.init($(".modal"));
+  }
+  static iniciarSideNav() {
+    M.Sidenav.init($(".sidenav"));
+  }
+  static openSideNav(idSideNav: string) {
+    M.Sidenav.getInstance($("#" + idSideNav)).open();
+  }
+  static closeSideNav(idSideNav: string) {
+    M.Sidenav.getInstance($("#" + idSideNav)).close();
+
+  }
+  static destroySideNav(idSideNav: string) {
+    M.Sidenav.getInstance($("#" + idSideNav)).destroy();
+
   }
 }
