@@ -69,6 +69,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .cursor{
   cursor: pointer;
 }
+.fondo_secundario_ocda{
+
+  background: rgba(221,247,207,1);
+  background: -moz-linear-gradient(left, rgba(221,247,207,1) 0%, rgba(79,231,67,1) 98%, rgba(76,231,64,1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(221,247,207,1)), color-stop(98%, rgba(79,231,67,1)), color-stop(100%, rgba(76,231,64,1)));
+  background: -webkit-linear-gradient(left, rgba(221,247,207,1) 0%, rgba(79,231,67,1) 98%, rgba(76,231,64,1) 100%);
+  background: -o-linear-gradient(left, rgba(221,247,207,1) 0%, rgba(79,231,67,1) 98%, rgba(76,231,64,1) 100%);
+  background: -ms-linear-gradient(left, rgba(221,247,207,1) 0%, rgba(79,231,67,1) 98%, rgba(76,231,64,1) 100%);
+  background: linear-gradient(to right, rgba(221,247,207,1) 0%, rgba(79,231,67,1) 98%, rgba(76,231,64,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ddf7cf', endColorstr='#4ce740', GradientType=1 );
+
+
+}
+
 .display_block{
   display: block;
 }
