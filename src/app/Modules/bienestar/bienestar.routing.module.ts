@@ -8,9 +8,9 @@ import { RequisitoComponent } from './componentAdmin/requisito/requisito.compone
 
 
 const routes: Routes = [
-  { path: "alumno/:id", component: PrincipalComponent },
+  { path: "alumno", component: PrincipalComponent },
   {
-    path: 'admin/:id', component: AdminComponent, children: [
+    path: 'admin', component: AdminComponent, children: [
       { path: "reportes", component: ReportesComponent },
       { path: "requisito", component: RequisitoComponent }
     ]
