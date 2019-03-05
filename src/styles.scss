@@ -61,7 +61,7 @@ $sigauPrincipal-theme: mat-light-theme($sigauPrincipal-primary, $sigauPrincipal-
 @import "../node_modules/materialize-css/sass/components/slider";
 @import "../node_modules/materialize-css/sass/components/buttons";
 
-html, body { height: 100%; }
+/*html, body { height: 100%; }*/
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .fondo-ocda{
  background-color: #1ABB9C;

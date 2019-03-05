@@ -1,0 +1,54 @@
+.login-screen {
+    background-image: url(http://i.giphy.com/MbPb4VwLRR7Yk.gif);
+}
+
+aside.sidebar .single {
+    padding: 30px 15px;
+    margin-top: 0px;
+    background: #fcfcfc;
+    border: 1px solid #f0f0f0; 
+}
+
+aside.sidebar .single h3.side-title {
+    margin: 0;
+    margin-bottom: 10px;
+    padding: 0;
+    font-size: 20px;
+    color: #333;
+    text-transform: uppercase; 
+}
+
+aside.sidebar .single h3.side-title:after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: #00b0ff;
+    display: block;
+    margin-top: 6px; 
+}
+
+.single.contact-info {
+    background: none;
+    border: none; 
+}
+
+.single.contact-info li {
+    margin-top: 0px; 
+}
+
+.single.contact-info li .icon {
+    display: block;
+    float: left;
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 1px solid #e0e0e0;
+    color: #00b0ff;
+    text-align: center;
+    line-height: 50px; 
+}
+
+.single.contact-info li .info {
+    overflow: hidden; 
+}
