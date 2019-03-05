@@ -11,24 +11,16 @@ export class PrincipalModulosComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.incializacion()
+    functionsGlobal.iniciarCollapside()
+
   }
   openSlideNav() {
-    console.log(this.sideNav)
-    $(this.sideNav.nativeElement).addClass("sidenav")
-    $(this.sideNav.nativeElement).removeClass("hide-on-med-and-down")
+
     functionsGlobal.iniciarSideNav()
     functionsGlobal.openSideNav($(this.sideNav.nativeElement).attr("id"))
   }
-  incializacion() {
-    $(window).on("resize", () => {
-      console.log($(window).width())
-      if ($(window).width() >= 400) {
-        $(this.sideNav.nativeElement).removeClass("sidenav")
-        $(this.sideNav.nativeElement).css("transform", "translateX(0%)")
-        $(this.sideNav.nativeElement).addClass("hide-on-med-and-down")
 
-      }
-    })
+  template(evento: any) {
+    console.log(evento)
   }
 }

@@ -25,4 +25,8 @@ export class functionsGlobal {
     M.Sidenav.getInstance($("#" + idSideNav)).destroy();
 
   }
+  static iniciarCollapside() {
+    console.log(M)
+    M.Collapsible.init($('.collapsible'));
+  }
 }

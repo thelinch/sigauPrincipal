@@ -2,9 +2,9 @@
   <div class="col s12 m3">
     <a (click)="openSlideNav()" class="hide-on-med-and-up btn-floating btn-large waves-effect waves-light fondo-ocda"><i
         class="material-icons">menu</i></a>
-    <ul id="slide-out" class="hide-on-med-and-down" #sideNav>
+    <ul id="slide-out" class="sidenav sidenav-fixed" #sideNav>
       <div class="header center-align">
-        <h1 class="truncate">Bienvenido</h1>
+        <h3 class="truncate">Bienvenido</h3>
         <p>Sistema de Gestion Administrativa Unas</p>
       </div>
       <div class="divider"></div>
@@ -12,47 +12,71 @@
       <li>
         <div class="user-view black-text">
           <div class="row">
-            <div class="col m5 push-m3">
+            <div class="col s12 m6 push-m3">
               <a><img class="circle responsive-img" src="../../assets/UsuarioDefecto/user-defect.jpg"></a>
             </div>
           </div>
-
-          <div class="row">
-              <div class="col-md-6 ">
-                  <aside class="sidebar">
-                    <div class="single contact-info">
-                      <h3 class="side-title"></h3>
-                      <ul class="list-unstyled">
-                        <li>
-                          <div class="icon"><i class="fa fa-address-card"></i></div>
-                          <div class="info"><p>47253956</p></div>
-                        </li>
-                        
-                        <li>
-                          <div class="icon"><i class="fa fa-user"></i></div>
-                          <div class="info"><p>Franklin Mijahuanca López</p></div>
-                        </li>
-                  
-                        <li>
-                          <div class="icon"><i class="fa fa-phone"></i></div>
-                          <div class="info"><p>969 050 796</p></div>
-                        </li>
-                  
-                        <li>
-                          <div class="icon"><i class="fa fa-envelope"></i></div>
-                          <div class="info"><p>frankiln.mijahuanca@sigau.edu.pe</p></div>
-                        </li>
-                      </ul>
-                    </div>
-                  </aside>
-              </div>
-            </div>
-
         </div>
+      </li>
+      <li class="no-padding">
+        <ul class="collapsible">
+          <li>
+            <div class="collapsible-header">Datos Personales </div>
+            <div class="collapsible-body">
+              <aside class="sidebar">
+                <div class="single contact-info">
+                  <h3 class="side-title"></h3>
+                  <ul class="list-unstyled">
+                    <li>
+                      <div class="icon"><i class="fa fa-address-card"></i></div>
+                      <div class="info">
+                        <p>47253956</p>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="icon"><i class="fa fa-user"></i></div>
+                      <div class="info">
+                        <p>Franklin Mijahuanca López</p>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="icon"><i class="fa fa-phone"></i></div>
+                      <div class="info">
+                        <p>969 050 796</p>
+                      </div>
+                    </li>
+
+                    <li>
+                      <div class="icon"><i class="fa fa-envelope"></i></div>
+                      <div class="info">
+                        <p>frankiln.mijahuanca@sigau.edu.pe</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </aside>
+
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header">Barra de Navegacion </div>
+            <div class="collapsible-body">
+              <ul>
+                <li>
+                  <a>UNO</a>
+                </li>
+                <li><a>DOS</a></li>
+                <li>TRES</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
   <div class="col s12 m9 login-screen ">
-    <router-outlet></router-outlet>
+    <router-outlet (navegacion)="template($event)"></router-outlet>
   </div>
 </div>
