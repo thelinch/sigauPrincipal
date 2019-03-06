@@ -5,6 +5,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app.routing.module';
+import { NavegacionService } from './global/services/navegacion.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,10 +16,11 @@ import { AppRoutingModule } from './app.routing.module';
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
-
     AppRoutingModule
+
   ],
-  providers: [],
+  exports:[],
+  providers: [NavegacionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

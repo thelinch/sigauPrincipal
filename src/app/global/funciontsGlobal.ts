@@ -26,7 +26,6 @@ export class functionsGlobal {
 
   }
   static iniciarCollapside() {
-    console.log(M)
     M.Collapsible.init($('.collapsible'));
   }
 }

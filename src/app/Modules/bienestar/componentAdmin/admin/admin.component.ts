@@ -1,4 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ContentChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ContentChild, ElementRef } from '@angular/core';
+import { NavegacionService } from 'src/app/global/services/navegacion.service';
 
 @Component({
   selector: 'app-admin',
@@ -6,16 +7,15 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, Conten
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-  @Output() navegacion: EventEmitter<TemplateRef<null>> = new EventEmitter();
-  @ViewChild("navegacion") navegacionTemplate: TemplateRef<null>
-  constructor() { }
+  @ViewChild("navegacion") navegacionTemplate: TemplateRef<any>
+  constructor(private navegacionService: NavegacionService) { }
 
   ngOnInit() {
     this.iniciarNavegacion()
+
   }
   iniciarNavegacion() {
-    console.log(this.navegacionTemplate)
-    this.navegacion.emit(this.navegacionTemplate)
+    this.navegacionService.transferirTemplate(this.navegacionTemplate)
   }
 
 }
