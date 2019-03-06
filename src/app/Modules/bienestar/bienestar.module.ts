@@ -6,13 +6,16 @@ import { PrincipalComponent } from './componentUsuario/principal/principal.compo
 import { AdminComponent } from './componentAdmin/admin/admin.component';
 import { RequisitoComponent } from './componentAdmin/requisito/requisito.component';
 import { MaterialModule } from 'src/app/global/global.module';
+import { ListaComponent } from './componentAdmin/lista/lista.component';
 
 
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
     AdminComponent,
-    RequisitoComponent],
+    RequisitoComponent,
+    ListaComponent
+  ],
   imports: [CommonModule,
     BienestarRoutingModule,
     MaterialModule],

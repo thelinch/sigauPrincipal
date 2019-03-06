@@ -4,6 +4,7 @@ import { AdminComponent } from './componentAdmin/admin/admin.component';
 import { ReportesComponent } from './componentAdmin/reportes/reportes.component';
 import { PrincipalComponent } from './componentUsuario/principal/principal.component';
 import { RequisitoComponent } from './componentAdmin/requisito/requisito.component';
+import { ListaComponent } from './componentAdmin/lista/lista.component';
 
 
 
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: "alumno", component: PrincipalComponent },
   {
     path: 'admin', component: AdminComponent, children: [
+      { path: "lista", component: ListaComponent },
       { path: "reportes", component: ReportesComponent },
       { path: "requisito", component: RequisitoComponent }
     ]

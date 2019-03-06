@@ -3,12 +3,13 @@
     <a (click)="openSlideNav()" class="hide-on-med-and-up btn-floating btn-large waves-effect waves-light fondo-ocda"><i
         class="material-icons">menu</i></a>
     <ul id="slide-out" class="sidenav sidenav-fixed" #sideNav>
-      <div class="header center-align">
-        <h3 class="truncate">Bienvenido</h3>
-        <p>Sistema de Gestion Administrativa Unas</p>
-      </div>
+      <li class="fondo-ocda white-text">
+        <div class="header center-align fondo-ocda">
+          <h3 class="truncate">Bienvenido</h3>
+          <p>Sistema de Gestion Administrativa Unas</p>
+        </div>
+      </li>
       <div class="divider"></div>
-      <h1></h1>
       <li>
         <div class="user-view black-text">
           <div class="row">
@@ -71,6 +72,6 @@
     </ul>
   </div>
   <div class="col s12 m9 login-screen ">
-    <router-outlet ></router-outlet>
+    <router-outlet></router-outlet>
   </div>
 </div>

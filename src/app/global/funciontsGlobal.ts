@@ -28,4 +28,10 @@ export class functionsGlobal {
   static iniciarCollapside() {
     M.Collapsible.init($('.collapsible'));
   }
+  static iniciarMaterialBoxed() {
+    M.Materialbox.init($('.materialboxed'));
+  }
+  static iniciarTooltip() {
+    M.Tooltip.init($('.tooltipped'))
+  }
 }
