@@ -64,6 +64,9 @@ $sigauPrincipal-theme: mat-light-theme($sigauPrincipal-primary, $sigauPrincipal-
 
 /*html, body { height: 100%; }*/
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.overflow_x_hidde{
+overflow-x: hidden;
+}
 .padding_2rem{
   padding: .2rem;
 }

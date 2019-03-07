@@ -7,19 +7,28 @@ import { AdminComponent } from './componentAdmin/admin/admin.component';
 import { RequisitoComponent } from './componentAdmin/requisito/requisito.component';
 import { MaterialModule } from 'src/app/global/global.module';
 import { ListaComponent } from './componentAdmin/lista/lista.component';
+import { ListaServiciosComponent } from './componentUsuario/lista/lista.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { RequisitoService } from './services/requisito.service';
 
 
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
     AdminComponent,
+
     RequisitoComponent,
-    ListaComponent
+    ListaComponent,
+    ListaServiciosComponent
   ],
   imports: [CommonModule,
     BienestarRoutingModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
     MaterialModule],
   exports: [PrincipalComponent],
-  providers: [],
+  providers: [RequisitoService],
 })
 export class BienestarModule { }

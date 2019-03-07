@@ -5,11 +5,14 @@ import { ReportesComponent } from './componentAdmin/reportes/reportes.component'
 import { PrincipalComponent } from './componentUsuario/principal/principal.component';
 import { RequisitoComponent } from './componentAdmin/requisito/requisito.component';
 import { ListaComponent } from './componentAdmin/lista/lista.component';
+import { ListaServiciosComponent } from './componentUsuario/lista/lista.component';
 
 
 
 const routes: Routes = [
-  { path: "alumno", component: PrincipalComponent },
+  { path: "alumno", component: PrincipalComponent,children:[
+    {path:"lista",component:ListaServiciosComponent}
+  ] },
   {
     path: 'admin', component: AdminComponent, children: [
       { path: "lista", component: ListaComponent },
@@ -27,6 +30,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+exports: [RouterModule]
 })
 export class BienestarRoutingModule { }

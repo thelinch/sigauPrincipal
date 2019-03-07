@@ -2,6 +2,7 @@ import Swal from 'sweetalert2'
 
 export class swal {
   static getMensajeExito(mensaje: string) {
+    console.log("enreo")
     return Swal.fire({
       title: "Operacion Exitosa",
       text: mensaje,
