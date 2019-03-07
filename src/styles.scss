@@ -60,11 +60,18 @@ $sigauPrincipal-theme: mat-light-theme($sigauPrincipal-primary, $sigauPrincipal-
 @import "../node_modules/materialize-css/sass/components/preloader";
 @import "../node_modules/materialize-css/sass/components/slider";
 @import "../node_modules/materialize-css/sass/components/buttons";
+@import "../node_modules/materialize-css/sass/components/forms/forms";
 
 /*html, body { height: 100%; }*/
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.padding_2rem{
+  padding: .2rem;
+}
 .fondo-ocda{
  background-color: #1ABB9C;
+}
+.display_inline_block{
+  display: inline-block;
 }
 .cursor{
   cursor: pointer;
@@ -131,6 +138,12 @@ position: relative;
 }
 .position_absolute{
 position: absolute;
+}
+.diplay_flex{
+  display: flex;
+}
+.flex_1{
+  flex: 1;
 }
 .bottom_0{
   bottom: 0;

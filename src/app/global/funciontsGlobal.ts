@@ -31,7 +31,13 @@ export class functionsGlobal {
   static iniciarMaterialBoxed() {
     M.Materialbox.init($('.materialboxed'));
   }
+  static getToast(mensaje: string) {
+    M.toast({ html: mensaje })
+  }
   static iniciarTooltip() {
     M.Tooltip.init($('.tooltipped'))
+  }
+  static iniciarSelect() {
+    M.FormSelect.init($('select'));
   }
 }

@@ -19,6 +19,7 @@ export class PrincipalModulosComponent implements OnInit, AfterViewInit {
     functionsGlobal.iniciarModal();
     functionsGlobal.iniciarMaterialBoxed()
     functionsGlobal.iniciarTooltip()
+    functionsGlobal.iniciarSelect()
   }
   ngAfterViewInit(): void {
     console.log(this.queryList)

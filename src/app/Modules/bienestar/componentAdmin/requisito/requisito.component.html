@@ -12,8 +12,12 @@
     <div class="card hoverable position_relative">
       <div class="card-stacked">
         <div class="card-action position_relative center-align">
+          <div class="icons position_relative  right_0 right-align diplay_flex">
+            <i class=" fas fa-calendar-alt  material-icons"></i>
+            <i class=" fas fas fa-calendar-check material-icons  "></i>
+          </div>
           <span class="card-title truncate">ES UN REQUISITO</span>
-          <p class="chip blue white-text position_absolute top_0 right_0">SEMESTRAl</p>
+
         </div>
         <div class="divider"></div>
         <div class="card-content">
@@ -36,48 +40,58 @@
     </div>
   </div>
 </div>
-<div id="modal1" class="modal">
+<div id="modal1" class="modal modal-fixed-footer">
   <div class="modal-content">
     <h4 class="center-align">Nuevo Requisito</h4>
     <form class="col s12">
       <div class="row">
+        <div class="input-field col s12">
+          <input placeholder="Nombre" id="Nombre" type="text" class="validate">
+          <label for="Nombre">Nombre</label>
+        </div>
+        <div class="input-field col s12">
+          <textarea name="descripcion" id="descripcion" class="materialize-textarea" cols="30" rows="10"></textarea>
+          <label for="descripcion">Descripcion</label>
+        </div>
+      </div>
+      <div class="row">
         <div class="input-field col s6">
-          <input placeholder="Placeholder" id="first_name" type="text" class="validate">
-          <label for="first_name">First Name</label>
+          <input placeholder="Numero Archivos" id="Numero" type="number" class="validate">
+          <label for="Numero">Numero Archivos</label>
         </div>
         <div class="input-field col s6">
-          <input id="last_name" type="text" class="validate">
-          <label for="last_name">Last Name</label>
+          <select>
+            <option value="" disabled selected>Seleccionar Archivo</option>
+            <option value="JPG">Imagen</option>
+            <option value="Archivo">Archivo</option>
+          </select>
+          <label>Tipo De Arhivo</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12">
-          <input disabled value="I am not editable" id="disabled" type="text" class="validate">
-          <label for="disabled">Disabled</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="password" type="password" class="validate">
-          <label for="password">Password</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <input id="email" type="email" class="validate">
-          <label for="email">Email</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col s12">
-          This is an inline input field:
-          <div class="input-field inline">
-            <input id="email_inline" type="email" class="validate">
-            <label for="email_inline">Email</label>
-            <span class="helper-text" data-error="wrong" data-success="right">Helper text</span>
+          <div class="file-field input-field">
+            <div class="btn">
+              <span>Archivo</span>
+              <input type="file" multiple>
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <select>
+            <option value="" disabled selected>Seleccionar</option>
+            <option value="JPG">Semestral</option>
+            <option value="Archivo">Anual</option>
+          </select>
+          <label>Tipo </label>
+        </div>
+      </div>
+
     </form>
   </div>
   <div class="modal-footer">
@@ -85,3 +99,24 @@
     <a class="waves-effect btn waves-light green">Guardar</a>
   </div>
 </div>
+
+<ng-template #templateFotos let-arrayFotos="fotos">
+  <article class="message is-info">
+    <div class="message-header">
+      <p>Lista de Fotos</p>
+    </div>
+    <div class="message-body">
+      <div class="display_flex">
+        <figure class="image is-128x128 " *ngFor="let foto of (arrayFotos) | async;let i=index">
+          <div class="display_flex position_absolute right padding_2">
+            <a class="delete" (click)="deleteImagenIncidencia(foto)" aria-label="delete"></a>
+            <a>
+              <i class="fas fa-download"></i>
+            </a>
+          </div>
+          <img [src]="foto.url" class="materialboxed" [alt]="foto.name">
+        </figure>
+      </div>
+    </div>
+  </article>
+</ng-template>
