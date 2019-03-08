@@ -7,7 +7,8 @@ import { requisito } from '../../Models/Requisito';
 import { RequisitoService } from '../../services/requisito.service';
 import { scan, concat, startWith } from 'rxjs/operators';
 import { ModelFactory, Model } from '@angular-extensions/model';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import Swal from 'sweetalert2';
+import { NgBlockUI, BlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-requisito',
@@ -56,18 +57,36 @@ export class RequisitoComponent implements OnInit {
   }
 
   guardarYEditarRequisito(formsValue) {
+    this.blockUI.start()
+    let requisitos = this.modelRequisito.get()
     if (formsValue.id == null) {
       delete formsValue.id
+      this.requisitoService.gurdarRequisito(formsValue).subscribe(requisito => {
+        requisitos.push(requisito)
+        this.modelRequisito.set(requisitos)
+        this.closeModal(this.idModalRegistroRequisito);
+        functionsGlobal.getToast("Se Registro Correctamente")
+        this.blockUI.stop();
+      })
+    } else {
+      this.requisitoSeleccionado.nombre = formsValue.nombre;
+      this.requisitoSeleccionado.descripcion = formsValue.descripcion;
+      this.requisitoSeleccionado.numeroArchivos = formsValue.numeroArchivos;
+      this.requisitoSeleccionado.tipo = formsValue.tipo;
+      this.requisitoSeleccionado.tipoArchivo = formsValue.tipoArchivo;
+      this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
+        let index = this.buscarRequisito(requisitos, requisitoUpdate);
+        requisitos[index] = requisitoUpdate;
+        this.modelRequisito.set(requisitos)
+        this.closeModal(this.idModalRegistroRequisito);
+        functionsGlobal.getToast("Se Edito Correctamente")
+        this.blockUI.stop();
+      })
     }
+  }
 
-    let requisitos = this.modelRequisito.get()
-    this.blockUI.start()
-    this.requisitoService.gurdarRequisito(formsValue).subscribe(requisito => {
-      requisitos.push(requisito)
-      this.modelRequisito.set(requisitos)
-      this.closeModal(this.idModalRegistroRequisito);
-      this.blockUI.stop();
-    })
+  buscarRequisito(requisitos: requisito[], requisito: requisito): number {
+    return requisitos.findIndex(requisitoB => requisitoB.id == requisito.id)
   }
   editarRequisito() {
     this.formularioRequisito.get("id").setValue(this.requisitoSeleccionado.id);
@@ -79,17 +98,32 @@ export class RequisitoComponent implements OnInit {
 
   }
   eliminarRequisito() {
-    this.blockUI.start()
-    this.requisitoService.borrarRequisito(this.requisitoSeleccionado.id).subscribe(requisitoPa => {
-      console.log(requisitoPa)
-      let arrayRequisito = this.modelRequisito.get();
-      let index = arrayRequisito.findIndex(requisito => {
-        return requisito.id == requisitoPa.id
-      })
-      arrayRequisito.splice(index, 1)
-      this.modelRequisito.set(arrayRequisito)
-      this.blockUI.stop();
+    Swal.fire({
+      title: "¿Desea Eliminar el requisito?",
+      showCancelButton: true,
+      type: "question",
+      showConfirmButton: true,
+      cancelButtonText: "cancelar",
+      confirmButtonText: "OK",
+
+    }).then(respuesta => {
+      if (respuesta.value) {
+        this.blockUI.start()
+        this.requisitoService.borrarRequisito(this.requisitoSeleccionado.id).subscribe(requisitoPa => {
+          console.log(requisitoPa)
+          let arrayRequisito = this.modelRequisito.get();
+          let index = arrayRequisito.findIndex(requisito => {
+            return requisito.id == requisitoPa.id
+          })
+          arrayRequisito.splice(index, 1)
+          this.modelRequisito.set(arrayRequisito)
+          this.blockUI.stop();
+          functionsGlobal.getToast("Se Elimino Correctamente")
+
+        })
+      }
     })
+
   }
   setRequisito(requisito: requisito) {
     this.requisitoSeleccionado = requisito;
