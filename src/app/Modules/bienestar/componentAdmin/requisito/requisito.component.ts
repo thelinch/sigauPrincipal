@@ -6,6 +6,7 @@ import { Observable, Observer, Subject } from 'rxjs';
 import { requisito } from '../../Models/Requisito';
 import { RequisitoService } from '../../services/requisito.service';
 import { scan, concat, startWith } from 'rxjs/operators';
+import { ModelFactory, Model } from '@angular-extensions/model';
 
 @Component({
   selector: 'app-requisito',
@@ -14,12 +15,11 @@ import { scan, concat, startWith } from 'rxjs/operators';
 })
 export class RequisitoComponent implements OnInit {
   listaRequisito$: Observable<requisito[]>
-  subject$ = new Subject()
-  element: Observable<any>
+  private modelRequisito: Model<requisito[]>;
   formularioRequisito: FormGroup
   requisitoSeleccionado: requisito
 
-  constructor(private fb: FormBuilder, private requisitoService: RequisitoService) {
+  constructor(private fb: FormBuilder, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>) {
 
   }
 
@@ -32,10 +32,13 @@ export class RequisitoComponent implements OnInit {
       tipoArchivo: new FormControl("", [Validators.required]),
       tipo: new FormControl("", [Validators.required])
     })
-    //this.listarRequisitos()
+    this.listarRequisitos()
   }
   listarRequisitos() {
-    this.listaRequisito$ = this.requisitoService.listarRequisitos();
+    this.requisitoService.listarRequisitos().subscribe(requisitos => {
+      this.modelRequisito = this.modelFactory.create(requisitos)
+      this.listaRequisito$ = this.modelRequisito.data$
+    })
   }
 
   abrirModal(id: string) {
@@ -45,6 +48,10 @@ export class RequisitoComponent implements OnInit {
     functionsGlobal.closeModal(id)
   }
   guardarYEditarRequisito(formsValue?) {
-
+    let requisitos = this.modelRequisito.get()
+    this.requisitoService.gurdarRequisito(formsValue).subscribe(requisito => {
+      requisitos.push(formsValue)
+      this.modelRequisito.set(requisitos)
+    })
   }
 }

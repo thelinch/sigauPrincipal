@@ -13,10 +13,16 @@ export class RequisitoService {
 
 
   }
-  gurdarRequisito(requisito: requisito): Observable<any> {
+  gurdarRequisito(requisito: requisito): Observable<requisito> {
     return this.http.post<requisito>(this.urlControlador, requisito)
   }
   listarRequisitos(): Observable<requisito[]> {
     return this.http.get<requisito[]>(this.urlControlador);
+  }
+  editarRequisito(requisito: requisito): Observable<requisito> {
+    return this.http.post<requisito>(this.urlControlador + "/requisito/" + requisito.id + "/edit", requisito)
+  }
+  borrarRequisito(id: number): Observable<requisito> {
+    return this.http.get<requisito>(this.urlControlador)
   }
 }
