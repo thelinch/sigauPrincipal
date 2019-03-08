@@ -15,11 +15,11 @@ export class PrincipalModulosComponent implements OnInit, AfterViewInit {
   constructor(private navegacionService: NavegacionService) { }
 
   ngOnInit() {
-    functionsGlobal.iniciarCollapside()
+    functionsGlobal.iniciarCollapside();
     functionsGlobal.iniciarModal();
-    functionsGlobal.iniciarMaterialBoxed()
-    functionsGlobal.iniciarTooltip()
-    functionsGlobal.iniciarSelect()
+    functionsGlobal.iniciarMaterialBoxed();
+    functionsGlobal.iniciarTooltip();
+    functionsGlobal.iniciarSelect();
   }
   ngAfterViewInit(): void {
     console.log(this.queryList)

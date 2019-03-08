@@ -11,6 +11,7 @@ import { ListaServiciosComponent } from './componentUsuario/lista/lista.componen
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RequisitoService } from './services/requisito.service';
+import { BlockUIModule } from 'ng-block-ui';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { RequisitoService } from './services/requisito.service';
   imports: [CommonModule,
     BienestarRoutingModule,
     FormsModule,
+    BlockUIModule.forRoot(),
     HttpClientModule,
     ReactiveFormsModule,
     MaterialModule],

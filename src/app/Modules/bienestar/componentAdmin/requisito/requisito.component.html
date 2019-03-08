@@ -1,107 +1,108 @@
-
-<div class="row">
-  <div class="col s12 ">
-    <div class="row">
-      <div class="col m6 push-m3">
-        <a class="waves-effect waves-light btn-floating btn-large blue " (click)=" abrirModal('modal1')">
-          <i class="material-icons">add</i>
-        </a>
+<block-ui>
+  <div class="row">
+    <div class="col s12 ">
+      <div class="row">
+        <div class="col m6 push-m3">
+          <a class="waves-effect waves-light btn-floating btn-large blue "
+            (click)="nuevoRequisito();abrirModal('modal1')">
+            <i class="material-icons">add</i>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col s12 m4">
-    <div class="card hoverable position_relative">
-      <div class="card-stacked">
-        <div class="card-action position_relative center-align">
-          <div class="icons position_relative  right_0 right-align diplay_flex">
-            <i class=" fas fa-calendar-alt  material-icons"></i>
-            <i class=" fas fas fa-calendar-check material-icons  "></i>
+    <div class="col s12 m4" *ngFor="let requisito of listaRequisito$ | async;let i=index">
+      <div class="card hoverable position_relative">
+        <div class="card-stacked">
+          <div class="card-action position_relative center-align">
+            <div class="icons position_relative  right_0 right-align diplay_flex">
+              <i class=" fas fa-calendar-alt  material-icons"></i>
+              <i class=" fas fas fa-calendar-check material-icons  "></i>
+            </div>
+            <span class="card-title truncate">{{requisito.nombre}}</span>
+
           </div>
-          <span class="card-title truncate">ES UN REQUISITO</span>
+          <div class="divider"></div>
+          <div class="card-content ">
+            {{requisito.descripcion}}
+          </div>
+          <div class="card-action right-align">
+            <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
+                class="materials-icon brown-text fas fa-archive cursor">
+              </i></a>
 
-        </div>
-        <div class="divider"></div>
-        <div class="card-content ">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, non dignissimos! Doloremque
-          suscipit temporibus vero deserunt harum libero reiciendis cumque?
-        </div>
-        <div class="card-action right-align">
-          <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-              class="materials-icon brown-text fas fa-archive">
-            </i></a>
-
-          <a href="#" data-position="bottom" data-tooltip="Editar" class="tooltipped"><i
-              class="materials-icon fas fa-edit  blue-text">
-            </i></a>
-          <a href="#" data-position="bottom" data-tooltip="Eliminar" class="tooltipped"><i
-              class="materials-icon fas fa-trash-alt red-text">
-            </i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="modal1" class="modal modal-fixed-footer  overflow_x_hidde">
-  <form [formGroup]="formularioRequisito" (submit)="guardarYEditarRequisito(formularioRequisito.value)" class="col s12">
-    <div class="modal-content overflow_x_hidde">
-      <h4 class="center-align">Nuevo Requisito</h4>
-      <div class="row">
-        <div class="input-field col s12">
-          <input placeholder="Nombre" id="Nombre" type="text" formControlName="nombre" class="validate">
-          <label for="Nombre">Nombre</label>
-        </div>
-        <div class="input-field col s12">
-          <textarea name="descripcion" id="descripcion" class="materialize-textarea" formControlName="descripcion"
-            cols="30" rows="10"></textarea>
-          <label for="descripcion">Descripcion</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s6">
-          <input placeholder="Numero Archivos" id="Numero" type="number" formControlName="numeroArchivos"
-            class="validate">
-          <label for="Numero">Numero Archivos</label>
-        </div>
-        <div class="input-field col s6">
-          <select formControlName="tipoArchivo">
-            <option value="" disabled selected>Seleccionar Archivo</option>
-            <option value="JPG">Imagen</option>
-            <option value="Archivo">Archivo</option>
-          </select>
-          <label>Tipo De Arhivo</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <div class="file-field input-field">
-            <div class="btn">
-              <span>Archivo</span>
-              <input type="file" multiple>
-            </div>
-            <div class="file-path-wrapper">
-              <input class="file-path validate" type="text">
-            </div>
+            <a (click)="setRequisito(requisito);editarRequisito();abrirModal(idModalRegistroRequisito)"
+              data-position="bottom" data-tooltip="Editar" class="tooltipped"><i
+                class="materials-icon fas fa-edit  blue-text cursor">
+              </i></a>
+            <a (click)="setRequisito(requisito);eliminarRequisito()" data-position="bottom" data-tooltip="Eliminar"
+              class="tooltipped"><i class="materials-icon fas fa-trash-alt red-text cursor">
+              </i></a>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <select formControlName="tipo">
-            <option value="" disabled selected>Seleccionar</option>
-            <option value="JPG">Semestral</option>
-            <option value="Archivo">Anual</option>
-          </select>
-          <label>Tipo </label>
+    </div>
+  </div>
+  <div [id]="idModalRegistroRequisito" class="modal modal-fixed-footer  overflow_x_hidde">
+    <form [formGroup]="formularioRequisito" (submit)="guardarYEditarRequisito(formularioRequisito.value)"
+      class="col s12">
+      <div class="modal-content overflow_x_hidde">
+        <h4 class="center-align">Nuevo Requisito</h4>
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="Nombre" id="Nombre" type="text" formControlName="nombre" class="validate">
+            <label for="Nombre">Nombre</label>
+          </div>
+          <div class="input-field col s12">
+            <textarea name="descripcion" id="descripcion" class="materialize-textarea" formControlName="descripcion"
+              cols="30" rows="10"></textarea>
+            <label for="descripcion">Descripcion</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+            <input placeholder="Numero Archivos" id="Numero" type="number" formControlName="numeroArchivos"
+              class="validate">
+            <label for="Numero">Numero Archivos</label>
+          </div>
+          <div class="input-field col s6">
+            <select formControlName="tipoArchivo">
+              <option value="JPG">Imagen</option>
+              <option value="Archivo">Archivo</option>
+            </select>
+            <label>Tipo De Arhivo</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Archivo</span>
+                <input type="file" multiple>
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <select formControlName="tipo">
+              <option value="JPG">Semestral</option>
+              <option value="Archivo">Anual</option>
+            </select>
+            <label>Tipo </label>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="modal-footer">
-      <a (click)="closeModal('modal1')" class="waves-effect btn  waves-light red">Cancelar</a>
-      <button class="waves-effect btn waves-light green" type="submit"
-        [disabled]="!formularioRequisito.valid">Guardar</button>
-    </div>
-  </form>
-</div>
+      <div class="modal-footer">
+        <a (click)="closeModal('modal1')" class="waves-effect btn  waves-light red">Cancelar</a>
+        <button class="waves-effect btn waves-light green" type="submit"
+          [disabled]="!formularioRequisito.valid">Guardar</button>
+      </div>
+    </form>
+  </div>
+</block-ui>
 
 <ng-template #templateFotos let-arrayFotos="fotos">
   <article class="message is-info">

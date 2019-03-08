@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app.routing.module';
 import { NavegacionService } from './global/services/navegacion.service';
 import { ParticlesModule } from 'angular-particle';
+import { BlockUIModule } from 'ng-block-ui';
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,6 +15,7 @@ import { ParticlesModule } from 'angular-particle';
   ],
   imports: [
     FormsModule,
+
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
