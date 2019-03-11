@@ -21,6 +21,9 @@ export class functionsGlobal {
     M.Sidenav.getInstance($("#" + idSideNav)).close();
 
   }
+  static updateInputs(){
+    M.updateTextFields()
+  }
   static destroySideNav(idSideNav: string) {
     M.Sidenav.getInstance($("#" + idSideNav)).destroy();
 
