@@ -9,6 +9,8 @@ import { scan, concat, startWith } from 'rxjs/operators';
 import { ModelFactory, Model } from '@angular-extensions/model';
 import Swal from 'sweetalert2';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
+import { tipoRequisito } from '../../Models/tipoRequisito';
+import { TipoRequisitoService } from '../../services/tipo-requisito.service';
 
 @Component({
   selector: 'app-requisito',
@@ -17,12 +19,13 @@ import { NgBlockUI, BlockUI } from 'ng-block-ui';
 })
 export class RequisitoComponent implements OnInit {
   listaRequisito$: Observable<requisito[]>
+  listaTipoRequisito$: Observable<tipoRequisito[]>
   idModalRegistroRequisito: string = "modal1"
   private modelRequisito: Model<requisito[]>;
   formularioRequisito: FormGroup
   requisitoSeleccionado: requisito
   @BlockUI() blockUI: NgBlockUI;
-  constructor(private fb: FormBuilder, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>) {
+  constructor(private fb: FormBuilder, private tipoRequisitoService: TipoRequisitoService, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>) {
 
   }
 
@@ -35,17 +38,35 @@ export class RequisitoComponent implements OnInit {
       tipoArchivo: new FormControl("", [Validators.required]),
       tipo: new FormControl("", [Validators.required])
     })
+    this.listarRequisitos();
     // this.requisitoService.getAllPersona()
-    this.listarRequisitos()
+
+  }
+  listarTipoRequisito(idModal: string) {
+    this.activarBlock()
+    this.listaTipoRequisito$ = this.tipoRequisitoService.all();
+    this.listaTipoRequisito$.subscribe(data => {
+      functionsGlobal.updateInputs()
+      this.abrirModal(idModal)
+      this.cerrarBlock()
+    })
   }
   listarRequisitos() {
+    this.activarBlock()
     this.requisitoService.listarRequisitos().subscribe(requisitos => {
 
       this.modelRequisito = this.modelFactory.create(requisitos)
       this.listaRequisito$ = this.modelRequisito.data$
+      this.cerrarBlock()
     })
   }
+  activarBlock() {
+    this.blockUI.start()
 
+  }
+  cerrarBlock() {
+    this.blockUI.stop()
+  }
   abrirModal(id: string) {
     functionsGlobal.openModal(id)
   }
@@ -57,7 +78,8 @@ export class RequisitoComponent implements OnInit {
   }
 
   guardarYEditarRequisito(formsValue) {
-    this.blockUI.start()
+    console.log(formsValue)
+    /*this.blockUI.start()
     let requisitos = this.modelRequisito.get()
     if (formsValue.id == null) {
       delete formsValue.id
@@ -82,7 +104,7 @@ export class RequisitoComponent implements OnInit {
         functionsGlobal.getToast("Se Edito Correctamente")
         this.blockUI.stop();
       })
-    }
+    }*/
   }
 
   buscarRequisito(requisitos: requisito[], requisito: requisito): number {

@@ -32,4 +32,5 @@ export class RequisitoService {
   borrarRequisito(id: number): Observable<requisito> {
     return this.http.get<requisito>(this.urlControlador + "/" + id + "/delete")
   }
+
 }

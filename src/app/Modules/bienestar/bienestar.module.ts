@@ -12,6 +12,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RequisitoService } from './services/requisito.service';
 import { BlockUIModule } from 'ng-block-ui';
+import { TipoRequisitoService } from './services/tipo-requisito.service';
 
 
 @NgModule({
@@ -31,6 +32,6 @@ import { BlockUIModule } from 'ng-block-ui';
     ReactiveFormsModule,
     MaterialModule],
   exports: [PrincipalComponent],
-  providers: [RequisitoService],
+  providers: [RequisitoService,TipoRequisitoService],
 })
 export class BienestarModule { }
