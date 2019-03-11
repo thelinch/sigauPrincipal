@@ -1,54 +1,60 @@
-<p>
-  login works!
-</p>
-
-<!------ Include the above in your HEAD tag ---------->
-
-<div class="login-screen"></div>
-<div class="login-center">
-  <div class="container min-height" style="margin-top: 20px;">
-    <div class="row">
-      <div class="col-md-6 register-right">
-
-      </div>
-      <div class="col-md-3 register-left">
-        <div class="col-xs-4 col-md-offset-8">
-          <div class="login" id="card">
-            <div class="front signin_form">
-              <p>Ingrese su cuenta</p>
-              <form class="login-form">
-                <div class="form-group">
-                  <div class="input-group">
-                    <input type="email" class="form-control" placeholder="Escribe tu email">
-                    <span class="input-group-addon">
-                      <i class="glyphicon glyphicon-user"></i>
-                    </span>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="input-group">
-                    <input type="password" class="form-control" placeholder="Escribe tu password">
-                    <span class="input-group-addon">
-                      <i class="glyphicon glyphicon-lock"></i>
-                    </span>
-                  </div>
-                </div>
-                <div class="checkbox">
-                  <label><input type="checkbox">Recuerdame la proxima vez.</label>
-                </div>
-
-                <div class="form-group sign-btn">
-                  <!--<input type="submit" class="btn" value="Iniciar sesión" src="">-->
-                  <a class="btn btn-small light-blue darken-4 " style="color:white"
-                    [routerLink]="['../principal','usuario','1','modulos']" routerLinkActive="router-link-active">
-                    Iniciar sesión</a>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="login-screen ">
+    <particles [params]="params" [style]="style " [width]="width" [height]="height"></particles>
 </div>
-<particles [width]="width" [height]="height" ></particles>
+<div class="login-center">
+    <div class="container min-height" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col s12 m8 ">
+                <img src="../../assets/LogoSigau/logoLogin.png" class="materialboxed responsive-img" alt="">
+            </div>
+            <div class="col s12 m4 ">
+                <div class="col l4 offset-m8">
+                    <div class="col l4 offset-m8">
+                        <div class="login" id="card">
+                            <div class="front signin_form" class="materialboxed">
+                                <p><b>Ingrese su cuenta</b></p>
+                                <form class="login-form">
+                                    <div class="row">
+                                        <form class="col s12">
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <input id="email" type="email" class="validate">
+                                                    <label for="email">Ingrese su email</label>
+                                                    <i class="material-icons prefix">person</i>
+                                                    <span class="helper-text" data-error="ingrese un email válido"
+                                                        data-success="right">Helper text</span>
+                                                </div>
+                                                <div class="input-field col s12">
+                                                    <input id="password" type="password" class="validate">
+                                                    <label for="password">Password</label>
+                                                    <i class="material-icons prefix">lock</i>
+                                                </div>
+                                            </div>
+                                            <div class="checkbox">
+                                                <p>
+                                                    <label>
+                                                        <input type="checkbox" class="filled-in" checked="checked" />
+                                                        <span>Recuerdame la proxima vez.</span>
+                                                    </label>
+                                                </p>
+                                            </div>
+
+                                            <div class="form-group sign-btn">
+                                                <a class="waves-effect waves-light btn" style="color:white"
+                                                    [routerLink]="['../principal','usuario','1','modulos']"
+                                                    routerLinkActive="router-link-active">
+                                                    Iniciar sesión
+                                                </a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+   
