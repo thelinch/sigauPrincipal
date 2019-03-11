@@ -5,9 +5,6 @@ html, body {
 }
 	
 
-.in-page {
-    min-height: 520px;
-}
 
 .main {
     position: relative;
@@ -21,21 +18,6 @@ a:hover, a:focus {
     color: #1b5a7c;
 }
 
-.btn-cyan {
-    background-color: #1b5a7c;
-    color: #fff;
-}
-
-.btn-cyan:hover {
-    color: #fff;
-    opacity: 0.9;
-}
-
-.form-control:focus {
-    border-color: #1b5a7c;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(24, 204, 162, 0.6);
-    outline: 0 none;
-}
 
 .min-height {
     min-height: 380px;
@@ -83,46 +65,6 @@ a:hover, a:focus {
     color: #fff;
 }
 
-.login-form .input-group .form-control {
-    background: none;
-    height: 44px;
-    color: #ddd;
-}
-
-.login-form .input-group .input-group-addon {
-    background: none;
-}
-
-.login-form .input-group .input-group-addon .glyphicon {
-    color: #1b5a7c;
-}
-
-.login-form .input-group .form-control::-moz-placeholder {
-    color: #fff;
-    opacity: 0.3;
-}
-
-.login .sign-btn input.btn {
-    background: #1b5a7c;
-    border-color: #1b5a7c;
-    color: #fff;
-    width: 180px;
-}
-
-.login .sign-btn a {
-    text-decoration: none;
-}
-
-.login .checkbox {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.login .forgot {
-    display: inline-block;
-    margin: 20px 0;
-}
-
 .register-right{
     border-top-left-radius: 10% 50%;
     border-bottom-left-radius: 10% 50%;
@@ -130,6 +72,14 @@ a:hover, a:focus {
 }
 
 .register-left{
-    text-align: center;
+    text-align: right;
     margin-top: 4%;
+}
+@media only screen and (max-width: 1000px) {
+.row .col.m6 {
+    width: 80%;
+    margin-left: auto;
+    left: auto;
+    right: auto;
+}
 }
