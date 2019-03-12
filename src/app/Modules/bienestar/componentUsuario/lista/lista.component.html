@@ -7,7 +7,7 @@
           <h4 class="center-align">Servicios Solicitados</h4>
         </div>
         <div class="padding_2rem right-align ">
-          <a class="btn-floating z-depth-3 btn-large waves-effect waves-light blue">
+          <a class="btn-floating z-depth-3 btn-large waves-effect waves-light blue" (click)="abrilModal(idModalServicio)">
             <i class="material-icons">add</i>
           </a>
         </div>
@@ -55,4 +55,15 @@
       </div>
     </div>
   </div>
+</div>
+<div [id]="idModalServicio" class="modal modal-fixed-footer  overflow_x_hidde">
+  <div class="modal-content overflow_x_hidde">
+
+  </div>
+  <div class="modal-footer">
+    <a (click)="closeModal('modal1')" class="waves-effect btn  waves-light red">Cancelar</a>
+    <button class="waves-effect btn waves-light green" type="submit"
+      [disabled]="!formularioRequisito.valid">Guardar</button>
+  </div>
+
 </div>

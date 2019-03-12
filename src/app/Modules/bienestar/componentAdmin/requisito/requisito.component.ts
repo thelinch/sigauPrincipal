@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import { tipoRequisito } from '../../Models/tipoRequisito';
 import { TipoRequisitoService } from '../../services/tipo-requisito.service';
+import FileUploadWithPreview from 'file-upload-with-preview'
 import { Select2OptionData } from 'ng2-select2';
 
 @Component({
@@ -26,6 +27,7 @@ export class RequisitoComponent implements OnInit {
   formularioRequisito: FormGroup
   requisitoSeleccionado: requisito
   @BlockUI() blockUI: NgBlockUI;
+  fileUpload: FileUploadWithPreview;
   constructor(private fb: FormBuilder, private tipoRequisitoService: TipoRequisitoService, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>) {
 
   }
@@ -35,10 +37,12 @@ export class RequisitoComponent implements OnInit {
       id: new FormControl(""),
       nombre: new FormControl("", [Validators.required]),
       descripcion: new FormControl(""),
-      numeroArchivos: new FormControl("", [Validators.required]),
+      requerido: new FormControl("", [Validators.required]),
+      prioridad: new FormControl("", [Validators.required]),
       tipoArchivo: new FormControl("", [Validators.required]),
       tipo: new FormControl("", [Validators.required])
     })
+    this.fileUpload = new FileUploadWithPreview("fileRequisito")
     this.listaTipoRequisito$ = this.tipoRequisitoService.all();
     this.listarRequisitos();
     // this.requisitoService.getAllPersona()
@@ -76,15 +80,23 @@ export class RequisitoComponent implements OnInit {
     functionsGlobal.closeModal(id)
   }
   nuevoRequisito() {
+    this.fileUpload.cachedFileArray = [];
+    this.fileUpload.clearImagePreviewPanel();
     this.formularioRequisito.reset();
   }
   guardarYEditarRequisito(formsValue) {
     let requisitos = this.modelRequisito.get()
+    let isRequerido: boolean = formsValue.requerido == "true";
+    let prioridadRequisito: number = parseInt(formsValue.prioridad);
     this.blockUI.start()
     if (formsValue.id == null) {
       delete formsValue.id;
-      this.requisitoService.gurdarRequisito(formsValue as requisito).subscribe(requisito => {
-        requisitos.push(requisito)
+      let guardarRequisito = formsValue as requisito;
+      guardarRequisito.prioridad = prioridadRequisito;
+      guardarRequisito.requerido = isRequerido;
+      this.requisitoService.gurdarRequisito(guardarRequisito).subscribe(requisitoGurdado => {
+        console.log(requisitoGurdado)
+        requisitos.push(requisitoGurdado)
         this.modelRequisito.set(requisitos)
         this.closeModal(this.idModalRegistroRequisito);
         functionsGlobal.getToast("Se Registro Correctamente")
@@ -94,9 +106,10 @@ export class RequisitoComponent implements OnInit {
     else {
       this.requisitoSeleccionado.nombre = formsValue.nombre;
       this.requisitoSeleccionado.descripcion = formsValue.descripcion;
-      this.requisitoSeleccionado.numeroArchivos = formsValue.numeroArchivos;
       this.requisitoSeleccionado.tipo = formsValue.tipo;
       this.requisitoSeleccionado.tipoArchivo = formsValue.tipoArchivo;
+      this.requisitoSeleccionado.prioridad = prioridadRequisito;
+      this.requisitoSeleccionado.requerido = isRequerido;
       this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
         let index = this.buscarRequisito(requisitos, requisitoUpdate);
         requisitos[index] = requisitoUpdate;
@@ -116,12 +129,17 @@ export class RequisitoComponent implements OnInit {
     this.formularioRequisito.get("id").setValue(this.requisitoSeleccionado.id);
     this.formularioRequisito.get("nombre").setValue(this.requisitoSeleccionado.nombre);
     this.formularioRequisito.get("descripcion").setValue(this.requisitoSeleccionado.descripcion)
-    this.formularioRequisito.get("numeroArchivos").setValue(this.requisitoSeleccionado.numeroArchivos)
     this.formularioRequisito.get("tipoArchivo").setValue(this.requisitoSeleccionado.tipoArchivo)
     this.formularioRequisito.get("tipo").patchValue({ id: this.requisitoSeleccionado.tipo.id });
-
+    this.formularioRequisito.get("prioridad").patchValue(this.requisitoSeleccionado.prioridad.toString());
+    this.formularioRequisito.get("requerido").patchValue(this.requisitoSeleccionado.requerido ? "true" : "false")
+    this.fileUpload.cachedFileArray = [];
+    this.fileUpload.clearImagePreviewPanel();
   }
-  compare(obj1: any, obj2: any) {
+  compareString(string1: any, string2: any) {
+    return string1 === string2;
+  }
+  compareObjeto(obj1: any, obj2: any) {
     return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
   }
   eliminarRequisito() {

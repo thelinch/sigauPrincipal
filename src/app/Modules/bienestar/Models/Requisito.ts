@@ -4,7 +4,8 @@ export interface requisito {
   id?: number
   nombre: string
   descripcion: string
-  numeroArchivos: number
+  requerido: boolean
+  prioridad: number
   tipoArchivo: string
   tipo: tipoRequisito
   estado: number
