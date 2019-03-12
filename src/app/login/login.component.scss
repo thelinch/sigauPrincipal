@@ -47,21 +47,19 @@ a:hover, a:focus {
     top: 0;
     left: 0;
 }
-
 .login-center {
-    text-align: left;
+    margin-left:  4%;   
 }
 
-.login {
-    width: 320px;
-    color: #fff;
-}
 
-.login .login-form {
-    text-align: left;
+.cardlogin{
+    border-radius: 30px 30px 30px 30px;
+    -moz-border-radius: 30px 30px 30px 30px;
+    -webkit-border-radius: 30px 30px 30px 30px;
+    border: 0px solid #646464;
+    color: white;
 }
-
-.login label {
+.label {
     color: #fff;
 }
 
@@ -75,9 +73,9 @@ a:hover, a:focus {
     text-align: right;
     margin-top: 4%;
 }
-@media only screen and (max-width: 1000px) {
+@media only screen and (max-width: 10px) {
 .row .col.m6 {
-    width: 80%;
+    width: 85%;
     margin-left: auto;
     left: auto;
     right: auto;
@@ -91,4 +89,17 @@ a:hover, a:focus {
   
   .example-container > * {
     width: 100%;
+  }
+
+  ::ng-deep .mat-form-field-underline .mat-form-field-ripple{
+    color: #26a69a !important;
+    background-color:#26a69a !important;
+  }
+  
+  ::ng-deep .mat-form-field-underline{
+    color: #26a69a !important;
+    background-color:#26a69a !important;
+  }
+  input label{
+      color: #26a69a !important;
   }
