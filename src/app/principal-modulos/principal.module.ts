@@ -9,7 +9,7 @@ import { MaterialModule } from '../global/global.module';
 @NgModule({
 
   declarations: [PrincipalModulosComponent, ModulosComponent, NavegacionDirective],
-  imports: [CommonModule, PrincipalRoutingModule, MaterialModule] ,
+  imports: [CommonModule, PrincipalRoutingModule, MaterialModule],
   exports: [PrincipalModulosComponent],
   providers: [],
 })

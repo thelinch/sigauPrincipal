@@ -69,6 +69,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .overflow_x_hidde{
 overflow-x: hidden;
 }
+.margin_icons{
+  margin-left: .5rem;
+}
 .padding_2rem{
   padding: .2rem;
 }
@@ -93,6 +96,16 @@ overflow-x: hidden;
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ddf7cf', endColorstr='#4ce740', GradientType=1 );
 
 
+}
+.card{
+  .icons{
+    display: flex;
+    padding: .8rem;
+    i{
+      flex: 1;
+
+    }
+  }
 }
 
 .card_animation{
