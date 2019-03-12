@@ -14,6 +14,8 @@ import { RequisitoService } from './services/requisito.service';
 import { BlockUIModule } from 'ng-block-ui';
 import { TipoRequisitoService } from './services/tipo-requisito.service';
 import { Select2Module } from 'ng2-select2';
+import { ServiciosComponent } from './componentAdmin/servicios/servicios.component';
+import { ServicioService } from './services/servicio.service';
 
 @NgModule({
   declarations: [ReportesComponent,
@@ -22,7 +24,8 @@ import { Select2Module } from 'ng2-select2';
 
     RequisitoComponent,
     ListaComponent,
-    ListaServiciosComponent
+    ListaServiciosComponent,
+    ServiciosComponent
   ],
   imports: [CommonModule,
     BienestarRoutingModule,
@@ -32,6 +35,6 @@ import { Select2Module } from 'ng2-select2';
     ReactiveFormsModule,
     MaterialModule, Select2Module],
   exports: [PrincipalComponent],
-  providers: [RequisitoService, TipoRequisitoService],
+  providers: [RequisitoService, TipoRequisitoService,ServicioService],
 })
 export class BienestarModule { }

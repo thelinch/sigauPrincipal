@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col s12">
+    <a class="btn-floating btn-large waves-effect waves-light red" (click)="abrirModal(idModalRegistroServicio)"><i
+        class="material-icons">add</i></a>
+  </div>
+  <div class="col s12">
+    <div class="row">
+      <div class="col s12 m4" *ngFor="let servicio of listaServicio$ | async">
+        <div class="card">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Comienzo de Modal de Registro de Servicio-->
+<div [id]="idModalRegistroServicio" class="modal modal-fixed-footer  overflow_x_hidde">
+  <div class="row">
+    <div class="col s12">
+      <div class="row">
+        <div class="col s12 right-align">
+          <mat-checkbox [(ngModel)]="autoSuma">Autosumar</mat-checkbox>
+        </div>
+      </div>
+      <form [formGroup]="formularioServicio" (submit)="guardarYEditarServicio(formularioServicio.value)">
+        <div class="modal-content overflow_x_hidde">
+          <h5 class="center-align">Registro de Servicio</h5>
+          <div class="row">
+            <input type="hidden" formControlName="id">
+            <mat-form-field class="col s6">
+              <input matInput placeholder="servicio" formControlName="nombre">
+            </mat-form-field>
+            <mat-form-field class="col s6">
+              <input matInput placeholder="Total" formControlName="total">
+            </mat-form-field>
+          </div>
+          <div class="row" formGroupName="vacante">
+            <input type="hidden" formControlName="id">
+            <mat-form-field class="col s6">
+              <input matInput type="number" placeholder="Vacantes Varones" (change)="actualizarTotal()"
+                formControlName="vacantesHombre">
+            </mat-form-field>
+            <mat-form-field class="col s6">
+              <input matInput type="number" placeholder="Vacantes Mujeres" (change)="actualizarTotal()"
+                formControlName="vacantesMujer">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a (click)="closeModal(idModalRegistroServicio)" class="waves-effect btn  waves-light red">Cancelar</a>
+          <button class="waves-effect btn waves-light green" type="submit"
+            [disabled]="!formularioServicio.valid">Guardar</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+</div>
+<!--Fin de Modal de Registro de Servicio-->

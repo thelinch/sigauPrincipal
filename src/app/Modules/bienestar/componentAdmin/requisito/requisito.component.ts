@@ -21,9 +21,9 @@ import { Select2OptionData } from 'ng2-select2';
 })
 export class RequisitoComponent implements OnInit {
   listaRequisito$: Observable<requisito[]>
+  private modelRequisito: Model<requisito[]>;
   listaTipoRequisito$: Observable<tipoRequisito[]>
   idModalRegistroRequisito: string = "modal1"
-  private modelRequisito: Model<requisito[]>;
   formularioRequisito: FormGroup
   requisitoSeleccionado: requisito
   @BlockUI() blockUI: NgBlockUI;
