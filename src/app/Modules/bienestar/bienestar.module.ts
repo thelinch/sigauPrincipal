@@ -13,7 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RequisitoService } from './services/requisito.service';
 import { BlockUIModule } from 'ng-block-ui';
 import { TipoRequisitoService } from './services/tipo-requisito.service';
-
+import { Select2Module } from 'ng2-select2';
 
 @NgModule({
   declarations: [ReportesComponent,
@@ -30,8 +30,8 @@ import { TipoRequisitoService } from './services/tipo-requisito.service';
     BlockUIModule.forRoot(),
     HttpClientModule,
     ReactiveFormsModule,
-    MaterialModule],
+    MaterialModule, Select2Module],
   exports: [PrincipalComponent],
-  providers: [RequisitoService,TipoRequisitoService],
+  providers: [RequisitoService, TipoRequisitoService],
 })
 export class BienestarModule { }

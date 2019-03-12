@@ -15,8 +15,8 @@
         <div class="card-stacked">
           <div class="card-action position_relative center-align">
             <div class="icons position_relative  right_0 right-align diplay_flex">
-              <i class=" fas fa-calendar-alt  material-icons"></i>
-              <i class=" fas fas fa-calendar-check material-icons  "></i>
+              <i class=" fas  material-icons {{requisito.tipo.icono}} tooltipped" data-position="bottom"
+                [attr.data-tooltip]="requisito.tipo.nombre"></i>
             </div>
             <span class="card-title truncate">{{requisito.nombre}}</span>
 
@@ -44,58 +44,45 @@
   </div>
 
 
- <!--Modal de Registro de requisito-->
+  <!--Modal de Registro de requisito-->
   <div [id]="idModalRegistroRequisito" class="modal modal-fixed-footer  overflow_x_hidde">
     <form [formGroup]="formularioRequisito" (submit)="guardarYEditarRequisito(formularioRequisito.value)"
       class="col s12">
       <div class="modal-content overflow_x_hidde">
         <h4 class="center-align">Nuevo Requisito</h4>
+        <input type="hidden" formControlName="id">
         <div class="row">
-          <div class="input-field col s12">
-            <input placeholder="Nombre" id="Nombre" type="text" formControlName="nombre" class="validate">
-            <label for="Nombre">Nombre</label>
-          </div>
-          <div class="input-field col s12">
-            <textarea name="descripcion" id="descripcion" class="materialize-textarea" formControlName="descripcion"
-              cols="30" rows="10"></textarea>
-            <label for="descripcion">Descripcion</label>
-          </div>
+          <mat-form-field class="col s12">
+            <input matInput placeholder="requisito" formControlName="nombre">
+          </mat-form-field>
+          <mat-form-field class="col s12">
+            <textarea matInput placeholder="Descripcion" formControlName="descripcion"></textarea>
+          </mat-form-field>
         </div>
         <div class="row">
-          <div class="input-field col s6">
-            <input placeholder="Numero Archivos" id="Numero" type="number" formControlName="numeroArchivos"
-              class="validate">
-            <label for="Numero">Numero Archivos</label>
-          </div>
-          <div class="input-field col s6">
-            <select formControlName="tipoArchivo">
+          <mat-form-field class="col s6">
+            <input matInput type="number" placeholder="Numero Archivos" formControlName="numeroArchivos">
+          </mat-form-field>
+          <mat-form-field class="col s6">
+            <select matNativeControl placeholder="Tipo Archivo" formControlName="tipoArchivo">
               <option value="JPG">Imagen</option>
-              <option value="Archivo">Archivo</option>
+              <option value="Archivo">Arhivos</option>
             </select>
-            <label>Tipo De Arhivo</label>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <div class="col s12">
+            <input type="file" multiple placeholder="Archivo Muestra" >
           </div>
         </div>
         <div class="row">
-          <div class="input-field col s12">
-            <div class="file-field input-field">
-              <div class="btn">
-                <span>Archivo</span>
-                <input type="file" multiple>
-              </div>
-              <div class="file-path-wrapper">
-                <input class="file-path validate" type="text">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <select formControlName="tipo" class="browser-default">
-              <option [value]="tipoRequisito.id" *ngFor="let tipoRequisito of listaTipoRequisito$ | async">
-                {{tipoRequisito.nombre}}
-              </option>
-            </select>
-            <label>Tipo </label>
+          <div class="col s12">
+            <mat-form-field>
+              <mat-label>Tipo</mat-label>
+              <select matNativeControl formControlName="tipo" [compareWith]="compare">
+                <option [ngValue]="tipo" *ngFor="let tipo of (listaTipoRequisito$ | async)">{{tipo.nombre}}</option>
+              </select>
+            </mat-form-field>
           </div>
         </div>
       </div>
@@ -106,7 +93,7 @@
       </div>
     </form>
   </div>
- <!--Fin Modal de Registro de requisito-->
+  <!--Fin Modal de Registro de requisito-->
 
 </block-ui>
 

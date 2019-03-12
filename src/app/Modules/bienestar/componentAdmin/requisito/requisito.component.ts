@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import { tipoRequisito } from '../../Models/tipoRequisito';
 import { TipoRequisitoService } from '../../services/tipo-requisito.service';
+import { Select2OptionData } from 'ng2-select2';
 
 @Component({
   selector: 'app-requisito',
@@ -31,22 +32,24 @@ export class RequisitoComponent implements OnInit {
 
   ngOnInit() {
     this.formularioRequisito = this.fb.group({
-      id: new FormControl(),
+      id: new FormControl(""),
       nombre: new FormControl("", [Validators.required]),
       descripcion: new FormControl(""),
       numeroArchivos: new FormControl("", [Validators.required]),
       tipoArchivo: new FormControl("", [Validators.required]),
       tipo: new FormControl("", [Validators.required])
     })
+    this.listaTipoRequisito$ = this.tipoRequisitoService.all();
     this.listarRequisitos();
     // this.requisitoService.getAllPersona()
 
   }
+
   listarTipoRequisito(idModal: string) {
     this.activarBlock()
     this.listaTipoRequisito$ = this.tipoRequisitoService.all();
     this.listaTipoRequisito$.subscribe(data => {
-      functionsGlobal.updateInputs()
+      this.listaTipoRequisito$ = this.tipoRequisitoService.all();
       this.abrirModal(idModal)
       this.cerrarBlock()
     })
@@ -54,7 +57,6 @@ export class RequisitoComponent implements OnInit {
   listarRequisitos() {
     this.activarBlock()
     this.requisitoService.listarRequisitos().subscribe(requisitos => {
-
       this.modelRequisito = this.modelFactory.create(requisitos)
       this.listaRequisito$ = this.modelRequisito.data$
       this.cerrarBlock()
@@ -76,21 +78,20 @@ export class RequisitoComponent implements OnInit {
   nuevoRequisito() {
     this.formularioRequisito.reset();
   }
-
   guardarYEditarRequisito(formsValue) {
-    console.log(formsValue)
-    /*this.blockUI.start()
     let requisitos = this.modelRequisito.get()
+    this.blockUI.start()
     if (formsValue.id == null) {
-      delete formsValue.id
-      this.requisitoService.gurdarRequisito(formsValue).subscribe(requisito => {
+      delete formsValue.id;
+      this.requisitoService.gurdarRequisito(formsValue as requisito).subscribe(requisito => {
         requisitos.push(requisito)
         this.modelRequisito.set(requisitos)
         this.closeModal(this.idModalRegistroRequisito);
         functionsGlobal.getToast("Se Registro Correctamente")
         this.blockUI.stop();
       })
-    } else {
+    }
+    else {
       this.requisitoSeleccionado.nombre = formsValue.nombre;
       this.requisitoSeleccionado.descripcion = formsValue.descripcion;
       this.requisitoSeleccionado.numeroArchivos = formsValue.numeroArchivos;
@@ -99,12 +100,13 @@ export class RequisitoComponent implements OnInit {
       this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
         let index = this.buscarRequisito(requisitos, requisitoUpdate);
         requisitos[index] = requisitoUpdate;
+        console.log(requisitos[index])
         this.modelRequisito.set(requisitos)
         this.closeModal(this.idModalRegistroRequisito);
         functionsGlobal.getToast("Se Edito Correctamente")
         this.blockUI.stop();
       })
-    }*/
+    }
   }
 
   buscarRequisito(requisitos: requisito[], requisito: requisito): number {
@@ -116,8 +118,11 @@ export class RequisitoComponent implements OnInit {
     this.formularioRequisito.get("descripcion").setValue(this.requisitoSeleccionado.descripcion)
     this.formularioRequisito.get("numeroArchivos").setValue(this.requisitoSeleccionado.numeroArchivos)
     this.formularioRequisito.get("tipoArchivo").setValue(this.requisitoSeleccionado.tipoArchivo)
-    this.formularioRequisito.get("tipo").setValue(this.requisitoSeleccionado.tipo);
+    this.formularioRequisito.get("tipo").patchValue({ id: this.requisitoSeleccionado.tipo.id });
 
+  }
+  compare(obj1: any, obj2: any) {
+    return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
   }
   eliminarRequisito() {
     Swal.fire({

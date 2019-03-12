@@ -9,8 +9,6 @@ import { Observable, Observer } from 'rxjs';
 export class RequisitoService {
   private urlControlador = "http://localhost:8000/bienestar/requisito"
   getHeaders: HttpHeaders = new HttpHeaders({
-    "Access-Control-Allow-Origin": "*",
-
     'Content-Type': 'application/json'
   });
   constructor(private http: HttpClient) {
@@ -21,13 +19,13 @@ export class RequisitoService {
     this.http.get(this.urlControlador).subscribe(console.log)
   }
   gurdarRequisito(requisito: requisito): Observable<requisito> {
-    return this.http.post<requisito>(this.urlControlador + "/create", requisito)
+    return this.http.post<requisito>(this.urlControlador + "/create", JSON.stringify(requisito), { headers: this.getHeaders })
   }
   listarRequisitos(): Observable<requisito[]> {
     return this.http.get<requisito[]>(this.urlControlador + "/all");
   }
   editarRequisito(requisito: requisito): Observable<requisito> {
-    return this.http.post<requisito>(this.urlControlador + "/" + requisito.id + "/edit", requisito)
+    return this.http.post<requisito>(this.urlControlador + "/" + requisito.id + "/edit", JSON.stringify(requisito), { headers: this.getHeaders })
   }
   borrarRequisito(id: number): Observable<requisito> {
     return this.http.get<requisito>(this.urlControlador + "/" + id + "/delete")

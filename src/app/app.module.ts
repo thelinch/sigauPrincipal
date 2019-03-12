@@ -14,10 +14,9 @@ import { BlockUIModule } from 'ng-block-ui';
     LoginComponent,
   ],
   imports: [
-    FormsModule,
-
-    BrowserModule,
     BrowserAnimationsModule,
+    BrowserModule,
+    FormsModule,
     AppRoutingModule,
     ParticlesModule
   ],
