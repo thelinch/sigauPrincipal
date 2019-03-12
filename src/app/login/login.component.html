@@ -18,27 +18,28 @@
                                         <form class="col s12">
                                             <div class="row">
                                                 <div class="input-field col s12">
-                                                    <input id="email" type="email" class="validate" style="color:white">
-                                                    <label for="email" style="color:#909090">Ingrese su email</label>
-                                                    <i class="material-icons prefix">person</i>
-                                                    <span class="helper-text" data-error="ingrese un email válido"
-                                                        data-success="right">Helper text</span>
+                                                    <div class="example-container">
+                                                        <mat-form-field>
+                                                          <input matInput placeholder="Enter your email" [formControl]="email" required style="color:white">
+                                                          <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
+                                                          <mat-icon matSuffix>person</mat-icon>
+                                                          <mat-hint>Hint</mat-hint>
+                                                        </mat-form-field>
+                                                      </div>
                                                 </div>
                                                 <div class="input-field col s12">
-                                                    <input id="password" type="password" class="validate"  style="color:white">
-                                                    <label for="password" style="color:#909090">Password</label>
-                                                    <i class="material-icons prefix">lock</i>
+                                                    <div class="example-container">
+                                                        <mat-form-field>
+                                                          <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'">
+                                                          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'lock' : 'lock_open'}}</mat-icon>
+                                                        </mat-form-field>
+                                                      </div>
                                                 </div>
                                             </div>
                                             <div class="checkbox">
-                                                <p>
-                                                    <label>
-                                                        <input type="checkbox" class="filled-in" checked="checked" />
-                                                        <span style="color:#909090">Recuerdame la proxima vez.</span>
-                                                    </label>
-                                                </p>
+                                                <mat-checkbox style="color:#909090">Recuerdame la proxima vez.</mat-checkbox>
                                             </div>
-
+                                            <p></p>
                                             <div class="form-group sign-btn">
                                                 <a class="waves-effect waves-light btn" style="color:white"
                                                     [routerLink]="['../principal','usuario','1','modulos']"
