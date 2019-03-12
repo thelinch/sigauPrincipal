@@ -12,18 +12,18 @@
     </div>
     <div class="col s12 m4" *ngFor="let requisito of listaRequisito$ | async;let i=index">
       <div class="card hoverable position_relative ">
+        <div class="position_absolute icons top_0 left_0">
+          <i class="fas fa-asterisk red-text lighten-1 red-text margin_icons lighten-1" *ngIf="requisito.requerido"></i>
+          <i class=" fas   {{requisito.tipo.icono}} tooltipped margin_icons" data-position="bottom"
+            [attr.data-tooltip]="requisito.tipo.nombre"></i>
+        </div>
         <div class="dmm_ribbon position_absolute top_0 right_0" *ngIf="requisito.prioridad==1">
           <span class="dmm_rbcnt">
           </span>
         </div>
         <div class="card-stacked">
-          <div class="card-action position_relative center-align">
-            <div class="icons position_relative  right_0 right-align diplay_flex">
-              <i class=" fas  material-icons {{requisito.tipo.icono}} tooltipped" data-position="bottom"
-                [attr.data-tooltip]="requisito.tipo.nombre"></i>
-            </div>
+          <div class="card-action  position_relative center-align">
             <span class="card-title truncate">{{requisito.nombre}}</span>
-
           </div>
           <div class="divider"></div>
           <div class="card-content ">
@@ -65,13 +65,15 @@
         </div>
         <div class="row">
           <mat-form-field class="col s6">
-            <select matNativeControl placeholder="restriccion" formControlName="requerido" [compareWith]="compareString">
+            <select matNativeControl placeholder="restriccion" formControlName="requerido"
+              [compareWith]="compareString">
               <option value="true">Requerido</option>
               <option value="false">Opcional</option>
             </select>
           </mat-form-field>
           <mat-form-field class="col s6">
-            <select matNativeControl placeholder="Tipo Archivo" formControlName="tipoArchivo" [compareWith]="compareString">
+            <select matNativeControl placeholder="Tipo Archivo" formControlName="tipoArchivo"
+              [compareWith]="compareString">
               <option value="JPG">Imagen</option>
               <option value="Archivo">Arhivos</option>
             </select>
@@ -95,7 +97,7 @@
         <div class="row">
           <div class="col s6">
             <mat-form-field>
-              <mat-label>Tipo</mat-label>
+              <mat-label>Se Aplica a:</mat-label>
               <select matNativeControl formControlName="tipo" [compareWith]="compareObjeto">
                 <option [ngValue]="tipo" *ngFor="let tipo of (listaTipoRequisito$ | async)">{{tipo.nombre}}</option>
               </select>
