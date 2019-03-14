@@ -103,3 +103,13 @@ a:hover, a:focus {
   input label{
       color: #26a69a !important;
   }
+
+.mat-error {
+    color: #636363;
+}
+
+.mat-form-field-appearance-legacy .mat-form-field-label {
+    transform: perspective(100px);
+    -ms-transform: none;
+    color: blue !important;
+}
