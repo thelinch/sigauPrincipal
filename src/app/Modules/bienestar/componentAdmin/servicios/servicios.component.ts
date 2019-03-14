@@ -25,12 +25,10 @@ export class ServiciosComponent implements OnInit {
       id: new FormControl(),
       nombre: new FormControl("", [Validators.required]),
       total: new FormControl("", Validators.required),
-      vacante: this.fb.group({
-        id: new FormControl(),
-        vacantesHombre: new FormControl(0),
-        vacantesMujer: new FormControl(0)
-      })
+      vacantesHombre: new FormControl(0),
+      vacantesMujer: new FormControl(0)
     })
+    this.listarServicios();
   }
   listarServicios() {
     this.servicioService.listarServicio().subscribe(servicios => {

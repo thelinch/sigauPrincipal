@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col s6 m6 push-m3 push-s3 center-align">
           <a class="waves-effect  btn-floating btn-large blue "
-            (click)="nuevoRequisito();listarTipoRequisito('modal1')">
+            (click)="nuevoRequisito();listarTipoRequisito(idModalRegistroRequisito);abrirModal(idModalRegistroRequisito)">
             <i class="material-icons">add</i>
           </a>
         </div>
@@ -14,8 +14,11 @@
       <div class="card hoverable position_relative ">
         <div class="position_absolute icons top_0 left_0">
           <i class="fas fa-asterisk red-text lighten-1 red-text margin_icons lighten-1" *ngIf="requisito.requerido"></i>
-          <i class=" fas   {{requisito.tipo.icono}} tooltipped margin_icons" data-position="bottom"
-            [attr.data-tooltip]="requisito.tipo.nombre"></i>
+          <i class=" fas  {{tipo.icono}}  tooltipped margin_icons" data-position="bottom"
+            [attr.data-tooltip]="tipo.nombre" *ngFor="let tipo of requisito.tipos"></i>
+          <i class=" fas  {{servicio.icono}}  tooltipped margin_icons" data-position="bottom"
+            *ngFor="let servicio of requisito.servicios"></i>
+
         </div>
         <div class="dmm_ribbon position_absolute top_0 right_0" *ngIf="requisito.prioridad==1">
           <span class="dmm_rbcnt">
@@ -65,18 +68,16 @@
         </div>
         <div class="row">
           <mat-form-field class="col s6">
-            <select matNativeControl placeholder="restriccion" formControlName="requerido"
-              [compareWith]="compareString">
-              <option value="true">Requerido</option>
-              <option value="false">Opcional</option>
-            </select>
+            <mat-select placeholder="restriccion" formControlName="requerido" [compareWith]="compareString">
+              <mat-option value="true">Requerido</mat-option>
+              <mat-option value="false">Opcional</mat-option>
+            </mat-select>
           </mat-form-field>
           <mat-form-field class="col s6">
-            <select matNativeControl placeholder="Tipo Archivo" formControlName="tipoArchivo"
-              [compareWith]="compareString">
-              <option value="JPG">Imagen</option>
-              <option value="Archivo">Arhivos</option>
-            </select>
+            <mat-select placeholder="Tipo Archivo" formControlName="tipoArchivo" [compareWith]="compareString">
+              <mat-option value="JPG">Imagen</mat-option>
+              <mat-option value="Archivo">Arhivos</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
         <div class="row">
@@ -95,23 +96,28 @@
           </div>
         </div>
         <div class="row">
-          <div class="col s6">
-            <mat-form-field>
-              <mat-label>Se Aplica a:</mat-label>
-              <select matNativeControl formControlName="tipo" [compareWith]="compareObjeto">
-                <option [ngValue]="tipo" *ngFor="let tipo of (listaTipoRequisito$ | async)">{{tipo.nombre}}</option>
-              </select>
-            </mat-form-field>
-          </div>
-          <div class="col s6">
-            <mat-form-field>
-              <mat-label>Prioridad</mat-label>
-              <select matNativeControl formControlName="prioridad" [compareWith]="compareString">
-                <option value=1>Alta</option>
-                <option value=0>Normal</option>
-              </select>
-            </mat-form-field>
-          </div>
+          <mat-form-field class="col s12 m6">
+            <mat-select #tipo="matSelect" (selectionChange)="changeSelecction($event)" placeholder="Aplica a:" class="filter-select" multiple
+              [compareWith]="compareString" formControlName="tipos">
+              <mat-option *ngFor="let tipo of  listaTipoRequisito$ | async" [value]="tipo.id">
+                {{tipo.nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="col s12 m6">
+            <mat-select placeholder="prioridad" formControlName="prioridad" [compareWith]="compareString">
+              <mat-option value=1>Alta</mat-option>
+              <mat-option value=0>Normal</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field class="col s12 m6">
+            <mat-select placeholder="Servicios" multiple formControlName="servicios">
+              <mat-option [value]="servicio.id" *ngFor="let servicio of listaServicio$ | async">{{servicio.nombre}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
       <div class="modal-footer">

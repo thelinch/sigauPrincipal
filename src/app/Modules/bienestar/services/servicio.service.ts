@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { vacante } from '../Models/vacante';
 import { Observable } from 'rxjs';
 import { servicio } from '../Models/servicio';
 

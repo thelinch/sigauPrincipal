@@ -21,15 +21,15 @@ export class PrincipalModulosComponent implements OnInit, AfterViewInit {
     functionsGlobal.iniciarTooltip();
   }
   ngAfterViewInit(): void {
-    console.log(this.queryList)
-    this.captacionNavegacion()
+    //   console.log(this.queryList)
+    // this.captacionNavegacion()
   }
-  captacionNavegacion() {
+  /*captacionNavegacion() {
     this.navegacionService.navegacion.subscribe((template: TemplateRef<any>) => {
       this.queryList.map(navegacion =>
         navegacion.viewContainerRef.createEmbeddedView(template));
     })
-  }
+  }*/
   openSlideNav() {
 
     functionsGlobal.iniciarSideNav()

@@ -178,3 +178,6 @@ position: absolute;
 .display_block{
   display: block;
 }
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+  z-index: 99999 !important;
+}
