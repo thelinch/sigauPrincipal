@@ -6,8 +6,27 @@
   <div class="col s12">
     <div class="row">
       <div class="col s12 m4" *ngFor="let servicio of listaServicio$ | async">
-        <div class="card">
-
+        <div class="card hoverable position_relative ">
+          <div class="position_absolute icons top_0 left_0">
+          </div>
+          <div class="card-stacked">
+            <div class="card-action  position_relative center-align">
+              <span class="card-title truncate">{{servicio.nombre}}</span>
+            </div>
+            <div class="divider"></div>
+            <div class="card-content ">
+              {{servicio.total}}
+            </div>
+            <div class="card-action right-align">
+              <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
+                  class="materials-icon brown-text fas fa-archive cursor">
+                </i></a>
+              <a><i class="materials-icon fas fa-edit  blue-text cursor">
+                </i></a>
+              <a><i class="materials-icon fas fa-trash-alt red-text cursor">
+                </i></a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -35,7 +54,7 @@
               <input matInput placeholder="Total" formControlName="total">
             </mat-form-field>
           </div>
-          <div class="row" formGroupName="vacante">
+          <div class="row">
             <input type="hidden" formControlName="id">
             <mat-form-field class="col s6">
               <input matInput type="number" placeholder="Vacantes Varones" (change)="actualizarTotal()"

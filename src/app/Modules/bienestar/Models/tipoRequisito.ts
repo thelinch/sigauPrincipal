@@ -5,6 +5,7 @@ export interface tipoRequisito {
   nombre: string;
   icono: string;
   estado: number;
+  requisitos: requisito[]
   created_at: Date;
   updated_at: Date;
 
