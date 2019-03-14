@@ -12,6 +12,7 @@ import { ServicioService } from '../../services/servicio.service';
   styleUrls: ['./servicios.component.scss']
 })
 export class ServiciosComponent implements OnInit {
+
   listaServicio$: Observable<servicio[]>
   private modelServicio: Model<servicio[]>
   autoSuma: boolean = false;

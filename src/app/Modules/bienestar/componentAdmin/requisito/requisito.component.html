@@ -97,9 +97,9 @@
         </div>
         <div class="row">
           <mat-form-field class="col s12 m6">
-            <mat-select #tipo="matSelect" (selectionChange)="changeSelecction($event)" placeholder="Aplica a:" class="filter-select" multiple
-              [compareWith]="compareString" formControlName="tipos">
-              <mat-option *ngFor="let tipo of  listaTipoRequisito$ | async" [value]="tipo.id">
+            <mat-select placeholder="Aplica a:" class="filter-select" multiple formControlName="tipos">
+              <mat-option (onSelectionChange)="changeTipo($event)" *ngFor="let tipo of  listaTipoRequisito$ | async"
+                [value]="tipo.id">
                 {{tipo.nombre}}
               </mat-option>
             </mat-select>
@@ -114,7 +114,8 @@
         <div class="row">
           <mat-form-field class="col s12 m6">
             <mat-select placeholder="Servicios" multiple formControlName="servicios">
-              <mat-option [value]="servicio.id" *ngFor="let servicio of listaServicio$ | async">{{servicio.nombre}}
+              <mat-option [value]="servicio.id" (onSelectionChange)="changeServicio($event)"
+                *ngFor="let servicio of listaServicio$ | async">{{servicio.nombre}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -123,12 +124,11 @@
       <div class="modal-footer">
         <a (click)="closeModal('modal1')" class="waves-effect btn  waves-light red">Cancelar</a>
         <button class="waves-effect btn waves-light green" type="submit"
-          [disabled]="!formularioRequisito.valid">Guardar</button>
+          [disabled]="!formularioRequisito.valid">{{this.estadoActualizarResgitrarFormularion?'Editar':'Guardar'}}</button>
       </div>
     </form>
   </div>
   <!--Fin Modal de Registro de requisito-->
-
 </block-ui>
 
 <ng-template #templateFotos let-arrayFotos="fotos">

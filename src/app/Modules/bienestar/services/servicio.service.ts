@@ -22,4 +22,5 @@ export class ServicioService {
   editarServicio(servicio: servicio): Observable<servicio> {
     return this.http.post<servicio>(this.urlControlador + "/" + servicio.id + "edit", JSON.stringify(servicio), { headers: this.header })
   }
+
 }

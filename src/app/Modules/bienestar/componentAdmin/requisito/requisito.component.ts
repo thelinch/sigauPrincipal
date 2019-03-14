@@ -16,15 +16,23 @@ import { Select2OptionData } from 'ng2-select2';
 import { ServicioService } from '../../services/servicio.service';
 import { servicio } from '../../Models/servicio';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatAutocomplete, MatChipInputEvent, MatAutocompleteSelectedEvent, MatSelectChange, MatSelect } from '@angular/material';
+import { MatSelect } from '@angular/material';
+/**
+ *
+ *
+ * @export
+ * @class RequisitoComponent
+ * @implements {OnInit}
+ * @implements {AfterViewInit}
+ */
 @Component({
   selector: 'app-requisito',
   templateUrl: './requisito.component.html',
   styleUrls: ['./requisito.component.scss']
 })
-export class RequisitoComponent implements OnInit, AfterViewInit {
 
-  separatorKeysCodes: number[] = [ENTER, COMMA];
+export class RequisitoComponent implements OnInit {
+
   listaRequisito$: Observable<requisito[]>
   private modelRequisito: Model<requisito[]>;
   listaServicio$: Observable<servicio[]>
@@ -34,12 +42,10 @@ export class RequisitoComponent implements OnInit, AfterViewInit {
   requisitoSeleccionado: requisito
   @BlockUI() blockUI: NgBlockUI;
   fileUpload: FileUploadWithPreview;
-
-  @ViewChild('tipo') tipoSelect: MatSelect;
+  estadoActualizarResgitrarFormularion: boolean = false;
   constructor(private fb: FormBuilder, private tipoRequisitoService: TipoRequisitoService, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>, private serviciosService: ServicioService) {
 
   }
-
   ngOnInit() {
     this.formularioRequisito = this.fb.group({
       id: new FormControl(),
@@ -58,14 +64,7 @@ export class RequisitoComponent implements OnInit, AfterViewInit {
     // this.requisitoService.getAllPersona()
 
   }
-  changeSelecction(event: MatSelectChange) {
-    console.log(event.source)
-  }
-  ngAfterViewInit(): void {
-    this.tipoSelect.optionSelectionChanges.subscribe(re => {
-      console.log(re)
-    })
-  }
+
   selectAll(select: NgModel, values, array) {
     select.update.emit(values);
   }
@@ -108,58 +107,56 @@ export class RequisitoComponent implements OnInit, AfterViewInit {
   }
   nuevoRequisito() {
     this.fileUpload.cachedFileArray = [];
+    this.estadoActualizarResgitrarFormularion = false;
     this.fileUpload.clearImagePreviewPanel();
     this.requisitoSeleccionado = null;
     this.formularioRequisito.reset();
   }
   guardarYEditarRequisito(formsValue) {
     console.log(formsValue)
-    /* let requisitos = this.modelRequisito.get()
-     let isRequerido: boolean = formsValue.requerido == "true";
-     let prioridadRequisito: number = parseInt(formsValue.prioridad);
-     this.blockUI.start()
-     if (formsValue.id == null) {
-       delete formsValue.id;
-       let guardarRequisito = formsValue as requisito;
-       guardarRequisito.prioridad = prioridadRequisito;
-       guardarRequisito.requerido = isRequerido;
-       this.requisitoService.gurdarRequisito(guardarRequisito).subscribe(requisitoGurdado => {
-         console.log(requisitoGurdado)
-         requisitos.push(requisitoGurdado)
-         this.modelRequisito.set(requisitos)
-         this.closeModal(this.idModalRegistroRequisito);
-         functionsGlobal.getToast("Se Registro Correctamente")
-         this.blockUI.stop();
-       })
-     }
-     else {
-       this.requisitoSeleccionado.nombre = formsValue.nombre;
-       this.requisitoSeleccionado.descripcion = formsValue.descripcion;
-       //this.requisitoSeleccionado.tipo = formsValue.tipo;
-       this.requisitoSeleccionado.tipoArchivo = formsValue.tipoArchivo;
-       this.requisitoSeleccionado.prioridad = prioridadRequisito;
-       this.requisitoSeleccionado.requerido = isRequerido;
-       this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
-         // let index = this.buscarRequisito(requisitos, requisitoUpdate);
-         //requisitos[index] = requisitoUpdate;
-         // console.log(requisitos[index])
-         //this.modelRequisito.set(requisitos)
-         this.closeModal(this.idModalRegistroRequisito);
-         functionsGlobal.getToast("Se Edito Correctamente")
-         this.blockUI.stop();
-       })
-     }*/
+    let requisitos = this.modelRequisito.get()
+    let isRequerido: boolean = formsValue.requerido == "true";
+    let prioridadRequisito: number = parseInt(formsValue.prioridad);
+    this.blockUI.start()
+    if (formsValue.id == null) {
+      delete formsValue.id;
+      let guardarRequisito = formsValue as requisito;
+      guardarRequisito.prioridad = prioridadRequisito;
+      guardarRequisito.requerido = isRequerido;
+      this.requisitoService.gurdarRequisito(guardarRequisito).subscribe(requisitoGurdado => {
+        console.log(requisitoGurdado)
+        requisitos.push(requisitoGurdado)
+        this.modelRequisito.set(requisitos)
+        this.closeModal(this.idModalRegistroRequisito);
+        functionsGlobal.getToast("Se Registro Correctamente")
+        this.blockUI.stop();
+      })
+    }
+    else {
+      this.requisitoSeleccionado.nombre = formsValue.nombre;
+      this.requisitoSeleccionado.descripcion = formsValue.descripcion;
+      this.requisitoSeleccionado.tipoArchivo = formsValue.tipoArchivo;
+      this.requisitoSeleccionado.prioridad = prioridadRequisito;
+      this.requisitoSeleccionado.requerido = isRequerido;
+      this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
+        let index = this.buscarRequisito(requisitos, requisitoUpdate);
+        requisitos[index] = requisitoUpdate;
+        this.modelRequisito.set(requisitos)
+        this.closeModal(this.idModalRegistroRequisito);
+        functionsGlobal.getToast("Se Edito Correctamente")
+        this.blockUI.stop();
+      })
+    }
   }
 
   buscarRequisito(requisitos: requisito[], requisito: requisito): number {
     return requisitos.findIndex(requisitoB => requisitoB.id == requisito.id)
   }
-  seleccion(event: MatSelectChange) {
-    console.log(event.value)
-  }
+
   editarRequisito() {
     let tiposSeleccionado = this.requisitoSeleccionado.tipos.map(tipo => tipo.id);
     let serviciosSeleccionado = this.requisitoSeleccionado.servicios.map(servicio => servicio.id);
+    this.estadoActualizarResgitrarFormularion = true;
     console.log(tiposSeleccionado)
     this.formularioRequisito.get("id").setValue(this.requisitoSeleccionado.id);
     this.formularioRequisito.get("nombre").setValue(this.requisitoSeleccionado.nombre);
@@ -175,6 +172,7 @@ export class RequisitoComponent implements OnInit, AfterViewInit {
   compareString(string1: any, string2: any) {
     return string1 === string2;
   }
+
   compareObjeto(obj1: any, obj2: any) {
     return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
   }
@@ -192,12 +190,7 @@ export class RequisitoComponent implements OnInit, AfterViewInit {
         this.blockUI.start()
         this.requisitoService.borrarRequisito(this.requisitoSeleccionado.id).subscribe(requisitoPa => {
           console.log(requisitoPa)
-          let arrayRequisito = this.modelRequisito.get();
-          let index = arrayRequisito.findIndex(requisito => {
-            return requisito.id == requisitoPa.id
-          })
-          arrayRequisito.splice(index, 1)
-          this.modelRequisito.set(arrayRequisito)
+
           this.blockUI.stop();
           functionsGlobal.getToast("Se Elimino Correctamente")
 
@@ -206,11 +199,47 @@ export class RequisitoComponent implements OnInit, AfterViewInit {
     })
 
   }
+
   setRequisito(requisito: requisito) {
     this.requisitoSeleccionado = requisito;
   }
-
-
+  //Metodos para cambiar el estado de los selects multiple
+  changeTipo(event: any) {
+    if (event.isUserInput && this.requisitoSeleccionado) {
+      let json = {
+        id: this.requisitoSeleccionado.id,
+        idTipo: event.source.value,
+        estado: event.source.selected
+      }
+      this.activarBlock()
+      this.requisitoService.editarOpcionTipo(json).subscribe(requisitoActualizado => {
+        this.actualizarRequisito(requisitoActualizado);
+        this.cerrarBlock();
+      });
+    }
+  }
+  changeServicio(event: any) {
+    if (this.requisitoSeleccionado && event.isUserInput) {
+      let json = {
+        "id": this.requisitoSeleccionado.id,
+        "idServicio": event.source.value,
+        "estado:": event.source.selected
+      }
+      this.activarBlock()
+      this.requisitoService.editarOpcionServicio(json).subscribe(requisitoActualizado => {
+        this.actualizarRequisito(requisitoActualizado);
+        this.cerrarBlock();
+      })
+    }
+  }
+  actualizarRequisito(requisitoActualizado: requisito) {
+    let arrayRequisito = this.modelRequisito.get();
+    let index = arrayRequisito.findIndex(requisito => {
+      return requisito.id == requisitoActualizado.id
+    })
+    arrayRequisito[index] = requisitoActualizado;
+    this.modelRequisito.set(arrayRequisito)
+  }
 
 
 }
