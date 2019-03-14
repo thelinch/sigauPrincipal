@@ -48,8 +48,8 @@ export class LoginComponent implements OnInit {
         "shape": {
           "type": "circle",
           "stroke": {
-            "width": 0,
-            "color": "#000000"
+            "width": 3,
+            "color": "#01579b"
           },
           "polygon": {
             "nb_sides": 5

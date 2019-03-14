@@ -3,30 +3,31 @@
 </div>
 <div class="login-center">
     <div class="row">
-        <div class="col s12 m6 register-right ">
+        <div class="col s12 m5 offset-m1 register-right">
             <img src="../../assets/LogoSigau/logoLogin.png" class="materialboxed responsive-img" alt="">
         </div>
-        <div class="col s12 m6 register-left">
+        <div class="col s12 m4 offset-m1 register-left">
             <div class="row">
-                <div class="col s12 m8 push-m3">
-                    <div class="card transparent cardlogin">
+                <div class="col s12 m12">
+                    <div class="card  cardlogin">
                         <div class="card-content">
                             <div class="front signin_form">
-                                <p style="color:#ececec text; text-align: center"><b>Ingrese su cuenta</b>
+                                <p style="color:#01579b ; text-align: center">Ingrese su cuenta
                                 </p>
                                 <form class="login-form">
                                     <div class="row">
                                         <form class="col s12">
                                             <div class="row">
-                                                <div class="input-field col s12">
+                                                <div class="input-field col s12 ">
                                                     <div class="example-container">
                                                         <mat-form-field>
                                                             <input matInput placeholder="Escribe tu email"
                                                                 [formControl]="email" required>
-                                                            <mat-error *ngIf="email.invalid">
-                                                                {{getErrorMessage()}}</mat-error>
-                                                            <mat-icon matSuffix>person</mat-icon>
-                                                            <mat-hint>email institucional</mat-hint>
+                                                            <!--  <mat-error *ngIf="email.invalid">
+                                                                {{getErrorMessage()}}</mat-error>  -->
+                                                            <mat-icon class="colorIconsLogin" matSuffix>person
+                                                            </mat-icon>
+                                                            <!-- <mat-hint>email institucional</mat-hint> -->
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
@@ -35,9 +36,10 @@
                                                     <p></p>
                                                     <div class="example-container">
                                                         <mat-form-field>
-                                                            <input  matInput placeholder="Escribe tu password"
+                                                            <input matInput placeholder="Escribe tu password"
                                                                 [type]="hide ? 'password' : 'text'">
-                                                            <mat-icon matSuffix (click)="hide = !hide">
+                                                            <mat-icon class="colorIconsLogin" matSuffix
+                                                                (click)="hide = !hide">
                                                                 {{hide ? 'lock' : 'lock_open'}}
                                                             </mat-icon>
                                                         </mat-form-field>
@@ -51,7 +53,8 @@
 
                                             <div class="form-group sign-btn left-align">
                                                 <h1></h1>
-                                                <a class="waves-effect waves-light btn" style="color:white"
+                                                <a class="waves-effect waves-light btn  light-blue darken-4"
+                                                    style="color:white"
                                                     [routerLink]="['../principal','usuario','1','modulos']"
                                                     routerLinkActive="router-link-active">
                                                     Iniciar sesión

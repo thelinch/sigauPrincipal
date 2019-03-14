@@ -1,115 +1,99 @@
-
-html, body {
-    height: 100%;
-    width: 100%;
+html,
+body {
+  height: 100%;
+  width: 100%;
 }
-	
-
 
 .main {
-    position: relative;
+  position: relative;
 }
 
 a {
-    color: #1b5a7c;
+  color: #1b5a7c;
 }
 
-a:hover, a:focus {
-    color: #1b5a7c;
+a:hover,
+a:focus {
+  color: #1b5a7c;
 }
-
 
 .min-height {
-    min-height: 380px;
+  min-height: 380px;
 }
 
 .login-screen {
-    background-image: url(https://www.squiz.net/__public/Systems/Perspective/FileCache/1-32000/465/prop/header-bg-image.jpg?t=1472431690);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    -moz-background-size: cover;
-    -webkit-background-size: cover;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
+  background-image: url(http://gammadesign.com.ar/wp-content/uploads/2015/10/rF2DM0DPrJU21.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
 .login-screen:before {
-    content: "";
-    background: rgba(0,0,0, 0.5);
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
+  content: "";
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
+
 .login-center {
-    margin-left:  4%;   
+  margin-left: 4%;
 }
 
-
-.cardlogin{
-    border-radius: 30px 30px 30px 30px;
-    -moz-border-radius: 30px 30px 30px 30px;
-    -webkit-border-radius: 30px 30px 30px 30px;
-    border: 0px solid #646464;
-    color: white;
+.cardlogin {
+  border-radius: 30px 30px 30px 30px;
+  -moz-border-radius: 30px 30px 30px 30px;
+  -webkit-border-radius: 30px 30px 30px 30px;
+  border: 1px solid #cccccccc;
+  color: black;
 }
 .label {
-    color: #fff;
+  color: #fff;
 }
 
-.register-right{
-    border-top-left-radius: 10% 50%;
-    border-bottom-left-radius: 10% 50%;
-    margin-top: 4%;
+.register-right {
+  border-top-left-radius: 10% 50%;
+  border-bottom-left-radius: 10% 50%;
+  margin-top: 4%;
 }
 
-.register-left{
-    text-align: right;
-    margin-top: 4%;
-}
-@media only screen and (max-width: 10px) {
-.row .col.m6 {
-    width: 85%;
-    margin-left: auto;
-    left: auto;
-    right: auto;
-}
+.register-left {
+  text-align: right;
+  margin-top: 4%;
 }
 
 .example-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .example-container > * {
-    width: 100%;
-  }
-
-  ::ng-deep .mat-form-field-underline .mat-form-field-ripple{
-    color: #26a69a !important;
-    background-color:#26a69a !important;
-  }
-  
-  ::ng-deep .mat-form-field-underline{
-    color: #26a69a !important;
-    background-color:#26a69a !important;
-  }
-  input label{
-      color: #26a69a !important;
-  }
-
-.mat-error {
-    color: #636363;
+  display: flex;
+  flex-direction: column;
 }
 
-.mat-form-field-appearance-legacy .mat-form-field-label {
-    transform: perspective(100px);
-    -ms-transform: none;
-    color: blue !important;
+.example-container > * {
+  width: 100%;
+}
+
+::ng-deep .mat-form-field-underline .mat-form-field-ripple {
+  color: #01579b !important;
+  background-color: #01579b !important;
+}
+
+::ng-deep .mat-form-field-underline {
+  color: #01579b !important;
+  background-color: #01579b !important;
+}
+input label {
+  color: #01579b !important;
+}
+
+.colorIconsLogin {
+  color: #01579b;
 }
