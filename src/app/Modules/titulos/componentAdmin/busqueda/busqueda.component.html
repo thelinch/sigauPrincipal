@@ -1,3 +1,297 @@
-<p>
-  busqueda works!
-</p>
+<div class="row">
+  <div class="col s12 m6 putLeft ">
+    <div class="dvContentTitMod ">
+      <span class="putLeft tituloModalG">REGISTRO NACIONAL DE </span>
+      <span class="putLeft tituloModalM">GRADOS ACADEMICOS Y TITULOS PROFESIONALES</span>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <form [formGroup]="busquedaForm" (submit)="filtrar(busquedaForm.value)">
+          <div class="row">
+            <mat-form-field class="col s12 m3">
+              <input matInput placeholder="dni" formControlName="dni">
+            </mat-form-field>
+            <mat-form-field class="col s12 m3">
+              <input matInput placeholder="nombre" formControlName="nombre">
+            </mat-form-field>
+            <mat-form-field class="col s12 m3">
+              <input matInput placeholder="apellido Paterno" formControlName="apellidoPaterno">
+            </mat-form-field>
+            <mat-form-field class="col s12 m3">
+              <input matInput placeholder="apellido Materno" formControlName="apellidoMaterno">
+            </mat-form-field>
+          </div>
+          <button class="btn btn-primary waves-effect" [disabled]="!busquedaForm.valid">Buscar</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <div class="col s12">
+    <div class="card">
+      <div class="card-content">
+        <table class="responsive-table centered">
+          <thead>
+            <tr>
+              <th>N°</th>
+              <th>Graduado</th>
+              <th>DNI</th>
+              <th>Grado o Título</th>
+              <th>Denominación del Grado</th>
+              <th>Ver</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Franklin Mijahuanca López</td>
+              <td>47253956</td>
+              <td>Bachiller</td>
+              <td>Bachiller en Informática y sistemas</td>
+              <td>
+                <a class="btn-floating btn-large waves-effect waves-light fondo-ocda"
+                  (click)="abrirModal(modalBusqueda)">
+                  <i class="material-icons">assignment</i>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Franklin Mijahuanca López</td>
+              <td>47253956</td>
+              <td>Titulado</td>
+              <td>ingeniero en Informática y sistemas</td>
+              <td>
+                <a class="btn-floating btn-large waves-effect waves-light fondo-ocda"
+                  (click)="abrirModal(modalBusqueda)">
+                  <i class="material-icons">assignment</i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal Structure  para visualizar los dotos del graduado-->
+<div [id]="modalBusqueda" class="modal modal-fixed-footer">
+  <div class="modal-content mosal">
+    <mat-tab-group>
+      <mat-tab label="Datos Personales">
+        <form class="example-form center">
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Tipo de Documento" value="DNI" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Número de Documento" value="47253956" readonly>
+          </mat-form-field>
+
+          <div class="col m4 modalMargin">
+            <img class="responsive-img" src="../../../../../assets/UsuarioDefecto/user-defect.jpg">
+          </div>
+
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Nombres " value="Franklin" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Aplellido Paterno " value="Mijahuanca" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Aplellido Materno " value="Lopez" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col m3 modalMargin">
+            <input matInput placeholder="Fecha de Nacimiento " value="20/08/1992" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m3 modalMargin">
+            <input matInput placeholder="Sexo " value="M" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Departamento" value="San Martin" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Provincia " value="Roja" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Distrito" value="Nueva Cajamarca" readonly>
+          </mat-form-field>
+
+        </form>
+      </mat-tab>
+      <mat-tab label="Datos Académicos">
+        <form class="example-form center">
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Universidad" value="Universidad Nacional Agraria de la Selva" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m3 modalMargin">
+            <input matInput placeholder="Fecha de Ingreso " value="20/03/2013" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m3 modalMargin">
+            <input matInput placeholder="Fecha de Egreso " value="20/05/2019" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Facultad" value="Informática y Sistemas" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Escuela Profesional " value="Informática y Sistemas" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Grado Académico " value="Bachiller" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m6 modalMargin">
+            <input matInput placeholder="Denominacion del Grado " value="Bachiller en Informática y Sistemas" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Modalidad de Obtención del Grado o Título" value="Automático" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Modalidad de Estudios " value="Presencial" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Nombre del Programa de Estudios" value="Ciclo Regular" readonly>
+          </mat-form-field>
+
+          <div class="col s12 m12">
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Trabajo de Investigación
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    Datos
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <mat-form-field class="col s12 m6 textalinaer">
+                  <textarea matInput placeholder="Título" value="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" readonly></textarea>
+                </mat-form-field>
+
+                <mat-form-field class="col s12 m6 textalinaer">
+                  <textarea matInput placeholder="URL" value="https://www.cielo.com" readonly></textarea>
+                </mat-form-field>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+
+        </form>
+      </mat-tab>
+      <mat-tab label="Datos de Registro">
+        <form class="example-form center">
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Numero de Oficio" value="026-2019-SG-UNAS" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Número de Resolución " value="265-2019-CU-R-UNAS" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Fecha de Resolución de Consejo Universitario" value="20/05/2019" readonly>
+          </mat-form-field>
+
+          <div class="col m12">
+            <mat-accordion>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    Diploma
+                  </mat-panel-title>
+                  <mat-panel-description>
+                    Datos
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="card">
+                  <div class="card-content">
+
+                    <table class="responsive-table centered">
+                      <thead>
+                        <tr>
+                          <th>N°</th>
+                          <th>Número de Diploma</th>
+                          <th>Fecha de Emisión</th>
+                          <th>Tipo</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>UNAS0001138</td>
+                          <td>5/04/2018</td>
+                          <td>Original</td>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>UNAS0001138</td>
+                          <td>5/04/2018</td>
+                          <td>Duplicado</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+
+          <mat-form-field class="example-full-width col s12 m3 modalMargin">
+            <input matInput placeholder="Libro de Registro" value="VI" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Folio " value="XXIV-086" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m4 modalMargin">
+            <input matInput placeholder="Número de Registro " value="6869" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m8 modalMargin">
+            <input matInput placeholder="Rector " value="Efrain Eli Esteban Churampi" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m8 modalMargin">
+            <input matInput placeholder="Decano " value="Walter Bernuy Blanco" readonly>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width col s12 m8 modalMargin">
+            <input matInput placeholder="Secretario General " value="Edilberto Acosta Grandez" readonly>
+          </mat-form-field>
+
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <div class="modal-footer">
+    <a class="waves-effect waves-green btn-flat" (click)="cerrarModal(modalBusqueda)">Cerrar</a>
+  </div>
+</div>
+<!-- FIn de Modal Structure  para visualizar los dotos del graduado-->
