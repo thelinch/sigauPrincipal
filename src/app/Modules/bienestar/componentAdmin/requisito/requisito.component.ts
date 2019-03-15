@@ -17,6 +17,8 @@ import { ServicioService } from '../../services/servicio.service';
 import { servicio } from '../../Models/servicio';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatSelect } from '@angular/material';
+import * as $ from 'jquery';
+
 /**
  *
  *
@@ -57,21 +59,24 @@ export class RequisitoComponent implements OnInit {
       tipos: new FormControl("", [Validators.required]),
       servicios: new FormControl("", [Validators.required])
     })
-
+    functionsGlobal.iniciarFloatinButton(null);
     this.fileUpload = new FileUploadWithPreview("fileRequisito")
-    //this.listaTipoRequisito$ = this.tipoRequisitoService.all();
+    this.listaTipoRequisito$ = this.tipoRequisitoService.all();
+    this.listaServicio$ = this.serviciosService.listarServicio();
     this.listarRequisitos();
     // this.requisitoService.getAllPersona()
 
   }
-
-  selectAll(select: NgModel, values, array) {
-    select.update.emit(values);
+  activarFloating(ul: ElementRef) {
+    $(ul).children().each((i, element) => {
+      setTimeout(() => {
+        $(element).fadeToggle(500)
+      }, 100 + (i * 50))
+    })
   }
 
-  deselectAll(select: NgModel) {
-    select.update.emit([]);
-  }
+
+
 
   listarTipoRequisito(idModal: string) {
     this.activarBlock()
@@ -110,6 +115,7 @@ export class RequisitoComponent implements OnInit {
     this.estadoActualizarResgitrarFormularion = false;
     this.fileUpload.clearImagePreviewPanel();
     this.requisitoSeleccionado = null;
+    this.enabledFormularioRequisito();
     this.formularioRequisito.reset();
   }
   guardarYEditarRequisito(formsValue) {
@@ -152,12 +158,27 @@ export class RequisitoComponent implements OnInit {
   buscarRequisito(requisitos: requisito[], requisito: requisito): number {
     return requisitos.findIndex(requisitoB => requisitoB.id == requisito.id)
   }
-
+  abrirFloatingButton(idFloating: string) {
+    functionsGlobal.abrirFloatingButton(idFloating);
+  }
+  cerrarFloating(idFloating: string) {
+    functionsGlobal.cerrarFloatingButton(idFloating);
+  }
+  disabledFormularioRequisito() {
+    this.formularioRequisito.disable();
+  }
+  enabledFormularioRequisito() {
+    this.formularioRequisito.enable();
+  }
+  visualizarRequisito() {
+    this.editarRequisito();
+    this.disabledFormularioRequisito();
+    this.abrirModal(this.idModalRegistroRequisito);
+  }
   editarRequisito() {
     let tiposSeleccionado = this.requisitoSeleccionado.tipos.map(tipo => tipo.id);
     let serviciosSeleccionado = this.requisitoSeleccionado.servicios.map(servicio => servicio.id);
     this.estadoActualizarResgitrarFormularion = true;
-    console.log(tiposSeleccionado)
     this.formularioRequisito.get("id").setValue(this.requisitoSeleccionado.id);
     this.formularioRequisito.get("nombre").setValue(this.requisitoSeleccionado.nombre);
     this.formularioRequisito.get("descripcion").setValue(this.requisitoSeleccionado.descripcion)
@@ -166,6 +187,9 @@ export class RequisitoComponent implements OnInit {
     this.formularioRequisito.get("servicios").setValue(serviciosSeleccionado);
     this.formularioRequisito.get("prioridad").patchValue(this.requisitoSeleccionado.prioridad.toString());
     this.formularioRequisito.get("requerido").patchValue(this.requisitoSeleccionado.requerido ? "true" : "false")
+    this.formularioRequisito.get("servicios").clearValidators();
+    this.formularioRequisito.get("tipos").clearValidators();
+    this.formularioRequisito.updateValueAndValidity();
     this.fileUpload.cachedFileArray = [];
     this.fileUpload.clearImagePreviewPanel();
   }
@@ -188,9 +212,11 @@ export class RequisitoComponent implements OnInit {
     }).then(respuesta => {
       if (respuesta.value) {
         this.blockUI.start()
-        this.requisitoService.borrarRequisito(this.requisitoSeleccionado.id).subscribe(requisitoPa => {
-          console.log(requisitoPa)
-
+        this.requisitoService.borrarRequisito(this.requisitoSeleccionado.id).subscribe(requisitoDelete => {
+          let arrayRequisito = this.modelRequisito.get();
+          let index = this.buscarRequisito(arrayRequisito, requisitoDelete)
+          arrayRequisito.splice(index, 1);
+          this.modelRequisito.set(arrayRequisito)
           this.blockUI.stop();
           functionsGlobal.getToast("Se Elimino Correctamente")
 
@@ -214,6 +240,8 @@ export class RequisitoComponent implements OnInit {
       this.activarBlock()
       this.requisitoService.editarOpcionTipo(json).subscribe(requisitoActualizado => {
         this.actualizarRequisito(requisitoActualizado);
+        this.closeModal(this.idModalRegistroRequisito);
+        functionsGlobal.getToast("Se Edito Correctamente")
         this.cerrarBlock();
       });
     }
@@ -221,22 +249,22 @@ export class RequisitoComponent implements OnInit {
   changeServicio(event: any) {
     if (this.requisitoSeleccionado && event.isUserInput) {
       let json = {
-        "id": this.requisitoSeleccionado.id,
-        "idServicio": event.source.value,
-        "estado:": event.source.selected
+        id: this.requisitoSeleccionado.id,
+        idServicio: event.source.value,
+        estado: event.source.selected
       }
       this.activarBlock()
       this.requisitoService.editarOpcionServicio(json).subscribe(requisitoActualizado => {
         this.actualizarRequisito(requisitoActualizado);
+        this.closeModal(this.idModalRegistroRequisito);
+        functionsGlobal.getToast("Se Edito Correctamente")
         this.cerrarBlock();
       })
     }
   }
   actualizarRequisito(requisitoActualizado: requisito) {
     let arrayRequisito = this.modelRequisito.get();
-    let index = arrayRequisito.findIndex(requisito => {
-      return requisito.id == requisitoActualizado.id
-    })
+    let index = this.buscarRequisito(arrayRequisito, requisitoActualizado)
     arrayRequisito[index] = requisitoActualizado;
     this.modelRequisito.set(arrayRequisito)
   }

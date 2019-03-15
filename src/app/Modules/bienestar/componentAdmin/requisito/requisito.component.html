@@ -12,13 +12,21 @@
     </div>
     <div class="col s12 m4" *ngFor="let requisito of listaRequisito$ | async;let i=index">
       <div class="card hoverable position_relative ">
-        <div class="position_absolute icons top_0 left_0">
-          <i class="fas fa-asterisk red-text lighten-1 red-text margin_icons lighten-1" *ngIf="requisito.requerido"></i>
-          <i class=" fas  {{tipo.icono}}  tooltipped margin_icons" data-position="bottom"
-            [attr.data-tooltip]="tipo.nombre" *ngFor="let tipo of requisito.tipos"></i>
-          <i class=" fas  {{servicio.icono}}  tooltipped margin_icons" data-position="bottom"
-            *ngFor="let servicio of requisito.servicios"></i>
-
+        <div class="fixed_action_btn_customize position_absolute left_0 top_0" id="floating">
+          <a class=" waves-effect z-depth-2 waves-light btn-small blue darken-2  btn-floating btn_triger"
+            (click)="activarFloating(ulButtons)">
+            <i class=" material-icons ">info_outline</i>
+          </a>
+          <ul class="buttons" #ulButtons>
+            <li *ngIf="requisito.requerido"><a class="btn-floating btn-small red"><i
+                  class="fas fa-asterisk  lighten-1"></i></a>
+            </li>
+            <li *ngFor="let tipo of requisito.tipos"><a class="btn-floating btn-small yellow darken-1"><i
+                  class=" fas  {{tipo.icono}}  tooltipped" data-position="bottom"
+                  [attr.data-tooltip]="tipo.nombre"></i></a></li>
+            <li *ngFor="let servicio of requisito.servicios"><a class="btn-floating btn-small green"><i
+                  class=" fas  {{servicio.icono}}  tooltipped" data-position="bottom"></i></a></li>
+          </ul>
         </div>
         <div class="dmm_ribbon position_absolute top_0 right_0" *ngIf="requisito.prioridad==1">
           <span class="dmm_rbcnt">
@@ -36,14 +44,17 @@
             <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
                 class="materials-icon brown-text fas fa-archive cursor">
               </i></a>
-
-            <a (click)="setRequisito(requisito);editarRequisito();abrirModal(idModalRegistroRequisito)"
+            <a (click)="setRequisito(requisito);visualizarRequisito()" data-position="bottom" data-tooltip="Eliminar"
+              class="tooltipped"><i class="materials-icon fas fa-eye blue-text cursor">
+              </i></a>
+            <a (click)="setRequisito(requisito);editarRequisito();enabledFormularioRequisito();abrirModal(idModalRegistroRequisito)"
               data-position="bottom" data-tooltip="Editar" class="tooltipped"><i
                 class="materials-icon fas fa-edit  blue-text cursor">
               </i></a>
             <a (click)="setRequisito(requisito);eliminarRequisito()" data-position="bottom" data-tooltip="Eliminar"
               class="tooltipped"><i class="materials-icon fas fa-trash-alt red-text cursor">
               </i></a>
+
           </div>
         </div>
       </div>

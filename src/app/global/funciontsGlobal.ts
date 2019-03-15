@@ -14,6 +14,17 @@ export class functionsGlobal {
   static iniciarModal() {
     M.Modal.init($(".modal"));
   }
+
+  static iniciarFloatinButton(configuracion: any) {
+    M.FloatingActionButton.init($(".fixed-action-btn"), { toolbarEnabled: true })
+  }
+  static abrirFloatingButton(idFixedAction: string) {
+    M.FloatingActionButton.getInstance($("#" + idFixedAction)).open();
+  }
+  static cerrarFloatingButton(idFixedAction: string) {
+    M.FloatingActionButton.getInstance($("#" + idFixedAction)).close();
+
+  }
   static iniciarSideNav() {
     M.Sidenav.init($(".sidenav"));
   }
@@ -24,7 +35,7 @@ export class functionsGlobal {
     M.Sidenav.getInstance($("#" + idSideNav)).close();
 
   }
-  static updateInputs(){
+  static updateInputs() {
     M.updateTextFields()
   }
   static destroySideNav(idSideNav: string) {

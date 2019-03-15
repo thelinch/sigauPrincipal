@@ -181,3 +181,17 @@ position: absolute;
 .cdk-global-overlay-wrapper, .cdk-overlay-container {
   z-index: 99999 !important;
 }
+.fixed_action_btn_customize{
+  width: 100%;
+  display: flex;
+  padding: 0.3rem;
+  .buttons{
+    display: flex;
+    margin: 0;
+   li{
+     display: none;
+   }
+
+  }
+}
+
