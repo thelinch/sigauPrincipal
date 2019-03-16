@@ -9,6 +9,9 @@ import { NavegacionService } from './global/services/navegacion.service';
 import { ParticlesModule } from 'angular-particle';
 import { BlockUIModule } from 'ng-block-ui';
 import { MaterialModule } from './global/global.module';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material';
+import { AppAdapter } from './global/appAdapter';
+
 @NgModule({
   declarations: [
     AppComponent,

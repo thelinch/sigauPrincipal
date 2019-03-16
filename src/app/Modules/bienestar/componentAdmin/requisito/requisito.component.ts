@@ -97,27 +97,7 @@ export class RequisitoComponent implements OnInit {
       this.cerrarBlock()
     })
   }
-  activarBlock() {
-    this.blockUI.start()
-
-  }
-  cerrarBlock() {
-    this.blockUI.stop()
-  }
-  abrirModal(id: string) {
-    functionsGlobal.openModal(id)
-  }
-  closeModal(id: string) {
-    functionsGlobal.closeModal(id)
-  }
-  nuevoRequisito() {
-    this.fileUpload.cachedFileArray = [];
-    this.estadoActualizarResgitrarFormularion = false;
-    this.fileUpload.clearImagePreviewPanel();
-    this.requisitoSeleccionado = null;
-    this.enabledFormularioRequisito();
-    this.formularioRequisito.reset();
-  }
+  //CRUD REQUISITO
   guardarYEditarRequisito(formsValue) {
     console.log(formsValue)
     let requisitos = this.modelRequisito.get()
@@ -154,28 +134,7 @@ export class RequisitoComponent implements OnInit {
       })
     }
   }
-
-  buscarRequisito(requisitos: requisito[], requisito: requisito): number {
-    return requisitos.findIndex(requisitoB => requisitoB.id == requisito.id)
-  }
-  abrirFloatingButton(idFloating: string) {
-    functionsGlobal.abrirFloatingButton(idFloating);
-  }
-  cerrarFloating(idFloating: string) {
-    functionsGlobal.cerrarFloatingButton(idFloating);
-  }
-  disabledFormularioRequisito() {
-    this.formularioRequisito.disable();
-  }
-  enabledFormularioRequisito() {
-    this.formularioRequisito.enable();
-  }
-  visualizarRequisito() {
-    this.editarRequisito();
-    this.disabledFormularioRequisito();
-    this.abrirModal(this.idModalRegistroRequisito);
-  }
-  editarRequisito() {
+  mostrarDatosFormularioRequisito() {
     let tiposSeleccionado = this.requisitoSeleccionado.tipos.map(tipo => tipo.id);
     let serviciosSeleccionado = this.requisitoSeleccionado.servicios.map(servicio => servicio.id);
     this.estadoActualizarResgitrarFormularion = true;
@@ -192,13 +151,6 @@ export class RequisitoComponent implements OnInit {
     this.formularioRequisito.updateValueAndValidity();
     this.fileUpload.cachedFileArray = [];
     this.fileUpload.clearImagePreviewPanel();
-  }
-  compareString(string1: any, string2: any) {
-    return string1 === string2;
-  }
-
-  compareObjeto(obj1: any, obj2: any) {
-    return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
   }
   eliminarRequisito() {
     Swal.fire({
@@ -224,10 +176,6 @@ export class RequisitoComponent implements OnInit {
       }
     })
 
-  }
-
-  setRequisito(requisito: requisito) {
-    this.requisitoSeleccionado = requisito;
   }
   //Metodos para cambiar el estado de los selects multiple
   changeTipo(event: any) {
@@ -268,6 +216,63 @@ export class RequisitoComponent implements OnInit {
     arrayRequisito[index] = requisitoActualizado;
     this.modelRequisito.set(arrayRequisito)
   }
+  //FIN DE CRUD REQUISITOS
 
 
+
+
+  disabledFormularioRequisito() {
+    this.formularioRequisito.disable();
+  }
+  enabledFormularioRequisito() {
+    this.formularioRequisito.enable();
+  }
+  visualizarRequisito() {
+    this.mostrarDatosFormularioRequisito();
+    this.disabledFormularioRequisito();
+    this.abrirModal(this.idModalRegistroRequisito);
+  }
+
+  compareString(string1: any, string2: any) {
+    return string1 === string2;
+  }
+
+  compareObjeto(obj1: any, obj2: any) {
+    return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
+  }
+
+
+
+
+
+
+  //FUNCIONES BASICAS
+  activarBlock() {
+    this.blockUI.start()
+
+  }
+  cerrarBlock() {
+    this.blockUI.stop()
+  }
+  abrirModal(id: string) {
+    functionsGlobal.openModal(id)
+  }
+  closeModal(id: string) {
+    functionsGlobal.closeModal(id)
+  }
+  buscarRequisito(requisitos: requisito[], requisito: requisito): number {
+    return requisitos.findIndex(requisitoB => requisitoB.id == requisito.id)
+  }
+  setRequisito(requisito: requisito) {
+    this.requisitoSeleccionado = requisito;
+  }
+  nuevoRequisito() {
+    this.fileUpload.cachedFileArray = [];
+    this.estadoActualizarResgitrarFormularion = false;
+    this.fileUpload.clearImagePreviewPanel();
+    this.requisitoSeleccionado = null;
+    this.enabledFormularioRequisito();
+    this.formularioRequisito.reset();
+  }
+  //FIN DE FUNCIONES BASICAS
 }

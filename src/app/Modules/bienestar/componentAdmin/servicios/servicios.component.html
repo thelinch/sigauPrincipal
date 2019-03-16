@@ -1,47 +1,67 @@
-<div class="row">
-  <div class="col s12">
-    <a class="btn-floating btn-large waves-effect waves-light red" (click)="abrirModal(idModalRegistroServicio)"><i
-        class="material-icons">add</i></a>
-  </div>
-  <div class="col s12">
-    <div class="row">
-      <div class="col s12 m4" *ngFor="let servicio of listaServicio$ | async">
-        <div class="card hoverable position_relative ">
-          <div class="position_absolute icons top_0 left_0">
-          </div>
-          <div class="card-stacked">
-            <div class="card-action  position_relative center-align">
-              <span class="card-title truncate">{{servicio.nombre}}</span>
+<block-ui>
+  <div class="row">
+    <div class="col s12 center-align">
+      <a class="btn-floating btn-large waves-effect waves-light blue"
+        (click)="nuevoServicio();abrirModal(idModalRegistroServicio)"><i class="material-icons">add</i></a>
+    </div>
+    <div class="col s12">
+      <div class="row">
+        <div class="col s12 m4" *ngFor="let servicio of listaServicio$ | async">
+          <div class="card hoverable position_relative ">
+            <div class="position_absolute icons top_0 left_0">
             </div>
-            <div class="divider"></div>
-            <div class="card-content ">
-              {{servicio.total}}
-            </div>
-            <div class="card-action right-align">
-              <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-                  class="materials-icon brown-text fas fa-archive cursor">
-                </i></a>
-              <a><i class="materials-icon fas fa-edit  blue-text cursor">
-                </i></a>
-              <a><i class="materials-icon fas fa-trash-alt red-text cursor">
-                </i></a>
+            <div class="card-stacked">
+              <div class="card-action  position_relative center-align">
+                <span class="card-title truncate">{{servicio.nombre}}</span>
+                <div class="position_absolute top_0 left_0 cursor"
+                  (click)="setServicio(servicio);limpiarFormularioActualizacionFechaServicio();abrirModal(idModalRegistroRegistroFecha)">
+                  <i class="material-icons {{servicio.activador?'green-text':'red-text'}}">fiber_manual_record</i>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="card-content ">
+                <p>
+                  <span>
+                    <i class="material-icons fas fa-female"></i>
+                    {{servicio.vacantesMujer}}
+                  </span>
+                  <span>
+                    <i class="material-icons fas fa-male"></i>
+                    {{servicio.vacantesHombre}}
+
+                  </span>
+                  <span>
+                    {{servicio.total}}
+                  </span>
+                </p>
+
+              </div>
+              <div class="card-action right-align">
+                <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
+                    class="materials-icon brown-text fas fa-archive cursor">
+                  </i></a>
+                <a (click)="setServicio(servicio);mostrarDatosFormularioServicio();abrirModal(idModalRegistroServicio)"><i
+                    class="materials-icon fas fa-edit  blue-text cursor">
+                  </i></a>
+                <a><i class="materials-icon fas fa-trash-alt red-text cursor">
+                  </i></a>
+                <a *ngIf="servicio.activador">
+                  <i class="materials-icon fas fa-calendar-alt"></i>
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+</block-ui>
 
 <!--Comienzo de Modal de Registro de Servicio-->
-<div [id]="idModalRegistroServicio" class="modal modal-fixed-footer  overflow_x_hidde">
+<div [id]="idModalRegistroServicio" class="modal modal-fixed-footer overflow_x_hidde">
   <div class="row">
     <div class="col s12">
-      <div class="row">
-        <div class="col s12 right-align">
-          <mat-checkbox [(ngModel)]="autoSuma">Autosumar</mat-checkbox>
-        </div>
-      </div>
       <form [formGroup]="formularioServicio" (submit)="guardarYEditarServicio(formularioServicio.value)">
         <div class="modal-content overflow_x_hidde">
           <h5 class="center-align">Registro de Servicio</h5>
@@ -55,14 +75,11 @@
             </mat-form-field>
           </div>
           <div class="row">
-            <input type="hidden" formControlName="id">
             <mat-form-field class="col s6">
-              <input matInput type="number" placeholder="Vacantes Varones" (change)="actualizarTotal()"
-                formControlName="vacantesHombre">
+              <input matInput type="number" placeholder="Vacantes Varones" formControlName="vacantesHombre">
             </mat-form-field>
             <mat-form-field class="col s6">
-              <input matInput type="number" placeholder="Vacantes Mujeres" (change)="actualizarTotal()"
-                formControlName="vacantesMujer">
+              <input matInput type="number" placeholder="Vacantes Mujeres" formControlName="vacantesMujer">
             </mat-form-field>
           </div>
         </div>
@@ -78,3 +95,35 @@
 
 </div>
 <!--Fin de Modal de Registro de Servicio-->
+<!--Comienzo Modal Registro de fecha de activacio-->
+<div [id]="idModalRegistroRegistroFecha" class="modal   overflow_x_hidde">
+  <div class="row">
+    <div class="col s12">
+      <form [formGroup]="formularioActualizacionFechaServicio"
+        (submit)="activarServicio(formularioActualizacionFechaServicio.value)">
+        <div class="modal-content overflow_x_hidde">
+          <h5 class="center-align">Activacion de Servicio</h5>
+          <div class="row">
+            <mat-form-field class="col s12 m6">
+              <input matInput [matDatepicker]="fechaInicio" placeholder="Fecha Inicio" formControlName="fechaInicio">
+              <mat-datepicker-toggle matSuffix [for]="fechaInicio"></mat-datepicker-toggle>
+              <mat-datepicker #fechaInicio></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="col s12 m6">
+              <input matInput [matDatepicker]="fechaFin" placeholder="Fecha Finalizacion" formControlName="fechaFin">
+              <mat-datepicker-toggle matSuffix [for]="fechaFin"></mat-datepicker-toggle>
+              <mat-datepicker #fechaFin></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a (click)="closeModal(idModalRegistroRegistroFecha)" class="waves-effect btn  waves-light red">Cancelar</a>
+          <button class="waves-effect btn waves-light green" type="submit"
+            [disabled]="!formularioActualizacionFechaServicio.valid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+<!--Fin de Modal Registro de fecha de acivacion-->

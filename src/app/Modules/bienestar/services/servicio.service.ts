@@ -11,7 +11,7 @@ export class ServicioService {
   private header = new HttpHeaders({ 'Content-Type': 'application/json' })
   constructor(private http: HttpClient) { }
   guardarServicio(servicio: servicio): Observable<servicio> {
-    return this.http.post<servicio>(this.urlControlador, JSON.stringify(servicio), { headers: this.header })
+    return this.http.post<servicio>(this.urlControlador+"/create", JSON.stringify(servicio), { headers: this.header })
   }
   listarServicio(): Observable<servicio[]> {
     return this.http.get<servicio[]>(this.urlControlador + "/all");
@@ -20,7 +20,7 @@ export class ServicioService {
     return this.http.get<servicio>(this.urlControlador + "/" + id + "/delete");
   }
   editarServicio(servicio: servicio): Observable<servicio> {
-    return this.http.post<servicio>(this.urlControlador + "/" + servicio.id + "edit", JSON.stringify(servicio), { headers: this.header })
+    return this.http.post<servicio>(this.urlControlador + "/" + servicio.id + "/edit", JSON.stringify(servicio), { headers: this.header })
   }
 
 }
