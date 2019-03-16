@@ -6,9 +6,13 @@ export interface servicio {
   estado: number
   total: number
   icono: string
-  vacanteHombre: number
-  vacanteMujer: number
   requisitos: requisito[]
+  vacantesHombre: number
+  vacantesMujer: number
+  activador: boolean
+  dividido: boolean
+  fechaInicio: Date
+  fechaFin: Date
   created_at: Date
   updated_at: Date
 }
