@@ -6,9 +6,11 @@ import { TitulosRoutingModule } from './titulos.routing.module';
 import { TitulosComponent } from './titulos.component';
 import { MaterialModule } from 'src/app/global/global.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RegistrosComponent } from './componentAdmin/registros/registros.component';
+
 
 @NgModule({
-  declarations: [PrincipalComponent, BusquedaComponent,TitulosComponent],
+  declarations: [PrincipalComponent, BusquedaComponent,TitulosComponent, RegistrosComponent],
   imports: [CommonModule,TitulosRoutingModule,MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [],
   providers: [],

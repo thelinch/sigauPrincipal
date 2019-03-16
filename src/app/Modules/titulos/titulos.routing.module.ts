@@ -3,10 +3,11 @@ import { NgModule } from '@angular/core';
 import { TitulosComponent } from './titulos.component';
 import { PrincipalComponent } from './componentAdmin/principal/principal.component';
 import { BusquedaComponent } from './componentAdmin/busqueda/busqueda.component';
+import { RegistrosComponent } from './componentAdmin/registros/registros.component';
 
 
 const routes: Routes = [
-        {path: "admin",component:TitulosComponent,children:[{path: "principal", component:PrincipalComponent},{path: "busqueda", component:BusquedaComponent }]}
+        {path: "admin",component:TitulosComponent,children:[{path: "principal", component:PrincipalComponent},{path: "busqueda", component:BusquedaComponent },{path: "registros", component:RegistrosComponent }]}
 
     //{ path: 'path/:routeParam', component: MyComponent },
     //{ path: 'staticPath', component: ... },
