@@ -1,5 +1,5 @@
 import { requisito } from './Requisito';
-
+import { Moment } from 'moment';
 export interface servicio {
   id?: number
   nombre: string

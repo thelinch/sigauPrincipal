@@ -44,8 +44,8 @@ export class ServiciosComponent implements OnInit {
       vacantesMujer: new FormControl("")
     })
     this.formularioActualizacionFechaServicio = this.fb.group({
-      fechaInicio: new FormControl("", Validators.required),
-      fechaFin: new FormControl(moment.utc().toDate(), Validators.required)
+      fechaInicio: new FormControl(moment(), Validators.required),
+      fechaFin: new FormControl(moment(), Validators.required)
     })
     this.listarServicios();
   }
@@ -100,10 +100,12 @@ export class ServiciosComponent implements OnInit {
   }
 
   activarServicio(formValue: any) {
-    console.log(formValue)
-    this.servicioSeleccionado.activador = true;
-    this.servicioSeleccionado.fechaInicio = formValue.fechaInicio
-    this.servicioSeleccionado.fechaFin = formValue.fechaFin
+    let jsonFecha: any = {
+      id: this.servicioSeleccionado.id,
+      fechaInicio: (formValue.fechaInicio as moment.Moment).format("YYYY-MM-DD"),
+      fechaFin: (formValue.fechaInicio as moment.Moment).format("YYYY-MM-DD")
+    }
+
     this.servicioService.editarServicio(this.servicioSeleccionado).subscribe(serviciosActualizado => {
       console.log(serviciosActualizado)
     })

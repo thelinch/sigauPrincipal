@@ -34,8 +34,6 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
-  DateAdapter,
-  MAT_DATE_FORMATS,
 } from '@angular/material';
 import { A11yModule } from '@angular/cdk/a11y';
 import { BidiModule } from '@angular/cdk/bidi';
@@ -48,17 +46,23 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import * as _moment from 'moment';
+// tslint:disable-next-line:no-duplicate-imports
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { AppAdapter } from './appAdapter';
+import { CustomDateAdapter } from './services/customDateAdapter.service';
+
+const moment = _moment;
 const APP_DATE_FORMATS = {
   parse: {
-    dateInput: { month: 'short', year: 'numeric', day: 'numeric' }
+    dateInput: 'DD/MM/YYYY',
   },
   display: {
-    // dateInput: { month: 'short', year: 'numeric', day: 'numeric' },
-    dateInput: 'input',
-    monthYearLabel: { year: 'numeric', month: 'short' },
-    dateA11yLabel: { year: 'numeric', month: 'long', day: 'numeric' },
-    monthYearA11yLabel: { year: 'numeric', month: 'long' },
+    dateInput: 'MM/DD/YYYY',
+    monthYearLabel: 'MM YYYY',
+    dateA11yLabel: 'MM/DD/YYYY',
+    monthYearA11yLabel: 'MM YYYY',
   }
 };
 /**
@@ -112,8 +116,13 @@ const APP_DATE_FORMATS = {
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatMomentDateModule,
     MatTreeModule,
+    MatNativeDateModule
   ],
-  providers: [{ provide: DateAdapter, useClass: AppAdapter }, { provide: MAT_DATE_FORMATS, useValue: APP_DATE_FORMATS }]
+  providers: [
+    CustomDateAdapter,
+    { provide: DateAdapter, useClass: CustomDateAdapter }
+  ]
 })
 export class MaterialModule { }

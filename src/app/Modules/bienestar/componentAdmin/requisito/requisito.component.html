@@ -131,6 +131,16 @@
             </mat-select>
           </mat-form-field>
         </div>
+        <div class="row">
+          <mat-form-field class="col s12 m6">
+            <mat-select placeholder="Tipo Peticion" formControlName="tipoPeticion">
+              <mat-option value="anual">anual
+              </mat-option>
+              <mat-option value="normal">Normal
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
       <div class="modal-footer">
         <a (click)="closeModal('modal1')" class="waves-effect btn  waves-light red">Cancelar</a>
