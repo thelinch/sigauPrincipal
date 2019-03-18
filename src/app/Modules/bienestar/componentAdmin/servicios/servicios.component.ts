@@ -100,16 +100,32 @@ export class ServiciosComponent implements OnInit {
   }
 
   activarServicio(formValue: any) {
+    this.abrirBlock();
+    let modeloServicio = this.modelServicio.get();
     let jsonFecha: any = {
       id: this.servicioSeleccionado.id,
       fechaInicio: (formValue.fechaInicio as moment.Moment).format("YYYY-MM-DD"),
-      fechaFin: (formValue.fechaInicio as moment.Moment).format("YYYY-MM-DD")
+      fechaFin: (formValue.fechaFin as moment.Moment).format("YYYY-MM-DD")
     }
-
-    this.servicioService.editarServicio(this.servicioSeleccionado).subscribe(serviciosActualizado => {
-      console.log(serviciosActualizado)
+    this.servicioService.activacionServicio(jsonFecha).subscribe(serviciosActualizado => {
+      let index = this.buscarServicio(modeloServicio, serviciosActualizado);
+      modeloServicio[index] = serviciosActualizado;
+      this.modelServicio.set(modeloServicio);
+      this.listaServicio$ = this.modelServicio.data$;
+      functionsGlobal.getToast("Se Edito Correctamente el Servicio")
+      this.cerrarModal(this.idModalRegistroRegistroFecha);
+      this.cerrarBlock();
     })
 
+  }
+  activarModalFormularioActualizacionFechaServicio() {
+    if (this.servicioSeleccionado.fechaFin && this.servicioSeleccionado.fechaInicio) {
+      this.formularioActualizacionFechaServicio.get("fechaInicio").setValue(this.servicioSeleccionado.fechaInicio)
+      this.formularioActualizacionFechaServicio.get("fechaFin").setValue(this.servicioSeleccionado.fechaFin)
+
+    }else{
+      this.limpiarFormularioActualizacionFechaServicio();
+    }
   }
   limpiarFormularioActualizacionFechaServicio() {
     this.formularioActualizacionFechaServicio.reset();
@@ -125,6 +141,9 @@ export class ServiciosComponent implements OnInit {
     functionsGlobal.closeModal(id);
   }
   //FUNCIONES COMUNES
+  buscarServicio(requisitos: servicio[], servicio: servicio): number {
+    return requisitos.findIndex(requisitoB => requisitoB.id == servicio.id)
+  }
   /**
    *
    * @param id

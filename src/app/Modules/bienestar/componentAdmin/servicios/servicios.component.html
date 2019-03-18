@@ -14,7 +14,7 @@
               <div class="card-action  position_relative center-align">
                 <span class="card-title truncate">{{servicio.nombre}}</span>
                 <div class="position_absolute top_0 left_0 cursor"
-                  (click)="setServicio(servicio);limpiarFormularioActualizacionFechaServicio();abrirModal(idModalRegistroRegistroFecha)">
+                  (click)="setServicio(servicio);activarModalFormularioActualizacionFechaServicio();abrirModal(idModalRegistroRegistroFecha)">
                   <i class="material-icons {{servicio.activador?'green-text':'red-text'}}">fiber_manual_record</i>
                 </div>
               </div>
@@ -36,7 +36,9 @@
 
                 </p>
                 <div *ngIf="servicio.activador">
-                  {{servicio.fechaFin | date:'short'}}
+                  <time>{{servicio.fechaFin | date}}</time>
+                  <time>{{servicio.fechaInicio | date}}</time>
+
                 </div>
               </div>
               <div class="card-action right-align">
