@@ -20,7 +20,7 @@
               </div>
               <div class="divider"></div>
               <div class="card-content ">
-                <p>
+                <p class="center-align">
                   <span>
                     <i class="material-icons fas fa-female"></i>
                     {{servicio.vacantesMujer}}
@@ -31,13 +31,17 @@
 
                   </span>
                   <span>
-                    {{servicio.total}}
+                    <strong>Total:</strong> {{servicio.total}}
                   </span>
 
                 </p>
                 <div *ngIf="servicio.activador">
-                  <time>{{servicio.fechaFin | date}}</time>
-                  <time>{{servicio.fechaInicio | date}}</time>
+                  <p class="center-align">
+                    <i class="fas fa-calendar-alt"></i>:
+                    <time>{{servicio.fechaFin | date}}</time>
+                    <strong>-</strong>
+                    <time>{{servicio.fechaInicio | date}}</time>
+                  </p>
 
                 </div>
               </div>
@@ -48,11 +52,8 @@
                 <a (click)="setServicio(servicio);mostrarDatosFormularioServicio();abrirModal(idModalRegistroServicio)"><i
                     class="materials-icon fas fa-edit  blue-text cursor">
                   </i></a>
-                <a><i class="materials-icon fas fa-trash-alt red-text cursor">
+                <a (click)="setServicio(servicio);eliminarServicio()"><i class="materials-icon fas fa-trash-alt red-text cursor">
                   </i></a>
-                <a *ngIf="servicio.activador">
-                  <i class="materials-icon fas fa-calendar-alt"></i>
-                </a>
               </div>
             </div>
           </div>

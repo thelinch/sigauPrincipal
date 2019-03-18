@@ -70,6 +70,7 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio.get("vacantesMujer").setValue(this.servicioSeleccionado.vacantesMujer);
   }
   eliminarServicio() {
+    let servicios = this.modelServicio.get();
     Swal.fire({
       title: "¿Desea Eliminar el Servicio?",
       showCancelButton: true,
@@ -79,17 +80,28 @@ export class ServiciosComponent implements OnInit {
       confirmButtonText: "OK",
 
     }).then(respuesta => {
-
+      if (respuesta.value) {
+        console.log(this.servicioSeleccionado)
+        this.abrirBlock()
+         this.servicioService.eliminarServicio(this.servicioSeleccionado.id).subscribe(servicioEliminado => {
+           let index = this.buscarServicio(servicios, servicioEliminado)
+           servicios.splice(index, 1);
+           this.modelServicio.set(servicios);
+           this.listaServicio$ = this.modelServicio.data$;
+           functionsGlobal.getToast("Se elimino correctamanete el servicio")
+           this.cerrarBlock();
+         })
+      }
     })
   }
   guardarYEditarServicio(valorFomulario: any) {
     this.abrirBlock();
-    let requisitos = this.modelServicio.get()
+    let servicios = this.modelServicio.get()
     if (valorFomulario.id == null) {
       delete valorFomulario.id
       this.servicioService.guardarServicio(valorFomulario as servicio).subscribe(nuevoServicio => {
-        requisitos.push(nuevoServicio);
-        this.modelServicio.set(requisitos);
+        servicios.push(nuevoServicio);
+        this.modelServicio.set(servicios);
         this.closeModal(this.idModalRegistroServicio);
         functionsGlobal.getToast("Se Registro Correctamente")
         this.cerrarBlock();
@@ -123,7 +135,7 @@ export class ServiciosComponent implements OnInit {
       this.formularioActualizacionFechaServicio.get("fechaInicio").setValue(this.servicioSeleccionado.fechaInicio)
       this.formularioActualizacionFechaServicio.get("fechaFin").setValue(this.servicioSeleccionado.fechaFin)
 
-    }else{
+    } else {
       this.limpiarFormularioActualizacionFechaServicio();
     }
   }
@@ -137,12 +149,13 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio.enable();
   }
 
+
   closeModal(id: string) {
     functionsGlobal.closeModal(id);
   }
   //FUNCIONES COMUNES
-  buscarServicio(requisitos: servicio[], servicio: servicio): number {
-    return requisitos.findIndex(requisitoB => requisitoB.id == servicio.id)
+  buscarServicio(servicios: servicio[], servicio: servicio): number {
+    return servicios.findIndex(requisitoB => requisitoB.id == servicio.id)
   }
   /**
    *
