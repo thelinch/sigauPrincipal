@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { servicio } from '../Models/servicio';
+import { requisito } from '../Models/Requisito';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,8 @@ export class ServicioService {
   }
   activacionServicio(json: any): Observable<servicio> {
     return this.http.post<servicio>(this.urlControlador + "/activarServicio", JSON.stringify(json), { headers: this.header })
+  }
+  requisitoIdServicio(json: any): Observable<requisito[]> {
+    return this.http.post<requisito[]>(this.urlControlador + "/requisitos", JSON.stringify(json), { headers: this.header });
   }
 }

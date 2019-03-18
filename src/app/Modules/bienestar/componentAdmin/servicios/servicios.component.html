@@ -13,9 +13,14 @@
             <div class="card-stacked">
               <div class="card-action  position_relative center-align">
                 <span class="card-title truncate">{{servicio.nombre}}</span>
-                <div class="position_absolute top_0 left_0 cursor"
+                <div matTooltip="{{servicio.activador? 'Servicio Activado':'Servicio Desactivado'}}"
+                  aria-label="Button that displays a tooltip when focused or hovered over"
+                  class="position_absolute top_0 left_0 cursor"
                   (click)="setServicio(servicio);activarModalFormularioActualizacionFechaServicio();abrirModal(idModalRegistroRegistroFecha)">
                   <i class="material-icons {{servicio.activador?'green-text':'red-text'}}">fiber_manual_record</i>
+                </div>
+                <div class="position_absolute right_0 top_0 padding_2rem">
+                  <i class="fas {{servicio.icono}}" [matTooltip]="servicio.nombre"></i>
                 </div>
               </div>
               <div class="divider"></div>
@@ -37,23 +42,30 @@
                 </p>
                 <div *ngIf="servicio.activador">
                   <p class="center-align">
-                    <i class="fas fa-calendar-alt"></i>:
-                    <time>{{servicio.fechaFin | date}}</time>
-                    <strong>-</strong>
+                    <i matTooltip="Temporada de activacion"
+                      aria-label="Button that displays a tooltip when focused or hovered over"
+                      class="fas fa-calendar-alt"></i>:
                     <time>{{servicio.fechaInicio | date}}</time>
+                    <strong>-</strong>
+                    <time>{{servicio.fechaFin | date}}</time>
                   </p>
 
                 </div>
               </div>
               <div class="card-action right-align">
-                <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-                    class="materials-icon brown-text fas fa-archive cursor">
+                <a (click)="setServicio(servicio);requisitosPorIdServicio()" matTooltip="Ver Requisitos"
+                  class="btn-floating btn-small waves-effect fondo-ocda"><i class="material-icons">
+                    description</i></a>
+                <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Editar Servicio"
+                  aria-label="Button that displays a tooltip when focused or hovered over"
+                  (click)="setServicio(servicio);mostrarDatosFormularioServicio();abrirModal(idModalRegistroServicio)"><i
+                    class="material-icons white-text cursor">edit
                   </i></a>
-                <a (click)="setServicio(servicio);mostrarDatosFormularioServicio();abrirModal(idModalRegistroServicio)"><i
-                    class="materials-icon fas fa-edit  blue-text cursor">
-                  </i></a>
-                <a (click)="setServicio(servicio);eliminarServicio()"><i class="materials-icon fas fa-trash-alt red-text cursor">
-                  </i></a>
+                <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Eliminar Servicio"
+                  aria-label="Button that displays a tooltip when focused or hovered over"
+                  (click)="setServicio(servicio);eliminarServicio()"><i class="material-icons white-text cursor">
+                    delete_forever </i></a>
+
               </div>
             </div>
           </div>
@@ -88,10 +100,16 @@
               <input matInput type="number" placeholder="Vacantes Mujeres" formControlName="vacantesMujer">
             </mat-form-field>
           </div>
+          <div class="row">
+            <mat-form-field class="col s6">
+              <input matInput type="text" placeholder="Icono" formControlName="icono">
+            </mat-form-field>
+
+          </div>
         </div>
         <div class="modal-footer">
           <a (click)="closeModal(idModalRegistroServicio)" class="waves-effect btn  waves-light red">Cancelar</a>
-          <button class="waves-effect btn waves-light green" type="submit"
+          <button class="waves-effect btn waves-light fondo-ocda" type="submit"
             [disabled]="!formularioServicio.valid">Guardar</button>
         </div>
       </form>
@@ -135,3 +153,47 @@
 
 </div>
 <!--Fin de Modal Registro de fecha de acivacion-->
+<!--Modal Para visualizar Requisito registrado por Servicio-->
+
+<div [id]="idModalRegistoRequisitoDeServicio" class="modal   overflow_x_hidde">
+  <div class="row">
+    <div class="col s12">
+      <div class="modal-content overflow_x_hidde">
+        <h5 class="center-align">Requisitos Registrados</h5>
+        <table class="responsive-table highlight centered">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Descripion</th>
+              <th>Prioridad</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Alvin</td>
+              <td>Eclair</td>
+              <td>$0.87</td>
+            </tr>
+            <tr>
+              <td>Alan</td>
+              <td>Jellybean</td>
+              <td>$3.76</td>
+            </tr>
+            <tr>
+              <td>Jonathan</td>
+              <td>Lollipop</td>
+              <td>$7.00</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <a (click)="closeModal(idModalRegistoRequisitoDeServicio)" class="waves-effect btn  waves-light red">salir</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!--Fin Modal Para visualizar Requisito registrado por Servicio-->

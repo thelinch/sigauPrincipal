@@ -18,17 +18,18 @@
             <i class=" material-icons ">info_outline</i>
           </a>
           <ul class="buttons" #ulButtons>
-            <li *ngIf="requisito.requerido"><a class="btn-floating btn-small red"><i
+            <li *ngIf="requisito.requerido" matTooltip="requerido"><a class="btn-floating btn-small red"><i
                   class="fas fa-asterisk  lighten-1"></i></a>
             </li>
-            <li *ngFor="let tipo of requisito.tipos"><a class="btn-floating btn-small yellow darken-1"><i
-                  class=" fas  {{tipo.icono}}  tooltipped" data-position="bottom"
-                  [attr.data-tooltip]="tipo.nombre"></i></a></li>
-            <li *ngFor="let servicio of requisito.servicios"><a class="btn-floating btn-small green"><i
-                  class=" fas  {{servicio.icono}}  tooltipped" data-position="bottom"></i></a></li>
+            <li *ngFor="let tipo of requisito.tipos"><a class="btn-floating btn-small yellow darken-1"
+                [matTooltip]="tipo.nombre"><i class=" fas  {{tipo.icono}}"></i></a>
+            </li>
+            <li *ngFor="let servicio of requisito.servicios"><a [matTooltip]="servicio.nombre"
+                class="btn-floating btn-small green"><i class="fas  {{servicio.icono}} "></i></a></li>
           </ul>
         </div>
-        <div class="dmm_ribbon position_absolute top_0 right_0" *ngIf="requisito.prioridad==1">
+        <div class="dmm_ribbon position_absolute top_0 right_0" matTooltip="Requisito Prioritario"
+          *ngIf="requisito.prioridad">
           <span class="dmm_rbcnt">
           </span>
         </div>
@@ -41,19 +42,21 @@
             {{requisito.descripcion}}
           </div>
           <div class="card-action right-align">
-            <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-                class="materials-icon brown-text fas fa-archive cursor">
+            <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Ver Archivos"><i
+                class="material-icons  cursor">
+                archive </i></a>
+            <a class="btn-floating btn-small waves-effect fondo-ocda"
+              (click)="setRequisito(requisito);visualizarRequisito()" matTooltip="Ver Requisito"><i
+                class="material-icons">
+                visibility </i></a>
+            <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Editar Requisito"
+              (click)="setRequisito(requisito);mostrarDatosFormularioRequisito();enabledFormularioRequisito();abrirModal(idModalRegistroRequisito)"><i
+                class="material-icons  cursor">edit
               </i></a>
-            <a (click)="setRequisito(requisito);visualizarRequisito()" data-position="bottom" data-tooltip="Eliminar"
-              class="tooltipped"><i class="materials-icon fas fa-eye blue-text cursor">
-              </i></a>
-            <a (click)="setRequisito(requisito);mostrarDatosFormularioRequisito();enabledFormularioRequisito();abrirModal(idModalRegistroRequisito)"
-              data-position="bottom" data-tooltip="Editar" class="tooltipped"><i
-                class="materials-icon fas fa-edit  blue-text cursor">
-              </i></a>
-            <a (click)="setRequisito(requisito);eliminarRequisito()" data-position="bottom" data-tooltip="Eliminar"
-              class="tooltipped"><i class="materials-icon fas fa-trash-alt red-text cursor">
-              </i></a>
+            <a class="btn-floating btn-small waves-effect fondo-ocda"
+              (click)="setRequisito(requisito);eliminarRequisito()" matTooltip="Eliminar  Requisito"><i
+                class="material-icons  cursor">
+                delete_forever </i></a>
 
           </div>
         </div>
@@ -150,6 +153,8 @@
     </form>
   </div>
   <!--Fin Modal de Registro de requisito-->
+
+
 </block-ui>
 
 <ng-template #templateFotos let-arrayFotos="fotos">

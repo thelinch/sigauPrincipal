@@ -9,6 +9,7 @@ import { ServicioService } from '../../services/servicio.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
+import { requisito } from '../../Models/Requisito';
 /**
  *
  *
@@ -29,6 +30,8 @@ export class ServiciosComponent implements OnInit {
   autoSuma: boolean = false;
   idModalRegistroServicio: string = "modalRegisto";
   idModalRegistroRegistroFecha: string = "modalActualizacionFecha"
+  idModalRegistoRequisitoDeServicio = "modalRequisitoServicio"
+  listaRequisitos$: Observable<requisito[]>
   formularioActualizacionFechaServicio: FormGroup;
   formularioServicio: FormGroup;
   @BlockUI() blockUI: NgBlockUI;
@@ -40,12 +43,13 @@ export class ServiciosComponent implements OnInit {
       id: new FormControl(),
       nombre: new FormControl("", [Validators.required]),
       total: new FormControl("", Validators.required),
+      icono: new FormControl(""),
       vacantesHombre: new FormControl(""),
       vacantesMujer: new FormControl("")
     })
     this.formularioActualizacionFechaServicio = this.fb.group({
-      fechaInicio: new FormControl(moment(), Validators.required),
-      fechaFin: new FormControl(moment(), Validators.required)
+      fechaInicio: new FormControl("", Validators.required),
+      fechaFin: new FormControl("", Validators.required)
     })
     this.listarServicios();
   }
@@ -68,6 +72,7 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio.get("total").setValue(this.servicioSeleccionado.total);
     this.formularioServicio.get("vacantesHombre").setValue(this.servicioSeleccionado.vacantesHombre);
     this.formularioServicio.get("vacantesMujer").setValue(this.servicioSeleccionado.vacantesMujer);
+    this.formularioServicio.get("icono").setValue(this.servicioSeleccionado.icono);
   }
   eliminarServicio() {
     let servicios = this.modelServicio.get();
@@ -83,14 +88,14 @@ export class ServiciosComponent implements OnInit {
       if (respuesta.value) {
         console.log(this.servicioSeleccionado)
         this.abrirBlock()
-         this.servicioService.eliminarServicio(this.servicioSeleccionado.id).subscribe(servicioEliminado => {
-           let index = this.buscarServicio(servicios, servicioEliminado)
-           servicios.splice(index, 1);
-           this.modelServicio.set(servicios);
-           this.listaServicio$ = this.modelServicio.data$;
-           functionsGlobal.getToast("Se elimino correctamanete el servicio")
-           this.cerrarBlock();
-         })
+        this.servicioService.eliminarServicio(this.servicioSeleccionado.id).subscribe(servicioEliminado => {
+          let index = this.buscarServicio(servicios, servicioEliminado)
+          servicios.splice(index, 1);
+          this.modelServicio.set(servicios);
+          this.listaServicio$ = this.modelServicio.data$;
+          functionsGlobal.getToast("Se elimino correctamanete el servicio")
+          this.cerrarBlock();
+        })
       }
     })
   }
@@ -107,17 +112,42 @@ export class ServiciosComponent implements OnInit {
         this.cerrarBlock();
       })
     } else {
-
+      this.servicioSeleccionado.nombre = valorFomulario.nombre;
+      this.servicioSeleccionado.total = valorFomulario.total;
+      this.servicioSeleccionado.vacantesHombre = valorFomulario.vacantesHombre;
+      this.servicioSeleccionado.vacantesMujer = valorFomulario.vacantesMujer;
+      this.servicioSeleccionado.icono = valorFomulario.icono;
+      // this.servicioSeleccionado.icono=valorFomulario.icono;
+      this.servicioService.editarServicio(this.servicioSeleccionado).subscribe(servicioActualizado => {
+        let index = this.buscarServicio(servicios, servicioActualizado);
+        servicios[index] = servicioActualizado;
+        this.modelServicio.set(servicios);
+        this.listaServicio$ = this.modelServicio.data$;
+        functionsGlobal.getToast("Se Edito Correctamente")
+        this.closeModal(this.idModalRegistroServicio);
+        this.cerrarBlock();
+      });
     }
   }
-
+  requisitosPorIdServicio() {
+    this.abrirBlock();
+    let json = {
+      id: this.servicioSeleccionado.id
+    }
+    console.log(json)
+    this.listaRequisitos$ = this.servicioService.requisitoIdServicio(json);
+    this.listaRequisitos$.subscribe(re => {
+      this.abrirModal(this.idModalRegistoRequisitoDeServicio);
+      this.cerrarBlock();
+    })
+  }
   activarServicio(formValue: any) {
     this.abrirBlock();
     let modeloServicio = this.modelServicio.get();
     let jsonFecha: any = {
       id: this.servicioSeleccionado.id,
-      fechaInicio: (formValue.fechaInicio as moment.Moment).format("YYYY-MM-DD"),
-      fechaFin: (formValue.fechaFin as moment.Moment).format("YYYY-MM-DD")
+      fechaInicio: formValue.fechaInicio,
+      fechaFin: formValue.fechaFin
     }
     this.servicioService.activacionServicio(jsonFecha).subscribe(serviciosActualizado => {
       let index = this.buscarServicio(modeloServicio, serviciosActualizado);
@@ -128,13 +158,11 @@ export class ServiciosComponent implements OnInit {
       this.cerrarModal(this.idModalRegistroRegistroFecha);
       this.cerrarBlock();
     })
-
   }
   activarModalFormularioActualizacionFechaServicio() {
     if (this.servicioSeleccionado.fechaFin && this.servicioSeleccionado.fechaInicio) {
-      this.formularioActualizacionFechaServicio.get("fechaInicio").setValue(this.servicioSeleccionado.fechaInicio)
-      this.formularioActualizacionFechaServicio.get("fechaFin").setValue(this.servicioSeleccionado.fechaFin)
-
+      this.formularioActualizacionFechaServicio.get("fechaInicio").patchValue(this.servicioSeleccionado.fechaInicio)
+      this.formularioActualizacionFechaServicio.get("fechaFin").patchValue(this.servicioSeleccionado.fechaFin)
     } else {
       this.limpiarFormularioActualizacionFechaServicio();
     }
