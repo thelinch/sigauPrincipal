@@ -7,10 +7,14 @@ import { TitulosComponent } from './titulos.component';
 import { MaterialModule } from 'src/app/global/global.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegistrosComponent } from './componentAdmin/registros/registros.component';
+import { RegistrobachillerComponent } from './componentAdmin/registrobachiller/registrobachiller.component';
+import { RegistrotituladoComponent } from './componentAdmin/registrotitulado/registrotitulado.component';
+import { RegistromaestriaComponent } from './componentAdmin/registromaestria/registromaestria.component';
+import { RegistrodoctoradoComponent } from './componentAdmin/registrodoctorado/registrodoctorado.component';
 
 
 @NgModule({
-  declarations: [PrincipalComponent, BusquedaComponent,TitulosComponent, RegistrosComponent],
+  declarations: [PrincipalComponent, BusquedaComponent,TitulosComponent, RegistrosComponent, RegistrobachillerComponent, RegistrotituladoComponent, RegistromaestriaComponent, RegistrodoctoradoComponent],
   imports: [CommonModule,TitulosRoutingModule,MaterialModule, FormsModule, ReactiveFormsModule],
   exports: [],
   providers: [],
