@@ -1,7 +1,7 @@
 <block-ui>
   <div class="row">
     <div class="col s12 center-align">
-      <a class="btn-floating btn-large waves-effect waves-light blue"
+      <a class="btn-floating btn-large waves-effect waves-light blue button_create"
         (click)="nuevoServicio();abrirModal(idModalRegistroServicio)"><i class="material-icons">add</i></a>
     </div>
     <div class="col s12">
@@ -20,6 +20,9 @@
                   <i class="material-icons {{servicio.activador?'green-text':'red-text'}}">fiber_manual_record</i>
                 </div>
                 <div class="position_absolute right_0 top_0 padding_2rem">
+                  <div class="chip">
+                    {{servicio.codigoMatricula}}
+                  </div>
                   <i class="fas {{servicio.icono}}" [matTooltip]="servicio.nombre"></i>
                 </div>
               </div>
@@ -40,15 +43,15 @@
                   </span>
 
                 </p>
-                <div *ngIf="servicio.activador">
-                  <p class="center-align">
+                <div *ngIf="servicio.activador" class="center-align">
+                  <span>
                     <i matTooltip="Temporada de activacion"
                       aria-label="Button that displays a tooltip when focused or hovered over"
                       class="fas fa-calendar-alt"></i>:
                     <time>{{servicio.fechaInicio | date}}</time>
                     <strong>-</strong>
                     <time>{{servicio.fechaFin | date}}</time>
-                  </p>
+                  </span>
 
                 </div>
               </div>
@@ -85,26 +88,28 @@
           <h5 class="center-align">Registro de Servicio</h5>
           <div class="row">
             <input type="hidden" formControlName="id">
-            <mat-form-field class="col s6">
+            <mat-form-field class="col s12 m6">
               <input matInput placeholder="servicio" formControlName="nombre">
             </mat-form-field>
-            <mat-form-field class="col s6">
+            <mat-form-field class="col s12 m6">
               <input matInput placeholder="Total" formControlName="total">
             </mat-form-field>
           </div>
           <div class="row">
-            <mat-form-field class="col s6">
+            <mat-form-field class="col s12 m6">
               <input matInput type="number" placeholder="Vacantes Varones" formControlName="vacantesHombre">
             </mat-form-field>
-            <mat-form-field class="col s6">
+            <mat-form-field class="col s12 m6">
               <input matInput type="number" placeholder="Vacantes Mujeres" formControlName="vacantesMujer">
             </mat-form-field>
           </div>
           <div class="row">
-            <mat-form-field class="col s6">
+            <mat-form-field class="col s12 m6">
               <input matInput type="text" placeholder="Icono" formControlName="icono">
             </mat-form-field>
-
+            <mat-form-field class="col s12 m6">
+              <input matInput type="text" placeholder="Codigo Matricula" formControlName="codigoMatricula">
+            </mat-form-field>
           </div>
         </div>
         <div class="modal-footer">
@@ -166,25 +171,18 @@
               <th>Nombre</th>
               <th>Descripion</th>
               <th>Prioridad</th>
+              <th>Restriccion</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr>
-              <td>Alvin</td>
-              <td>Eclair</td>
-              <td>$0.87</td>
+            <tr *ngFor="let requisito of listaRequisitos$ | async  ">
+              <td>{{requisito.nombre}}</td>
+              <td>{{requisito.descripcion}}</td>
+              <td>{{requisito.prioridad? 'Prioritario':'Normal'}}</td>
+              <td>{{requisito.requerido? 'Requerido':'Opcional'}}</td>
             </tr>
-            <tr>
-              <td>Alan</td>
-              <td>Jellybean</td>
-              <td>$3.76</td>
-            </tr>
-            <tr>
-              <td>Jonathan</td>
-              <td>Lollipop</td>
-              <td>$7.00</td>
-            </tr>
+
           </tbody>
         </table>
 

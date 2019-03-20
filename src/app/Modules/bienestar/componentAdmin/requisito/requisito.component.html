@@ -3,7 +3,7 @@
     <div class="col s12 ">
       <div class="row">
         <div class="col s12  center-align">
-          <a class="waves-effect  btn-floating btn-large blue "
+          <a matTooltip="Nuevo Requisito" class="waves-effect button_create  btn-floating btn-large blue "
             (click)="nuevoRequisito();abrirModal(idModalRegistroRequisito)">
             <i class="material-icons">add</i>
           </a>
@@ -82,9 +82,9 @@
         </div>
         <div class="row">
           <mat-form-field class="col s6">
-            <mat-select placeholder="restriccion" formControlName="requerido" [compareWith]="compareString">
-              <mat-option value="true">Requerido</mat-option>
-              <mat-option value="false">Opcional</mat-option>
+            <mat-select placeholder="restriccion" formControlName="requerido">
+              <mat-option value=true>Requerido</mat-option>
+              <mat-option value=false>Opcional</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col s6">
@@ -119,9 +119,9 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col s12 m6">
-            <mat-select placeholder="prioridad" formControlName="prioridad" [compareWith]="compareString">
-              <mat-option value=1>Alta</mat-option>
-              <mat-option value=0>Normal</mat-option>
+            <mat-select placeholder="prioridad" formControlName="prioridad">
+              <mat-option value=true>Alta</mat-option>
+              <mat-option value=false>Normal</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

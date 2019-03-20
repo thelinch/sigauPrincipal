@@ -37,6 +37,8 @@ export class RequisitoComponent implements OnInit {
 
   listaRequisito$: Observable<requisito[]>
   private modelRequisito: Model<requisito[]>;
+  private modelTipoRequisito: Model<tipoRequisito[]>;
+  private modelServicios: Model<servicio[]>
   listaServicio$: Observable<servicio[]>
   listaTipoRequisito$: Observable<tipoRequisito[]>
   idModalRegistroRequisito: string = "modal1"
@@ -45,7 +47,7 @@ export class RequisitoComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
   fileUpload: FileUploadWithPreview;
   estadoActualizarResgitrarFormularion: boolean = false;
-  constructor(private fb: FormBuilder, private tipoRequisitoService: TipoRequisitoService, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>, private serviciosService: ServicioService) {
+  constructor(private fb: FormBuilder, private tipoRequisitoService: TipoRequisitoService, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>, private modelFacotoryServicio: ModelFactory<servicio[]>, private modelFactoryTipoRequisito: ModelFactory<tipoRequisito[]>, private serviciosService: ServicioService) {
 
   }
   ngOnInit() {
@@ -64,6 +66,7 @@ export class RequisitoComponent implements OnInit {
     this.listaTipoRequisito$ = this.tipoRequisitoService.all();
     this.listaServicio$ = this.serviciosService.listarServicio();
     this.listarRequisitos();
+    this.iniciarDatos();
     // this.requisitoService.getAllPersona()
 
   }
@@ -78,16 +81,25 @@ export class RequisitoComponent implements OnInit {
 
 
 
-  listarTipoRequisito(idModal: string) {
+  iniciarDatos() {
     this.activarBlock()
-    this.listaTipoRequisito$ = this.tipoRequisitoService.all();
-    this.listaTipoRequisito$.subscribe(data => {
+    this.tipoRequisitoService.all().subscribe(async tipoRequisito => {
+      this.modelTipoRequisito = this.modelFactoryTipoRequisito.create(tipoRequisito);
+      this.listaTipoRequisito$ = this.modelTipoRequisito.data$;
+      await this.serviciosService.listarServicio().subscribe(async servicios => {
+        this.modelServicios = this.modelFacotoryServicio.create(servicios);
+        this.listaServicio$ = this.modelServicios.data$;
+        await this.cerrarBlock();
+      })
+
+    });
+    /*this.listaTipoRequisito$.subscribe(data => {
       this.listaServicio$ = this.serviciosService.listarServicio();
       this.listaServicio$.subscribe(async dataSer => {
         await this.abrirModal(idModal)
         this.cerrarBlock()
       })
-    })
+    })*/
   }
   listarRequisitos() {
     this.activarBlock()
@@ -99,16 +111,12 @@ export class RequisitoComponent implements OnInit {
   }
   //CRUD REQUISITO
   guardarYEditarRequisito(formsValue) {
-    console.log(formsValue)
     let requisitos = this.modelRequisito.get()
-    let isRequerido: boolean = formsValue.requerido == "true";
-    let prioridadRequisito: number = parseInt(formsValue.prioridad);
     this.blockUI.start()
     if (formsValue.id == null) {
       delete formsValue.id;
       let guardarRequisito = formsValue as requisito;
-      guardarRequisito.prioridad = prioridadRequisito;
-      guardarRequisito.requerido = isRequerido;
+      console.log(guardarRequisito)
       this.requisitoService.gurdarRequisito(guardarRequisito).subscribe(requisitoGurdado => {
         console.log(requisitoGurdado)
         requisitos.push(requisitoGurdado)
@@ -122,8 +130,8 @@ export class RequisitoComponent implements OnInit {
       this.requisitoSeleccionado.nombre = formsValue.nombre;
       this.requisitoSeleccionado.descripcion = formsValue.descripcion;
       this.requisitoSeleccionado.tipoArchivo = formsValue.tipoArchivo;
-      this.requisitoSeleccionado.prioridad = prioridadRequisito;
-      this.requisitoSeleccionado.requerido = isRequerido;
+      this.requisitoSeleccionado.prioridad = formsValue.prioridad;
+      this.requisitoSeleccionado.requerido = formsValue.requerido;
       this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
         let index = this.buscarRequisito(requisitos, requisitoUpdate);
         requisitos[index] = requisitoUpdate;
@@ -144,7 +152,7 @@ export class RequisitoComponent implements OnInit {
     this.formularioRequisito.get("tipoArchivo").setValue(this.requisitoSeleccionado.tipoArchivo)
     this.formularioRequisito.get("tipos").setValue(tiposSeleccionado);
     this.formularioRequisito.get("servicios").setValue(serviciosSeleccionado);
-    this.formularioRequisito.get("prioridad").patchValue(this.requisitoSeleccionado.prioridad.toString());
+    this.formularioRequisito.get("prioridad").patchValue(this.requisitoSeleccionado.prioridad ? "true" : "false");
     this.formularioRequisito.get("requerido").patchValue(this.requisitoSeleccionado.requerido ? "true" : "false")
     this.formularioRequisito.get("tipoPeticion").patchValue(this.requisitoSeleccionado.tipoPeticion);
     this.formularioRequisito.get("servicios").clearValidators();

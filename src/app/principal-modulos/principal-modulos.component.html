@@ -5,7 +5,7 @@
     <ul id="slide-out" class="sidenav sidenav-fixed" #sideNav>
       <li class="fondo-ocda white-text">
         <div class="header center-align fondo-ocda">
-          <h3 class="truncate">Bienvenido</h3>
+          <h3 class="truncate" style="margin: 0">Bienvenido</h3>
           <p>Sistema de Gestion Administrativa Unas</p>
         </div>
       </li>
@@ -16,9 +16,6 @@
             <div class="col s12 m6 push-m3">
               <a><img class="circle responsive-img" src="../../assets/UsuarioDefecto/user-defect.jpg"></a>
             </div>
-            <mat-form-field>
-              <input matInput placeholder="Input">
-            </mat-form-field>
           </div>
         </div>
       </li>
@@ -74,9 +71,7 @@
       </li>
     </ul>
   </div>
-  <div class="col s12 m12">
-    <div class="col s12 m9 offset-m3 ">
-      <router-outlet></router-outlet>
-    </div>
+  <div class="col s12 m9">
+    <router-outlet></router-outlet>
   </div>
 </div>

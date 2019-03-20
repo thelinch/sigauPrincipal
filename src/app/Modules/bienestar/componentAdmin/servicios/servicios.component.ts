@@ -45,7 +45,8 @@ export class ServiciosComponent implements OnInit {
       total: new FormControl("", Validators.required),
       icono: new FormControl(""),
       vacantesHombre: new FormControl(""),
-      vacantesMujer: new FormControl("")
+      vacantesMujer: new FormControl(""),
+      codigoMatricula: new FormControl("", [Validators.required])
     })
     this.formularioActualizacionFechaServicio = this.fb.group({
       fechaInicio: new FormControl("", Validators.required),
@@ -73,6 +74,7 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio.get("vacantesHombre").setValue(this.servicioSeleccionado.vacantesHombre);
     this.formularioServicio.get("vacantesMujer").setValue(this.servicioSeleccionado.vacantesMujer);
     this.formularioServicio.get("icono").setValue(this.servicioSeleccionado.icono);
+    this.formularioServicio.get("codigoMatricula").setValue(this.servicioSeleccionado.codigoMatricula)
   }
   eliminarServicio() {
     let servicios = this.modelServicio.get();
@@ -117,6 +119,7 @@ export class ServiciosComponent implements OnInit {
       this.servicioSeleccionado.vacantesHombre = valorFomulario.vacantesHombre;
       this.servicioSeleccionado.vacantesMujer = valorFomulario.vacantesMujer;
       this.servicioSeleccionado.icono = valorFomulario.icono;
+      this.servicioSeleccionado.codigoMatricula = valorFomulario.codigoMatricula;
       // this.servicioSeleccionado.icono=valorFomulario.icono;
       this.servicioService.editarServicio(this.servicioSeleccionado).subscribe(servicioActualizado => {
         let index = this.buscarServicio(servicios, servicioActualizado);
@@ -134,12 +137,9 @@ export class ServiciosComponent implements OnInit {
     let json = {
       id: this.servicioSeleccionado.id
     }
-    console.log(json)
     this.listaRequisitos$ = this.servicioService.requisitoIdServicio(json);
-    this.listaRequisitos$.subscribe(re => {
-      this.abrirModal(this.idModalRegistoRequisitoDeServicio);
-      this.cerrarBlock();
-    })
+    this.abrirModal(this.idModalRegistoRequisitoDeServicio);
+    this.cerrarBlock();
   }
   activarServicio(formValue: any) {
     this.abrirBlock();

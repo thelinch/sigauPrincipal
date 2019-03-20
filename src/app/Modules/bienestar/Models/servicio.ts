@@ -1,5 +1,4 @@
 import { requisito } from './Requisito';
-import { Moment } from 'moment';
 export interface servicio {
   id?: number
   nombre: string
@@ -7,6 +6,7 @@ export interface servicio {
   total: number
   icono: string
   requisitos: requisito[]
+  codigoMatricula: string
   vacantesHombre: number
   vacantesMujer: number
   activador: boolean
