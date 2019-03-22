@@ -22,7 +22,7 @@ a:focus {
 }
 
 .login-screen {
-  background-image: url(http://gammadesign.com.ar/wp-content/uploads/2015/10/rF2DM0DPrJU21.jpg);
+  background-image: url(http://www.v3wall.com/wallpaper/1920_1200/1104/1920_1200_20110414104536520766.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -38,7 +38,7 @@ a:focus {
 
 .login-screen:before {
   content: "";
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   position: absolute;
   width: 100%;
   height: 100%;
@@ -46,15 +46,12 @@ a:focus {
   left: 0;
 }
 
-.login-center {
-  margin-left: 4%;
-}
 
 .cardlogin {
-  border-radius: 30px 30px 30px 30px;
-  -moz-border-radius: 30px 30px 30px 30px;
-  -webkit-border-radius: 30px 30px 30px 30px;
-  border: 1px solid #cccccccc;
+  border-radius: 20px 20px 20px 20px;
+  -moz-border-radius: 20px 20px 20px 20px;
+  -webkit-border-radius: 20px 20px 20px 20px;
+  border: 2px solid #a6a6a4;
   color: black;
 }
 .label {
@@ -82,18 +79,25 @@ a:focus {
 }
 
 ::ng-deep .mat-form-field-underline .mat-form-field-ripple {
-  color: #01579b !important;
-  background-color: #01579b !important;
+  color: #c0c0c0 !important;
+  background-color: #c0c0c0 !important;
 }
 
 ::ng-deep .mat-form-field-underline {
-  color: #01579b !important;
-  background-color: #01579b !important;
+  color: #c0c0c0 !important;
+  background-color: #c0c0c0 !important;
 }
 input label {
-  color: #01579b !important;
+  color: #ffffff !important;
 }
 
 .colorIconsLogin {
-  color: #01579b;
+  color: #ffffff;
 }
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
+  transform: perspective(100px);
+  -ms-transform: none;
+  color: #9e9e9e;
+}
+
