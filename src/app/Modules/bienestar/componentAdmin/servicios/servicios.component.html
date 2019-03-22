@@ -56,6 +56,11 @@
                 </div>
               </div>
               <div class="card-action right-align">
+                <a (click)="setServicio(servicio);todososAlumnosPorIdServicio()" *ngIf="servicio.activador"
+                  class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Alumnos Registrados"
+                  aria-label="Button that displays a tooltip when focused or hovered over"><i
+                    class="material-icons white-text cursor">
+                    account_circle </i></a>
                 <a (click)="setServicio(servicio);requisitosPorIdServicio()" matTooltip="Ver Requisitos"
                   class="btn-floating btn-small waves-effect fondo-ocda"><i class="material-icons">
                     description</i></a>
@@ -68,6 +73,7 @@
                   aria-label="Button that displays a tooltip when focused or hovered over"
                   (click)="setServicio(servicio);eliminarServicio()"><i class="material-icons white-text cursor">
                     delete_forever </i></a>
+
 
               </div>
             </div>
@@ -176,7 +182,7 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let requisito of listaRequisitos$ | async  ">
+            <tr *ngFor="let requisito of listaRequisitos">
               <td>{{requisito.nombre}}</td>
               <td>{{requisito.descripcion}}</td>
               <td>{{requisito.prioridad? 'Prioritario':'Normal'}}</td>
@@ -195,3 +201,35 @@
 
 </div>
 <!--Fin Modal Para visualizar Requisito registrado por Servicio-->
+<!--Comienzo de modal para visualizar los alumnos por Servicio-->
+
+<div [id]="idModalVisualizacionAlumno" class="modal   overflow_x_hidde">
+  <div class="row">
+    <div class="col s12">
+      <div class="modal-content overflow_x_hidde">
+        <h5 class="center-align">Alumnos Registrados</h5>
+        <table class="responsive-table highlight centered">
+          <thead>
+            <tr>
+              <th>CODIGO</th>
+              <th>Fecha EGRESO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let alumno of listaAlumnos">
+              <td>{{alumno.codigo}}</td>
+              <td>{{alumno.fecha_egreso}}</td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <a (click)="closeModal(idModalVisualizacionAlumno)" class="waves-effect btn  waves-light red">salir</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!--Fin DE MODAL para visualizar MODAL de Alumnos-->

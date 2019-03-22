@@ -10,6 +10,7 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
 import { requisito } from '../../Models/Requisito';
+import { alumno } from 'src/app/global/Models/Alumno';
 /**
  *
  *
@@ -26,12 +27,14 @@ import { requisito } from '../../Models/Requisito';
 export class ServiciosComponent implements OnInit {
 
   listaServicio$: Observable<servicio[]>
+  listaRequisitos: requisito[]
+  listaAlumnos: alumno[]
   private modelServicio: Model<servicio[]>
   autoSuma: boolean = false;
   idModalRegistroServicio: string = "modalRegisto";
   idModalRegistroRegistroFecha: string = "modalActualizacionFecha"
   idModalRegistoRequisitoDeServicio = "modalRequisitoServicio"
-  listaRequisitos$: Observable<requisito[]>
+  idModalVisualizacionAlumno = "modalAlumno"
   formularioActualizacionFechaServicio: FormGroup;
   formularioServicio: FormGroup;
   @BlockUI() blockUI: NgBlockUI;
@@ -53,6 +56,7 @@ export class ServiciosComponent implements OnInit {
       fechaFin: new FormControl("", Validators.required)
     })
     this.listarServicios();
+
   }
   listarServicios() {
     this.abrirBlock();
@@ -132,14 +136,30 @@ export class ServiciosComponent implements OnInit {
       });
     }
   }
+  todososAlumnosPorIdServicio() {
+    this.abrirBlock();
+    let json = {
+      id: this.servicioSeleccionado.id,
+      codigoMatricula: this.servicioSeleccionado.codigoMatricula
+    }
+    this.servicioService.todososAlumnosPorIdServicio(json).subscribe(alumnos => {
+      this.listaAlumnos = alumnos
+      this.cerrarBlock();
+      this.abrirModal(this.idModalVisualizacionAlumno)
+    })
+  }
   requisitosPorIdServicio() {
     this.abrirBlock();
     let json = {
-      id: this.servicioSeleccionado.id
+      id: this.servicioSeleccionado.id,
+
     }
-    this.listaRequisitos$ = this.servicioService.requisitoIdServicio(json);
-    this.abrirModal(this.idModalRegistoRequisitoDeServicio);
-    this.cerrarBlock();
+    this.servicioService.requisitoIdServicio(json).subscribe(requisitos => {
+      this.listaRequisitos = requisitos
+      this.abrirModal(this.idModalRegistoRequisitoDeServicio);
+      this.cerrarBlock();
+    });
+
   }
   activarServicio(formValue: any) {
     this.abrirBlock();

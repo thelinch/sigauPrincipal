@@ -13,6 +13,8 @@ import { registerLocaleData } from '@angular/common';
 
 // importar locales
 import localePy from '@angular/common/locales/es-PY';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 registerLocaleData(localePy, 'es');
 
 @NgModule({
@@ -27,7 +29,8 @@ registerLocaleData(localePy, 'es');
     ReactiveFormsModule,
     AppRoutingModule,
     ParticlesModule,
-    MaterialModule
+    MaterialModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [],
   providers: [NavegacionService, { provide: LOCALE_ID, useValue: "es" }],

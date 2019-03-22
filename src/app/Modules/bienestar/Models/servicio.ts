@@ -1,4 +1,5 @@
 import { requisito } from './Requisito';
+import { alumno } from 'src/app/global/Models/Alumno';
 export interface servicio {
   id?: number
   nombre: string
@@ -11,6 +12,7 @@ export interface servicio {
   vacantesMujer: number
   activador: boolean
   dividido: boolean
+  alumnos: alumno[]
   fechaInicio: Date
   fechaFin: Date
   created_at: Date

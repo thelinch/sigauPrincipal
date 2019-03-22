@@ -130,8 +130,9 @@ export class RequisitoComponent implements OnInit {
       this.requisitoSeleccionado.nombre = formsValue.nombre;
       this.requisitoSeleccionado.descripcion = formsValue.descripcion;
       this.requisitoSeleccionado.tipoArchivo = formsValue.tipoArchivo;
-      this.requisitoSeleccionado.prioridad = formsValue.prioridad;
-      this.requisitoSeleccionado.requerido = formsValue.requerido;
+      this.requisitoSeleccionado.prioridad = formsValue.prioridad == "true" ? true : false;
+      this.requisitoSeleccionado.requerido = formsValue.requerido == "true" ? true : false;
+      this.requisitoSeleccionado.tipoPeticion = formsValue.tipoPeticion;
       this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
         let index = this.buscarRequisito(requisitos, requisitoUpdate);
         requisitos[index] = requisitoUpdate;
