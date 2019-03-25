@@ -10,7 +10,6 @@ import { ParticlesModule } from 'angular-particle';
 import { BlockUIModule } from 'ng-block-ui';
 import { MaterialModule } from './global/global.module';
 import { registerLocaleData } from '@angular/common';
-
 // importar locales
 import localePy from '@angular/common/locales/es-PY';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -30,6 +29,7 @@ registerLocaleData(localePy, 'es');
     AppRoutingModule,
     ParticlesModule,
     MaterialModule,
+
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [],

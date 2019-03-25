@@ -8,7 +8,6 @@ export interface requisito {
   requerido: boolean
   prioridad: boolean
   tipoArchivo: string
-  tipoPeticion: string
   tipos: tipoRequisito[]
   servicios: servicio[]
   estado: boolean

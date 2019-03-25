@@ -34,6 +34,7 @@
     "moment": "^2.24.0",
     "ng-block-ui": "^2.1.1",
     "ng2-select2": "^1.0.0-beta.16",
+    "ngx-dropzone-wrapper": "^7.2.1",
     "rxjs": "~6.3.3",
     "select2": "^4.0.6-rc.1",
     "sweetalert2": "^8.2.6",
