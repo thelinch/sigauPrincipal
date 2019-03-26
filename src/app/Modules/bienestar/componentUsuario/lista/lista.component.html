@@ -73,10 +73,11 @@
       </div>
       <mat-vertical-stepper linear="true" #stepper>
         <span *ngIf="listaRequisitosPorServicio">{{listaRequisitosPorServicio.length}}</span>
-        <mat-step [matTooltip]="requisito.nombre" class="position_relative" [optional]="!requisito.requerido"
-          *ngFor="let requisito of listaRequisitosPorServicio">
+        <mat-step [stepControl]="formFile" [matTooltip]="requisito.nombre" class="position_relative"
+          [optional]="!requisito.requerido" *ngFor="let requisito of listaRequisitosPorServicio">
           <ng-template matStepLabel>{{requisito.nombre}}</ng-template>
-          <a matTooltip="Registar Requisito"
+          <a matTooltip="Registar Requisito" [ngClass]="{'disabled': !formFile.valid}"
+            (click)="subirImagenFileWithPreview(requisito.id,requisito.tipoArchivo,requisito)"
             class="btn-floating btn-small waves-effect waves-light red  position_absolute right_0 top_0"
             style="z-index: 100"><i class="material-icons">cloud_upload</i></a>
           <div class="card" [matTooltip]="requisito.descripcion">
@@ -84,18 +85,35 @@
               {{requisito.descripcion}}
             </div>
           </div>
-          <dropzone [message]="'Click or drag images here to upload'"></dropzone>
+          <!-- <dropzone [message]="'Arrastar o hacer click'" (sending)="onSending($event,requisito.id)"
+            #drpzone="ngxDropzone" (success)="onUploadSuccess($event)" class="dropzone-container">
+          </dropzone>-->
+          <form #formFile="ngForm">
+            <div class="custom-file-container" [attr.data-upload-id]="requisito.id">
+              <label>Archivos: <a href="javascript:void(0)" class="custom-file-container__image-clear  red-text"
+                  title="Clear Image"><i class="material-icons">cancel</i></a></label>
+              <label class="custom-file-container__custom-file">
+                <input type="file" class="custom-file-container__custom-file__custom-file-input"
+                  [accept]="requisito.tipoArchivo" name="file" ngModel required multiple aria-label="Subir Archivos"
+                  (click)="crearInstanciaFileWithPreview(requisito.id)">
+                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                <span class="custom-file-container__custom-file__custom-file-control"></span>
+              </label>
+              <div class="custom-file-container__image-preview"></div>
+            </div>
+          </form>
+
         </mat-step>
 
-        <mat-step>
-          FICHA SOCIOECONOMICA
-        </mat-step>
 
       </mat-vertical-stepper>
+      {{stepper.completed}}
     </div>
+
     <div class="modal-footer">
       <a class="waves-effect btn  waves-light red" (click)="cerrarModal(idModalServicio)">Cancelar</a>
       <button class="waves-effect btn waves-light green" [disabled]="!stepper.completed" type="submit">Guardar</button>
+
     </div>
 
   </div>

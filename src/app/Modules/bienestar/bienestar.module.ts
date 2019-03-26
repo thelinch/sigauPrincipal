@@ -22,8 +22,16 @@ import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: 'https://httpbin.org/post',
-  maxFilesize: 50,
-  acceptedFiles: 'image/*'
+  acceptedFiles: 'image/*,application/pdf',
+  autoProcessQueue: false,
+  addRemoveLinks: true,
+  clickable: true,
+  dictInvalidFileType: "El archivo no es Aceptado",
+  dictRemoveFile: "Quitar Archivo",
+  dictRemoveFileConfirmation: "¿Esta seguro de quitar el archivo?",
+  maxFiles: 50,
+  uploadMultiple:true,
+
 };
 @NgModule({
   declarations: [ReportesComponent,
