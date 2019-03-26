@@ -15,6 +15,8 @@ import { registerLocaleData } from '@angular/common';
 import localePy from '@angular/common/locales/es-PY';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { AlumnoService } from './global/services/alumno.service';
+import { HttpClientModule } from '@angular/common/http';
 registerLocaleData(localePy, 'es');
 
 @NgModule({
@@ -26,6 +28,7 @@ registerLocaleData(localePy, 'es');
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
     ParticlesModule,
@@ -33,7 +36,7 @@ registerLocaleData(localePy, 'es');
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [],
-  providers: [NavegacionService, { provide: LOCALE_ID, useValue: "es" }],
+  providers: [NavegacionService, { provide: LOCALE_ID, useValue: "es" }, AlumnoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
