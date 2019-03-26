@@ -34,4 +34,10 @@ export class ServicioService {
     console.log("entro al servicio")
     return this.http.post<alumno[]>(this.urlControlador + "/alumnosPorIdServicio", JSON.stringify(json), { headers: this.header });
   }
+  serviciosActivados(): Observable<servicio[]> {
+    return this.http.get<servicio[]>(this.urlControlador + "/all/servicioActivados");
+  }
+  requisitosPorArrayServicio(json: any): Observable<requisito[]> {
+    return this.http.post<requisito[]>(this.urlControlador + "/alumno/requisitos", JSON.stringify(json), { headers: this.header });
+  }
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 
 @Component({
   selector: 'app-principal',

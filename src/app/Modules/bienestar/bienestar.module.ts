@@ -16,7 +16,15 @@ import { TipoRequisitoService } from './services/tipo-requisito.service';
 import { Select2Module } from 'ng2-select2';
 import { ServiciosComponent } from './componentAdmin/servicios/servicios.component';
 import { ServicioService } from './services/servicio.service';
-
+import { DropzoneModule } from 'ngx-dropzone-wrapper';
+import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
+  // Change this to your upload POST address:
+  url: 'https://httpbin.org/post',
+  maxFilesize: 50,
+  acceptedFiles: 'image/*'
+};
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
@@ -32,9 +40,13 @@ import { ServicioService } from './services/servicio.service';
     FormsModule,
     BlockUIModule.forRoot(),
     HttpClientModule,
+    DropzoneModule,
     ReactiveFormsModule,
     MaterialModule, Select2Module],
   exports: [PrincipalComponent],
-  providers: [RequisitoService, TipoRequisitoService,ServicioService],
+  providers: [RequisitoService, TipoRequisitoService, ServicioService, {
+    provide: DROPZONE_CONFIG,
+    useValue: DEFAULT_DROPZONE_CONFIG
+  }],
 })
 export class BienestarModule { }

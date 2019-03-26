@@ -60,7 +60,7 @@ $sigauPrincipal-theme: mat-light-theme($sigauPrincipal-primary, $sigauPrincipal-
 @import "../node_modules/materialize-css/sass/components/preloader";
 @import "../node_modules/materialize-css/sass/components/slider";
 @import "../node_modules/materialize-css/sass/components/buttons";
-
+@import '~dropzone/dist/min/dropzone.min.css';
 //@import "../node_modules/materialize-css/sass/components/forms/forms";
 //File-upload-with-preview
 @import "../node_modules/file-upload-with-preview/src/file-upload-with-preview.scss";

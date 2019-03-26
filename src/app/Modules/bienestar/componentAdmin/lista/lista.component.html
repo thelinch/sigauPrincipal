@@ -2,13 +2,10 @@
   <div class="container">
     <div class="col s12">
       <div class="row">
-        <div class="col s12 m6">
-          <input type="search" matInput placeholder="Buscar">
+        <mat-form-field class="col s12 m6">
+          <input matInput placeholder="Buscar" formControlName="nombre">
           <mat-icon matPrefix>account_circle</mat-icon>
-        </div>
-        <div class="col s12 m6 right-align">
-          <i class="material-icons medium ">notifications</i>
-        </div>
+        </mat-form-field>
       </div>
     </div>
   </div>
@@ -220,6 +217,17 @@
 <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
 </mat-paginator>
 
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large red" matTooltip="Notificaciones">
+    <i class="large material-icons">notifications</i>
+  </a>
+  <ul>
+    <li><a class="btn-floating red"> <i class="material-icons">insert_chart</i></a></li>
+    <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+    <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+    <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+  </ul>
+</div>
 <template #navegacion>
   <div>HOLA</div>
 </template>

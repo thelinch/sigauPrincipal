@@ -1,115 +1,115 @@
-<h2 class="center-align">LISTA DE SERVICIOS </h2>
-<div class="row">
-  <div class="col s12 m5  ">
-    <div class="solicitar card-panel  fondo-ocda">
-      <div class="header white-text">
-        <div class="title">
-          <h4 class="center-align">Servicios Solicitados</h4>
+<block-ui>
+  <h2 class="center-align">LISTA DE SERVICIOS </h2>
+  <div class="row">
+    <div class="col s12 m5  ">
+      <div class="solicitar card-panel  fondo-ocda">
+        <div class="header white-text">
+          <div class="title">
+            <h4 class="center-align">Servicios Solicitados</h4>
+          </div>
+          <div class="padding_2rem right-align ">
+            <a matTooltip="Nueva solicitud" class="btn-floating z-depth-3 btn-large waves-effect waves-light blue"
+              (click)="abrilModal(idModalServicio)">
+              <i class="material-icons">add</i>
+            </a>
+          </div>
         </div>
-        <div class="padding_2rem right-align ">
-          <a class="btn-floating z-depth-3 btn-large waves-effect waves-light blue"
-            (click)="abrilModal(idModalServicio)">
-            <i class="material-icons">add</i>
-          </a>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="card-stacked">
-        <div class="card-content">
-          <div class="row">
-            <div class="col s12">
-              <div class="card hoverable">
-                wdwidjwijdi
+        <div class="divider"></div>
+        <div class="card-stacked">
+          <div class="card-content">
+            <div class="row">
+              <div class="col s12">
+                <div class="card hoverable">
+                  wdwidjwijdi
+                </div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
 
     </div>
-
-  </div>
-  <div class="col s12 m7">
-    <div class="row">
-      <div class="col s12">
-        <h4 class="center-align">Solicitudes Realizadas</h4>
-      </div>
-    </div>
-    <div class="col s12 m6">
-      <div class="card hoverable">
-        wdwidjwijdi
-      </div>
-    </div>
-    <div class="col s12 m6">
-      <div class="card hoverable">
-        wdwidjwijdi
-      </div>
-    </div>
-    <div class="col s12 m6">
-      <div class="card hoverable">
-        wdwidjwijdi
-      </div>
-    </div>
-    <div class="col s12 m6">
-      <div class="card hoverable">
-        wdwidjwijdi
-      </div>
-    </div>
-  </div>
-</div>
-<div [id]="idModalServicio" class="modal modal-fixed-footer  overflow_x_hidde">
-  <div class="modal-content overflow_x_hidde">
-    <div class="row">
-      <h4 class="col s12 m6">Elige el servicio</h4>
-      <mat-form-field class="col s12 m6">
-        <mat-select placeholder="Servicios" multiple>
-          <mat-option value="COMEDOR">
-            COMEDOR
-          </mat-option>
-          <mat-option value="INTERNADO">
-            INTERNADO
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <mat-vertical-stepper [linear]="isLinear" #stepper>
-      <mat-step [stepControl]="firstFormGroup">
-        <form [formGroup]="firstFormGroup" (submit)="guardarResultado(firstFormGroup.value)">
-          <ng-template matStepLabel>Fill out your name</ng-template>
-          <mat-form-field>
-            <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
-          </mat-form-field>
-          <div>
-            <button mat-button matStepperNext [disabled]="!firstFormGroup.valid">Guardar</button>
-          </div>
-        </form>
-      </mat-step>
-      <mat-step [stepControl]="secondFormGroup">
-        <form [formGroup]="secondFormGroup" (submit)="guardarResultado(secondFormGroup.value)">
-          <ng-template matStepLabel>Fill out your address</ng-template>
-          <mat-form-field>
-            <input matInput placeholder="Address" formControlName="secondCtrl" required>
-          </mat-form-field>
-          <div>
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button matStepperNext [disabled]="!secondFormGroup.valid">Next</button>
-          </div>
-        </form>
-      </mat-step>
-      <mat-step>
-        <ng-template matStepLabel>Done</ng-template>
-        You are now done.
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button (click)="stepper.reset()">Reset</button>
+    <div class="col s12 m7">
+      <div class="row">
+        <div class="col s12">
+          <h4 class="center-align">Solicitudes Realizadas</h4>
         </div>
-      </mat-step>
-
-    </mat-vertical-stepper>
+      </div>
+      <div class="col s12 m6">
+        <div class="card hoverable">
+          wdwidjwijdi
+        </div>
+      </div>
+      <div class="col s12 m6">
+        <div class="card hoverable">
+          wdwidjwijdi
+        </div>
+      </div>
+      <div class="col s12 m6">
+        <div class="card hoverable">
+          wdwidjwijdi
+        </div>
+      </div>
+      <div class="col s12 m6">
+        <div class="card hoverable">
+          wdwidjwijdi
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="modal-footer">
-    <a class="waves-effect btn  waves-light red">Cancelar</a>
-    <button class="waves-effect btn waves-light green" [disabled]="!stepper.completed" type="submit">Guardar</button>
+  <div [id]="idModalServicio" class="modal modal-fixed-footer  overflow_x_hidde">
+    <div class="modal-content overflow_x_hidde">
+      <div class="row">
+        <h4 class="col s12 m6">Elige el servicio</h4>
+        <mat-form-field class="col s12 m6">
+          <mat-select placeholder="Servicios" multiple [formControl]="formControlListaServicio"
+            (selectionChange)="changeSelectListaServicios($event)">
+            <mat-option [value]="servicio.id" *ngFor="let servicio of listaServiciosActivados">
+              {{servicio.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <mat-vertical-stepper linear="true" #stepper>
+        <span *ngIf="listaRequisitosPorServicio">{{listaRequisitosPorServicio.length}}</span>
+        <mat-step [matTooltip]="requisito.nombre" class="position_relative" [optional]="!requisito.requerido"
+          *ngFor="let requisito of listaRequisitosPorServicio">
+          <ng-template matStepLabel>{{requisito.nombre}}</ng-template>
+          <a matTooltip="Registar Requisito"
+            class="btn-floating btn-small waves-effect waves-light red  position_absolute right_0 top_0"
+            style="z-index: 100"><i class="material-icons">cloud_upload</i></a>
+          <div class="card" [matTooltip]="requisito.descripcion">
+            <div class="card-content truncate ">
+              {{requisito.descripcion}}
+            </div>
+          </div>
+          <dropzone [message]="'Click or drag images here to upload'"></dropzone>
+        </mat-step>
+
+        <mat-step>
+          FICHA SOCIOECONOMICA
+        </mat-step>
+
+      </mat-vertical-stepper>
+    </div>
+    <div class="modal-footer">
+      <a class="waves-effect btn  waves-light red" (click)="cerrarModal(idModalServicio)">Cancelar</a>
+      <button class="waves-effect btn waves-light green" [disabled]="!stepper.completed" type="submit">Guardar</button>
+    </div>
+
   </div>
 
+</block-ui>
+
+<div class="fixed-action-btn">
+  <a class="btn-floating btn-large blue" matTooltip="Notificaciones">
+    <i class="large material-icons">notifications</i>
+  </a>
+  <ul>
+    <li><a class="btn-floating red"> <i class="material-icons">insert_chart</i></a></li>
+    <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
+    <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
+    <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
+  </ul>
 </div>

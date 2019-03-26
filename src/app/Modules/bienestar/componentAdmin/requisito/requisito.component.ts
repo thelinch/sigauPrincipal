@@ -60,7 +60,6 @@ export class RequisitoComponent implements OnInit {
       tipoArchivo: new FormControl("", [Validators.required]),
       tipos: new FormControl("", [Validators.required]),
       servicios: new FormControl("", [Validators.required]),
-      tipoPeticion: new FormControl("", [Validators.required])
     })
     this.fileUpload = new FileUploadWithPreview("fileRequisito")
     this.listaTipoRequisito$ = this.tipoRequisitoService.all();
@@ -132,7 +131,6 @@ export class RequisitoComponent implements OnInit {
       this.requisitoSeleccionado.tipoArchivo = formsValue.tipoArchivo;
       this.requisitoSeleccionado.prioridad = formsValue.prioridad == "true" ? true : false;
       this.requisitoSeleccionado.requerido = formsValue.requerido == "true" ? true : false;
-      this.requisitoSeleccionado.tipoPeticion = formsValue.tipoPeticion;
       this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
         let index = this.buscarRequisito(requisitos, requisitoUpdate);
         requisitos[index] = requisitoUpdate;
@@ -155,7 +153,6 @@ export class RequisitoComponent implements OnInit {
     this.formularioRequisito.get("servicios").setValue(serviciosSeleccionado);
     this.formularioRequisito.get("prioridad").patchValue(this.requisitoSeleccionado.prioridad ? "true" : "false");
     this.formularioRequisito.get("requerido").patchValue(this.requisitoSeleccionado.requerido ? "true" : "false")
-    this.formularioRequisito.get("tipoPeticion").patchValue(this.requisitoSeleccionado.tipoPeticion);
     this.formularioRequisito.get("servicios").clearValidators();
     this.formularioRequisito.get("tipos").clearValidators();
     this.formularioRequisito.updateValueAndValidity();

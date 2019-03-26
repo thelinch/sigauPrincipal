@@ -16,7 +16,7 @@ export class functionsGlobal {
   }
 
   static iniciarFloatinButton(configuracion: any) {
-    M.FloatingActionButton.init($(".fixed-action-btn"), { toolbarEnabled: true })
+    M.FloatingActionButton.init($(".fixed-action-btn"), { hoverEnabled: false })
   }
   static abrirFloatingButton(idFixedAction: string) {
     M.FloatingActionButton.getInstance($("#" + idFixedAction)).open();
