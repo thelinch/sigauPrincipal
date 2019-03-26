@@ -1,5 +1,10 @@
 export interface alumno {
   id: number;
   codigo: string;
-  fecha_egreso: Date;
+  correo_institucional:string;
+  estado:boolean;
+  grado_alumno:boolean
+  created_at:Date
+  updated_at:Date
+
 }
