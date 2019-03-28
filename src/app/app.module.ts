@@ -16,6 +16,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AlumnoService } from './global/services/alumno.service';
 import { HttpClientModule } from '@angular/common/http';
+import { FileService } from './global/services/file.service';
 registerLocaleData(localePy, 'es');
 
 @NgModule({
@@ -36,7 +37,7 @@ registerLocaleData(localePy, 'es');
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [],
-  providers: [NavegacionService, { provide: LOCALE_ID, useValue: "es" }, AlumnoService],
+  providers: [NavegacionService, { provide: LOCALE_ID, useValue: "es" }, AlumnoService, FileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

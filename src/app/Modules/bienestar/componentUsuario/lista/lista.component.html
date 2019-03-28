@@ -73,11 +73,11 @@
       </div>
       <mat-vertical-stepper linear="true" #stepper>
         <span *ngIf="listaRequisitosPorServicio">{{listaRequisitosPorServicio.length}}</span>
-        <mat-step [stepControl]="formFile" [matTooltip]="requisito.nombre" class="position_relative"
+        <mat-step  editable="false" [stepControl]="formFile" [matTooltip]="requisito.nombre" class="position_relative"
           [optional]="!requisito.requerido" *ngFor="let requisito of listaRequisitosPorServicio">
           <ng-template matStepLabel>{{requisito.nombre}}</ng-template>
           <a matTooltip="Registar Requisito" [ngClass]="{'disabled': !formFile.valid}"
-            (click)="subirImagenFileWithPreview(requisito.id,requisito.tipoArchivo,requisito)"
+            (click)="subirImagenFileWithPreview(requisito.id,requisito.tipoArchivo,requisito,stepper)"
             class="btn-floating btn-small waves-effect waves-light red  position_absolute right_0 top_0"
             style="z-index: 100"><i class="material-icons">cloud_upload</i></a>
           <div class="card" [matTooltip]="requisito.descripcion">
@@ -96,7 +96,7 @@
                 <input type="file" class="custom-file-container__custom-file__custom-file-input"
                   [accept]="requisito.tipoArchivo" name="file" ngModel required multiple aria-label="Subir Archivos"
                   (click)="crearInstanciaFileWithPreview(requisito.id)">
-                <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                <input type="hidden" name="MAX_FILE_SIZE" value="12485760" />
                 <span class="custom-file-container__custom-file__custom-file-control"></span>
               </label>
               <div class="custom-file-container__image-preview"></div>

@@ -9,7 +9,8 @@ import { requisito } from '../../Models/Requisito';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import FileUploadWithPreview from 'file-upload-with-preview';
 import Swal from 'sweetalert2';
-import { flatMap, map } from 'rxjs/operators';
+import { flatMap, map, take } from 'rxjs/operators';
+import { FileService } from 'src/app/global/services/file.service';
 
 @Component({
   selector: 'app-lista',
@@ -40,7 +41,7 @@ export class ListaServiciosComponent implements OnInit {
     dictDefaultMessage: "Arrastrar imagen o hacer click",
     maxFiles: 50
   };
-  constructor(private _formBuilder: FormBuilder, private servicioService: ServicioService) { }
+  constructor(private _formBuilder: FormBuilder, private servicioService: ServicioService, private filseService: FileService) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -78,14 +79,12 @@ export class ListaServiciosComponent implements OnInit {
       functionsGlobal.getToast("No hay archivos seleccionados")
     }
   }*/
-  subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string,requisito:requisito) {
+  subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string, requisito: requisito, stepper) {
     let instanciaFotos = this.listaFotosParaSubir.find(fileUploader => fileUploader.uploadId == id);
     let validacionImagen: boolean = true;
     instanciaFotos.cachedFileArray.forEach(element => {
       if (tipoArchivoAdmitido == "image/*") {
-        console.log("entro a validar imagenes")
         if (!(/\.(jpg|png|gif)$/i).test(element.name)) {
-
           validacionImagen = false;
           return
         }
@@ -99,10 +98,28 @@ export class ListaServiciosComponent implements OnInit {
 
     });
     if (validacionImagen) {
-      from(instanciaFotos.cachedFileArray).pipe(map((file: File) => {
-        let nuevoDat = { idRequisito: requisito.id, idUsuario: 2, archivo: file }
-        return nuevoDat;
-      })).subscribe(console.log)
+      this.abrirBlock();
+      from(instanciaFotos.cachedFileArray).pipe(take(instanciaFotos.cachedFileArray.length), map((file: File) => {
+        let formData = new FormData();
+        formData.append("archivo", file)
+        formData.append("idRequisito", requisito.id.toString());
+        formData.append("idUsuario", "2");
+        return formData
+      }),
+        flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
+          next: (respuesta) => { console.log(respuesta) },
+          complete: () => {
+            functionsGlobal.getToast("Se subio los archivos correctamente");
+            stepper.next();
+            this.cerrarBlock();
+          }
+        })
+      /*let formData = new FormData();
+      formData.append("archivos", instanciaFotos.cachedFileArray)
+      formData.append("idUsuario", "2");
+      formData.append("idRequisito", requisito.id.toString())
+      this.filseService.guardarArchivo(formData).subscribe(console.log)*/
+
     } else {
       Swal.fire({
         title: "Error",

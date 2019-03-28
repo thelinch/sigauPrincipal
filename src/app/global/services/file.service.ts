@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-
-  constructor(private http: HttpClient) { }
-  guardarArchivo(file: File) {
-
+  private urlControlador = "http://localhost:8000/global/";
+  private headers: HttpHeaders = new HttpHeaders();
+  constructor(private http: HttpClient) {
+    this.headers.append("Content-Type", undefined);
+  }
+  guardarArchivo(formData: any): Observable<any> {
+    return this.http.post(this.urlControlador + "fileUpload", formData, { headers: this.headers });
   }
 }
