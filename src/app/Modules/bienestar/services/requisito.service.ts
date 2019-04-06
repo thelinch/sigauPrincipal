@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { requisito } from '../Models/Requisito';
 import { Observable, Observer } from 'rxjs';
+import { archivo } from '../Models/archivo';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +36,9 @@ export class RequisitoService {
   }
   editarOpcionServicio(json: any) {
     return this.http.post<requisito>(this.urlControlador + "/updateServicio", JSON.stringify(json), { headers: this.header });
+  }
+  getArchivosPorRequisitoId(idRequisitio: number): Observable<archivo[]> {
+    let json = { id: idRequisitio }
+    return this.http.post<archivo[]>(this.urlControlador + "/archivos", JSON.stringify(json));
   }
 }

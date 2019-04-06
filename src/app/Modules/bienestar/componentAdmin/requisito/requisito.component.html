@@ -39,11 +39,11 @@
           </div>
           <div class="divider"></div>
           <div class="card-content ">
-            {{requisito.descripcion}}
+            {{requisito.descripcion? requisito.descripcion:'No tiene Descripcion' }}
           </div>
           <div class="card-action right-align">
-            <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Ver Archivos"><i
-                class="material-icons  cursor">
+            <a class="btn-floating btn-small waves-effect fondo-ocda" (click)="getArhivosPorRequisitoId(requisito.id)"
+              matTooltip="Ver Archivos"><i class="material-icons  cursor">
                 archive </i></a>
             <a class="btn-floating btn-small waves-effect fondo-ocda"
               (click)="setRequisito(requisito);visualizarRequisito()" matTooltip="Ver Requisito"><i
@@ -88,9 +88,12 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col s6">
-            <mat-select placeholder="Tipo Archivo" formControlName="tipoArchivo" [compareWith]="compareString">
-              <mat-option value="JPG">Imagen</mat-option>
-              <mat-option value="Archivo">Arhivos</mat-option>
+            <mat-select placeholder="Tipo Archivo" #selectTipoArchivo formControlName="tipoArchivo"
+              [compareWith]="compareString">
+              <mat-option value="image/*">Imagen</mat-option>
+              <mat-option value="application/word">word</mat-option>
+              <mat-option value="application/pdf">pdf</mat-option>
+
             </mat-select>
           </mat-form-field>
         </div>
@@ -115,6 +118,7 @@
               <mat-option (onSelectionChange)="changeTipo($event)" *ngFor="let tipo of  listaTipoRequisito$ | async"
                 [value]="tipo.id">
                 {{tipo.nombre}}
+                <i class="fas  {{tipo.icono}} "></i>
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -130,6 +134,7 @@
             <mat-select placeholder="Servicios" multiple formControlName="servicios">
               <mat-option [value]="servicio.id" (onSelectionChange)="changeServicio($event)"
                 *ngFor="let servicio of listaServicio$ | async">{{servicio.nombre}}
+                <i class="fas  {{servicio.icono}} "></i>
               </mat-option>
             </mat-select>
           </mat-form-field>

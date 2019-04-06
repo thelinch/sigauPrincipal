@@ -2,10 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { swal } from './../../../../global/swal';
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray, NgModel } from '@angular/forms';
-import { Observable, Observer, Subject } from 'rxjs';
+import { Observable, Observer, Subject, from } from 'rxjs';
 import { requisito } from '../../Models/Requisito';
 import { RequisitoService } from '../../services/requisito.service';
-import { scan, concat, startWith } from 'rxjs/operators';
+import { scan, concat, startWith, flatMap, take, map } from 'rxjs/operators';
 import { ModelFactory, Model } from '@angular-extensions/model';
 import Swal from 'sweetalert2';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
@@ -18,6 +18,8 @@ import { servicio } from '../../Models/servicio';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatSelect } from '@angular/material';
 import * as $ from 'jquery';
+import { FileService } from 'src/app/global/services/file.service';
+import { archivo } from '../../Models/archivo';
 
 /**
  *
@@ -40,14 +42,17 @@ export class RequisitoComponent implements OnInit {
   private modelTipoRequisito: Model<tipoRequisito[]>;
   private modelServicios: Model<servicio[]>
   listaServicio$: Observable<servicio[]>
+  listaArchivosPorRequisito: archivo[];
   listaTipoRequisito$: Observable<tipoRequisito[]>
   idModalRegistroRequisito: string = "modal1"
   formularioRequisito: FormGroup
   requisitoSeleccionado: requisito
   @BlockUI() blockUI: NgBlockUI;
   fileUpload: FileUploadWithPreview;
+  @ViewChild("selectTipoArchivo")
+  private selectTipoArchivo;
   estadoActualizarResgitrarFormularion: boolean = false;
-  constructor(private fb: FormBuilder, private tipoRequisitoService: TipoRequisitoService, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>, private modelFacotoryServicio: ModelFactory<servicio[]>, private modelFactoryTipoRequisito: ModelFactory<tipoRequisito[]>, private serviciosService: ServicioService) {
+  constructor(private fb: FormBuilder, private tipoRequisitoService: TipoRequisitoService, private filseService: FileService, private requisitoService: RequisitoService, private modelFactory: ModelFactory<requisito[]>, private modelFacotoryServicio: ModelFactory<servicio[]>, private modelFactoryTipoRequisito: ModelFactory<tipoRequisito[]>, private serviciosService: ServicioService) {
 
   }
   ngOnInit() {
@@ -111,19 +116,31 @@ export class RequisitoComponent implements OnInit {
   //CRUD REQUISITO
   guardarYEditarRequisito(formsValue) {
     let requisitos = this.modelRequisito.get()
-    this.blockUI.start()
+    this.activarBlock();
     if (formsValue.id == null) {
       delete formsValue.id;
-      let guardarRequisito = formsValue as requisito;
-      console.log(guardarRequisito)
-      this.requisitoService.gurdarRequisito(guardarRequisito).subscribe(requisitoGurdado => {
-        console.log(requisitoGurdado)
-        requisitos.push(requisitoGurdado)
-        this.modelRequisito.set(requisitos)
-        this.closeModal(this.idModalRegistroRequisito);
-        functionsGlobal.getToast("Se Registro Correctamente")
-        this.blockUI.stop();
-      })
+      let guardarRequisito = formsValue as requisito
+      guardarRequisito.nombreArchivo = this.selectTipoArchivo.selected._element.nativeElement.innerText.trim()
+      this.requisitoService.gurdarRequisito(guardarRequisito)
+        .subscribe(requisitoGurdado => {
+          from(this.fileUpload.cachedFileArray ? this.fileUpload.cachedFileArray : []).pipe(take(this.fileUpload.cachedFileArray.length), map((file: File) => {
+            let formData = new FormData();
+            formData.append("archivo", file)
+            formData.append("idRequisito", requisitoGurdado.id.toString());
+            formData.append("nombreCarpeta", "requisitos");
+            return formData
+          }), flatMap(formData => this.filseService.gurdarArchivoRequisito(formData))).subscribe({
+            next: (respuesta) => { console.log(respuesta) },
+            complete: () => {
+              console.log(requisitoGurdado)
+              this.closeModal(this.idModalRegistroRequisito);
+              functionsGlobal.getToast("Se Registro Correctamente")
+              requisitos.push(requisitoGurdado)
+              this.modelRequisito.set(requisitos)
+              this.cerrarBlock();
+            }
+          })
+        })
     }
     else {
       this.requisitoSeleccionado.nombre = formsValue.nombre;
@@ -131,6 +148,7 @@ export class RequisitoComponent implements OnInit {
       this.requisitoSeleccionado.tipoArchivo = formsValue.tipoArchivo;
       this.requisitoSeleccionado.prioridad = formsValue.prioridad == "true" ? true : false;
       this.requisitoSeleccionado.requerido = formsValue.requerido == "true" ? true : false;
+      this.requisitoSeleccionado.nombreArchivo = this.selectTipoArchivo.selected._element.nativeElement.innerText.trim()
       this.requisitoService.editarRequisito(this.requisitoSeleccionado).subscribe(requisitoUpdate => {
         let index = this.buscarRequisito(requisitos, requisitoUpdate);
         requisitos[index] = requisitoUpdate;
@@ -224,7 +242,13 @@ export class RequisitoComponent implements OnInit {
     this.modelRequisito.set(arrayRequisito)
   }
   //FIN DE CRUD REQUISITOS
-
+  //
+  getArhivosPorRequisitoId(idRequisito: number) {
+    this.requisitoService.getArchivosPorRequisitoId(idRequisito).subscribe(archivos => {
+      this.listaArchivosPorRequisito = archivos;
+      console.log(this.listaArchivosPorRequisito)
+    })
+  }
 
 
 

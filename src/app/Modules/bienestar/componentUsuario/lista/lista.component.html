@@ -71,13 +71,13 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <mat-vertical-stepper linear="true" #stepper>
+      <mat-vertical-stepper #stepper>
         <span *ngIf="listaRequisitosPorServicio">{{listaRequisitosPorServicio.length}}</span>
-        <mat-step  editable="false" [stepControl]="formFile" [matTooltip]="requisito.nombre" class="position_relative"
+        <mat-step #matStep [stepControl]="formFile" [matTooltip]="requisito.nombre" class="position_relative"
           [optional]="!requisito.requerido" *ngFor="let requisito of listaRequisitosPorServicio">
-          <ng-template matStepLabel>{{requisito.nombre}}</ng-template>
-          <a matTooltip="Registar Requisito" [ngClass]="{'disabled': !formFile.valid}"
-            (click)="subirImagenFileWithPreview(requisito.id,requisito.tipoArchivo,requisito,stepper)"
+          <ng-template matStepLabel>{{requisito.nombre | titlecase}}</ng-template>
+          <a #boton matTooltip="Registar Requisito" [ngClass]="{'disabled': !formFile.valid}"
+            (click)="subirImagenFileWithPreview(requisito.id,requisito.tipoArchivo,requisito.nombreArchivo,requisito,stepper,matStep,boton)"
             class="btn-floating btn-small waves-effect waves-light red  position_absolute right_0 top_0"
             style="z-index: 100"><i class="material-icons">cloud_upload</i></a>
           <div class="card" [matTooltip]="requisito.descripcion">
@@ -109,7 +109,6 @@
       </mat-vertical-stepper>
       {{stepper.completed}}
     </div>
-
     <div class="modal-footer">
       <a class="waves-effect btn  waves-light red" (click)="cerrarModal(idModalServicio)">Cancelar</a>
       <button class="waves-effect btn waves-light green" [disabled]="!stepper.completed" type="submit">Guardar</button>

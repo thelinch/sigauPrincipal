@@ -14,4 +14,7 @@ export class FileService {
   guardarArchivo(formData: any): Observable<any> {
     return this.http.post(this.urlControlador + "fileUpload", formData, { headers: this.headers });
   }
+  gurdarArchivoRequisito(formData: any): Observable<any> {
+    return this.http.post(this.urlControlador + "fileUpload/Requisito", formData, { headers: this.headers })
+  }
 }

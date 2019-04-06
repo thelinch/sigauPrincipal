@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { Observable, from } from 'rxjs';
@@ -28,20 +28,8 @@ export class ListaServiciosComponent implements OnInit {
   listaRequisitosLlenadosPorUsuario: requisito[]
   listaFotosParaSubir: Array<FileUploadWithPreview>
   @BlockUI() blockUI: NgBlockUI;
-  config: DropzoneConfigInterface = {
-    // Change this to your upload POST address:
-    url: 'https://httpbin.org/post',
-    acceptedFiles: 'image/*,application/pdf',
-    autoProcessQueue: false,
-    addRemoveLinks: true,
-    clickable: true,
-    dictInvalidFileType: "El archivo no es Aceptado",
-    dictRemoveFile: "Quitar Archivo",
-    dictRemoveFileConfirmation: "¿Esta seguro de quitar el archivo?",
-    dictDefaultMessage: "Arrastrar imagen o hacer click",
-    maxFiles: 50
-  };
-  constructor(private _formBuilder: FormBuilder, private servicioService: ServicioService, private filseService: FileService) { }
+
+  constructor(private _formBuilder: FormBuilder, private servicioService: ServicioService, private filseService: FileService, private render: Renderer2) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -79,7 +67,7 @@ export class ListaServiciosComponent implements OnInit {
       functionsGlobal.getToast("No hay archivos seleccionados")
     }
   }*/
-  subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string, requisito: requisito, stepper) {
+  subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string, nombreArchivPermitido: string, requisito: requisito, stepper, matSteep, boton: ElementRef) {
     let instanciaFotos = this.listaFotosParaSubir.find(fileUploader => fileUploader.uploadId == id);
     let validacionImagen: boolean = true;
     instanciaFotos.cachedFileArray.forEach(element => {
@@ -98,33 +86,38 @@ export class ListaServiciosComponent implements OnInit {
 
     });
     if (validacionImagen) {
-      this.abrirBlock();
-      from(instanciaFotos.cachedFileArray).pipe(take(instanciaFotos.cachedFileArray.length), map((file: File) => {
-        let formData = new FormData();
-        formData.append("archivo", file)
-        formData.append("idRequisito", requisito.id.toString());
-        formData.append("idUsuario", "2");
-        return formData
-      }),
-        flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
-          next: (respuesta) => { console.log(respuesta) },
-          complete: () => {
-            functionsGlobal.getToast("Se subio los archivos correctamente");
-            stepper.next();
-            this.cerrarBlock();
-          }
-        })
-      /*let formData = new FormData();
-      formData.append("archivos", instanciaFotos.cachedFileArray)
-      formData.append("idUsuario", "2");
-      formData.append("idRequisito", requisito.id.toString())
-      this.filseService.guardarArchivo(formData).subscribe(console.log)*/
-
+      Swal.fire({
+        title: "Los archivos son correctos",
+        type: "question"
+      }).then(respuesta => {
+        if (respuesta.value) {
+          this.abrirBlock();
+          from(instanciaFotos.cachedFileArray).pipe(take(instanciaFotos.cachedFileArray.length), map((file: File) => {
+            let formData = new FormData();
+            formData.append("archivo", file)
+            formData.append("idRequisito", requisito.id.toString());
+            formData.append("idUsuario", "2");
+            formData.append("nombreCarpeta", "Comedor_internado");
+            return formData
+          }),
+            flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
+              next: (respuesta) => { console.log(respuesta) },
+              complete: () => {
+                functionsGlobal.getToast("Se subio los archivos correctamente");
+                stepper.next();
+                matSteep.editable = false;
+                matSteep.interacted = true;
+                this.render.addClass(boton, "disabled")
+                this.cerrarBlock();
+              }
+            })
+        }
+      })
     } else {
       Swal.fire({
         title: "Error",
         type: "error",
-        html: "Por favor solo sube archivos de tipo " + tipoArchivoAdmitido
+        html: "Por favor solo sube archivos de tipo " + nombreArchivPermitido
       })
     }
   }
@@ -147,6 +140,7 @@ export class ListaServiciosComponent implements OnInit {
     this.abrirBlock();
     this.servicioService.requisitosPorArrayServicio(this.formControlListaServicio.value).subscribe(listaRequisito => {
       this.listaRequisitosPorServicio = listaRequisito
+      this.listaFotosParaSubir = [];
       this.cerrarBlock();
     }
 
