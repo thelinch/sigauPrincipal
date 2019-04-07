@@ -45,6 +45,7 @@ export class RequisitoComponent implements OnInit {
   listaArchivosPorRequisito: archivo[];
   listaTipoRequisito$: Observable<tipoRequisito[]>
   idModalRegistroRequisito: string = "modal1"
+  idModalArchivos: string = "modalArchivos"
   formularioRequisito: FormGroup
   requisitoSeleccionado: requisito
   @BlockUI() blockUI: NgBlockUI;
@@ -244,9 +245,11 @@ export class RequisitoComponent implements OnInit {
   //FIN DE CRUD REQUISITOS
   //
   getArhivosPorRequisitoId(idRequisito: number) {
+    this.activarBlock();
     this.requisitoService.getArchivosPorRequisitoId(idRequisito).subscribe(archivos => {
       this.listaArchivosPorRequisito = archivos;
-      console.log(this.listaArchivosPorRequisito)
+      this.cerrarBlock();
+      this.abrirModal(this.idModalArchivos)
     })
   }
 
