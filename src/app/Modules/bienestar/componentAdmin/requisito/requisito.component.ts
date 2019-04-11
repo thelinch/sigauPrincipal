@@ -266,7 +266,9 @@ export class RequisitoComponent implements OnInit {
     this.disabledFormularioRequisito();
     this.abrirModal(this.idModalRegistroRequisito);
   }
-
+  descargarArchivo(archivo: string) {
+    this.filseService.downloadFile(archivo)
+  }
   compareString(string1: any, string2: any) {
     return string1 === string2;
   }

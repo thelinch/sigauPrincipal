@@ -9,7 +9,7 @@
           </div>
           <div class="padding_2rem right-align ">
             <a matTooltip="Nueva solicitud" class="btn-floating z-depth-3 btn-large waves-effect waves-light blue"
-              (click)="abrilModal(idModalServicio)">
+              [ngClass]="{disabled:this.listaServiciosRegistradoPorAlumno}" (click)="abrilModal(idModalServicio)">
               <i class="material-icons">add</i>
             </a>
           </div>
@@ -19,8 +19,18 @@
           <div class="card-content">
             <div class="row">
               <div class="col s12">
-                <div class="card hoverable">
-                  wdwidjwijdi
+                <div class="card hoverable" *ngIf="listaServiciosRegistradoPorAlumno">
+                  <div class="card-content">
+                    <div class="chip blue" *ngFor="let servicoRegistrado of  listaServiciosRegistradoPorAlumno">
+                      {{servicoRegistrado.nombre}}
+                      <i class="fas {{servicoRegistrado.icono}}"></i>
+                    </div>
+                  </div>
+                  <div class="card-action right-align">
+                    <a href="">UNO</a>
+                    <a href="">DOS</a>
+                    <a href="">TRES</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -102,7 +112,6 @@
               <div class="custom-file-container__image-preview"></div>
             </div>
           </form>
-
         </mat-step>
 
 
@@ -110,9 +119,11 @@
       {{stepper.completed}}
     </div>
     <div class="modal-footer">
-      <a class="waves-effect btn  waves-light red" (click)="cerrarModal(idModalServicio)">Cancelar</a>
-      <button class="waves-effect btn waves-light green" [disabled]="!stepper.completed" type="submit">Guardar</button>
-
+      <a class="waves-effect btn  waves-light red" (click)="cerrarModal(idModalServicio)"><i
+          class="material-icons">close</i></a>
+      <a class="waves-effect btn waves-light fondo-ocda" matTooltip="Registrar sevicios para su revision"
+        [ngClass]="{disabled:!stepper.completed}" (click)="registrarServiciosParaEvaluacion()"><i
+          class="material-icons">send</i></a>
     </div>
 
   </div>
