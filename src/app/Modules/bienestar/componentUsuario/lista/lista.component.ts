@@ -59,18 +59,15 @@ export class ListaServiciosComponent implements OnInit {
    */
   iniciarDatos() {
     this.abrirBlock();
-    let json = { id: "1" };
+    let json = { idAlumno: "1", semestreActual: "2019-I" };
     this.servicioService.serviciosActivados().subscribe({
       next: (listaServicios) => {
         this.listaServiciosActivados = listaServicios;
 
       },
       complete: () => {
-        console.log("entro al complete")
-        this.alumnoService.buscarAlumnoConRequisitosYServiciosPorId(json).subscribe(async alumno => {
-
-          await this.cerrarBlock();
-          this.listaRequisitoRegistrodoAlumno = alumno.requisitos.map(requisito => requisito.id);
+        this.alumnoService.listaServiciosPorAlumno(json).subscribe(listaServiciosRegistrados => {
+          this.listaServiciosRegistradoPorAlumno = listaServiciosRegistrados;
         })
       }
     });
