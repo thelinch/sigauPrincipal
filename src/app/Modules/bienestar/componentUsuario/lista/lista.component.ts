@@ -66,8 +66,9 @@ export class ListaServiciosComponent implements OnInit {
 
       },
       complete: () => {
-        this.alumnoService.listaServiciosPorAlumno(json).subscribe(listaServiciosRegistrados => {
+        this.alumnoService.listaServiciosPorAlumno(json).subscribe(async listaServiciosRegistrados => {
           this.listaServiciosRegistradoPorAlumno = listaServiciosRegistrados;
+          await this.cerrarBlock();
         })
       }
     });
