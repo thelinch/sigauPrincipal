@@ -9,10 +9,11 @@ import { requisito } from '../../Models/Requisito';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import FileUploadWithPreview from 'file-upload-with-preview';
 import Swal from 'sweetalert2';
-import { flatMap, map, take, reduce, filter, mapTo, toArray } from 'rxjs/operators';
+import { flatMap, map, take, reduce, filter, mapTo, toArray, isEmpty } from 'rxjs/operators';
 import { FileService } from 'src/app/global/services/file.service';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { servicioSolicitados } from '../../Models/servicioSolicitados';
+import { isUndefined } from 'util';
 
 @Component({
   selector: 'app-lista',
@@ -68,7 +69,7 @@ export class ListaServiciosComponent implements OnInit {
       },
       complete: () => {
         this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async listaServiciosRegistrados => {
-          this.servicioSolicitadoActualPorAlumnoYSemestreActual = listaServiciosRegistrados;
+          this.servicioSolicitadoActualPorAlumnoYSemestreActual = listaServiciosRegistrados == undefined ? null : listaServiciosRegistrados;
           await this.cerrarBlock();
         })
       }
@@ -126,7 +127,7 @@ export class ListaServiciosComponent implements OnInit {
             formData.append("archivo", file)
             formData.append("idRequisito", requisito.id.toString());
             formData.append("idUsuario", "1");
-            formData.append("nombreCarpeta", "Comedor_internado");
+            formData.append("nombreCarpeta", "Comedor_internado/antony/"+"2019-I");
             return formData
           }),
             flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
@@ -191,6 +192,14 @@ export class ListaServiciosComponent implements OnInit {
     }
 
     )
+  }
+  listaRequisitosPorAlumnoYSemestre(serviciosolicitado: servicioSolicitados) {
+    let json = {
+      codigoMatricula: serviciosolicitado.codigoMatricula,
+      idAlumno: "1"
+    }
+
+
   }
   verificarExistenciaDeServicioSolicitado(idModalServicio: string) {
     if (this.servicioSolicitadoActualPorAlumnoYSemestreActual) {

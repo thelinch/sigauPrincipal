@@ -21,7 +21,10 @@
             <div class="row">
               <div class="col s12">
                 <div class="card hoverable" *ngIf="servicioSolicitadoActualPorAlumnoYSemestreActual">
-                  <div class="card-content position_relative">
+                  <div class="card-title">
+                    <h5 class="padding_4">
+                      {{servicioSolicitadoActualPorAlumnoYSemestreActual.codigoMatricula}}
+                    </h5>
                     <div class="position_absolute padding_4 right_0 top_0">
                       <div class="chip" [matTooltip]="servicio.nombre"
                         *ngFor="let servicio of  servicioSolicitadoActualPorAlumnoYSemestreActual.servicios">
@@ -32,25 +35,22 @@
                         {{this.servicioSolicitadoActualPorAlumnoYSemestreActual.estado_servicio.nombre}}
                       </div>
                     </div>
-                    <div class="card-title">
-                      {{servicioSolicitadoActualPorAlumnoYSemestreActual.codigoMatricula}}
-                    </div>
+                  </div>
+                  <div class="card-content position_relative">
+                    {{servicioSolicitadoActualPorAlumnoYSemestreActual.fechaRegistro}}
                   </div>
                   <div class="card-action right-align">
                     <a matTooltip="Requisitos" class="btn-floating btn-small waves-effect fondo-ocda"><i
                         class="material-icons">
-                        dehaze
+                        description
                       </i></a>
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-
     </div>
     <div class="col s12 m7">
       <div class="row">

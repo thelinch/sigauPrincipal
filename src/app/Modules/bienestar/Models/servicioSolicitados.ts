@@ -5,7 +5,7 @@ import { estadoServicio } from './estadoServicio';
 export interface servicioSolicitados {
     id: number
     servicios: servicio[]
-    fecha_registro: Date
+    fechaRegistro: Date
     codigoMatricula: string
     estado_servicio: estadoServicio
     estado: boolean
