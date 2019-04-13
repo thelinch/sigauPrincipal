@@ -1,4 +1,12 @@
 
+.backgroundd {
+  overflow: hidden;
+  position: absolute;
+  top: auto;
+  right: 0;
+  bottom: -28px;
+  z-index: -1;
+ }
 aside.sidebar .single {
   padding: 30px 15px;
   margin-top: 0px;
@@ -86,7 +94,12 @@ nav {
 
 /////////////////////////////
 .sidenav {
-  width: 240px;
+  width: 250px;
+}
+
+.sidenav .user-view .email {
+   font-size: 13px; 
+  line-height: 24px;
 }
 
 ////////////////DROPDOWN///////////////
@@ -119,7 +132,6 @@ nav {
 
 /////////////////////////////////////////
 ///////////////STYLE MAIN GENERAL////////////////////////
-
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700);
 .materialize-red {
@@ -2747,10 +2759,17 @@ body.layout-semi-dark .footer-copyright {
 
 footer {
   padding-left: 240px;
+  height: 50px; 
+  background:black; 
+  width:100%; 
+  position:a relative; 
+  bottom:0; 
+  left: 0; 
+  top: 0px
 }
 
 footer.page-footer {
-  padding-top: 1px;
+  padding-top: 0px;
 }
 
 select {
@@ -6382,13 +6401,14 @@ h1 span.logo-text {
 }
 
 header .brand-logo {
-  margin: 1px 0px;
-  padding: 22px 20px;
+  margin: 8px 0px; 
+  padding: 5px 20px 6px 2px;
   line-height: 0;
+  margin-left: 20px;
 }
 
 header .brand-logo img {
-  height: 18px;
+  height: 40px;
 }
 
 @media only screen and (max-width: 992px) {
@@ -6863,10 +6883,10 @@ ul.side-nav .collapsible-header.active:after {
 .user-details .row {
   margin: 0;
 }
-
+/*
 .bold > a {
   font-weight: bold;
-}
+}*/
 
 .rightside-navigation {
   overflow: hidden;
@@ -7602,4 +7622,9 @@ tr.group:hover {
 
 #polar-chart-holder {
   padding-top: 20px;
+}
+
+.sidenav li > a {
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 400;
 }
