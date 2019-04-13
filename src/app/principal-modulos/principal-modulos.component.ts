@@ -10,8 +10,8 @@ import { NavegacionDirective } from '../global/directives/navegacion.directive';
 })
 export class PrincipalModulosComponent implements OnInit, AfterViewInit {
 
-  @ViewChild("sideNav") sideNav: ElementRef;
-  @ViewChildren(NavegacionDirective) queryList: QueryList<NavegacionDirective>
+  //@ViewChild("sideNav") sideNav: ElementRef;
+  //@ViewChildren(NavegacionDirective) queryList: QueryList<NavegacionDirective>
   constructor(private navegacionService: NavegacionService) { }
 
   ngOnInit() {
@@ -20,6 +20,9 @@ export class PrincipalModulosComponent implements OnInit, AfterViewInit {
     functionsGlobal.iniciarMaterialBoxed();
     functionsGlobal.iniciarTooltip();
     functionsGlobal.iniciarFloatinButton(null);
+    functionsGlobal.iniciarSideNav();
+    functionsGlobal.iniciarScrollSpy();
+    functionsGlobal.iniciarDropdown();
   }
   ngAfterViewInit(): void {
     //   console.log(this.queryList)
@@ -31,11 +34,6 @@ export class PrincipalModulosComponent implements OnInit, AfterViewInit {
         navegacion.viewContainerRef.createEmbeddedView(template));
     })
   }*/
-  openSlideNav() {
-
-    functionsGlobal.iniciarSideNav()
-    functionsGlobal.openSideNav($(this.sideNav.nativeElement).attr("id"))
-  }
 
   template(evento: any) {
     console.log(evento)

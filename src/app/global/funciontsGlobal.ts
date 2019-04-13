@@ -57,4 +57,23 @@ export class functionsGlobal {
   static iniciarSelect() {
     M.FormSelect.init($('select'));
   }
+
+  static iniciarScrollSpy() {
+    M.ScrollSpy.init($('.scrollspy'));
+  }
+  static iniciarDropdown() {
+    M.Dropdown.init($('.dropdown-trigger'));
+  }
+  static openDropdown(idDropdown: string) {
+    M.Dropdown.getInstance($("#" + idDropdown)).open();
+  }
+  static closeDropdown(idDropdown: string) {
+    M.Dropdown.getInstance($("#" + idDropdown)).close();
+  }
+  static recalculatedimensionsDropdown(idDropdown: string) {
+    M.Dropdown.getInstance($("#" + idDropdown)).recalculateDimensions();
+  }
+  static destroyDropdown(idDropdown: string) {
+    M.Dropdown.getInstance($("#" + idDropdown)).destroy();
+  }
 }
