@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
 import { flatMap, map, take, reduce, filter, mapTo, toArray } from 'rxjs/operators';
 import { FileService } from 'src/app/global/services/file.service';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
+import { servicioSolicitados } from '../../Models/servicioSolicitados';
 
 @Component({
   selector: 'app-lista',
@@ -25,7 +26,7 @@ export class ListaServiciosComponent implements OnInit {
   secondFormGroup: FormGroup;
   formControlListaServicio: FormControl;
   listaServiciosActivados: servicio[]
-  listaServiciosRegistradoPorAlumno: servicio[];
+  servicioSolicitadoActualPorAlumnoYSemestreActual: servicioSolicitados;
   listaRequisitosPorServicio: any[]
   listaRequisitosLlenadosPorUsuario: requisito[]
   listaRequisitoRegistrodoAlumno: Array<number>
@@ -66,8 +67,8 @@ export class ListaServiciosComponent implements OnInit {
 
       },
       complete: () => {
-        this.alumnoService.listaServiciosPorAlumno(json).subscribe(async listaServiciosRegistrados => {
-          this.listaServiciosRegistradoPorAlumno = listaServiciosRegistrados;
+        this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async listaServiciosRegistrados => {
+          this.servicioSolicitadoActualPorAlumnoYSemestreActual = listaServiciosRegistrados;
           await this.cerrarBlock();
         })
       }
@@ -90,8 +91,8 @@ export class ListaServiciosComponent implements OnInit {
       listaDeServicioSolicitados: this.formControlListaServicio.value,
       codigoMatricula: "2019-I"
     }
-    this.servicioService.registrarServicioParaEvaluacion(json).subscribe(servicioRegistrado => {
-      this.listaServiciosRegistradoPorAlumno = servicioRegistrado;
+    this.servicioService.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
+      this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioRegistrado;
     })
 
   }
@@ -190,6 +191,17 @@ export class ListaServiciosComponent implements OnInit {
     }
 
     )
+  }
+  verificarExistenciaDeServicioSolicitado(idModalServicio: string) {
+    if (this.servicioSolicitadoActualPorAlumnoYSemestreActual) {
+      Swal.fire({
+        html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
+        type: "info"
+      })
+      return
+
+    }
+    this.abrilModal(idModalServicio)
   }
   abrirBlock() {
     this.blockUI.start();

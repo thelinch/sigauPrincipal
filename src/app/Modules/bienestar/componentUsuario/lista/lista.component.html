@@ -9,7 +9,8 @@
           </div>
           <div class="padding_2rem right-align ">
             <a matTooltip="Nueva solicitud" class="btn-floating z-depth-3 btn-large waves-effect waves-light blue"
-              [ngClass]="{disabled:this.listaServiciosRegistradoPorAlumno}" (click)="abrilModal(idModalServicio)">
+              [ngClass]="{disabled:servicioSolicitadoActualPorAlumnoYSemestreActual}"
+              (click)="verificarExistenciaDeServicioSolicitado(idModalServicio)">
               <i class="material-icons">add</i>
             </a>
           </div>
@@ -19,17 +20,28 @@
           <div class="card-content">
             <div class="row">
               <div class="col s12">
-                <div class="card hoverable" *ngIf="listaServiciosRegistradoPorAlumno">
-                  <div class="card-content">
-                    <div class="chip blue" *ngFor="let servicoRegistrado of  listaServiciosRegistradoPorAlumno">
-                      {{servicoRegistrado.nombre}}
-                      <i class="fas {{servicoRegistrado.icono}}"></i>
+                <div class="card hoverable" *ngIf="servicioSolicitadoActualPorAlumnoYSemestreActual">
+                  <div class="card-content position_relative">
+                    <div class="position_absolute padding_4 right_0 top_0">
+                      <div class="chip" [matTooltip]="servicio.nombre"
+                        *ngFor="let servicio of  servicioSolicitadoActualPorAlumnoYSemestreActual.servicios">
+                        <i class="fas {{servicio.icono}}"></i>
+                      </div>
+                      <div class="chip white-text indigo  lighten-1"
+                        matTooltip="estado actual de los servicios solicitados">
+                        {{this.servicioSolicitadoActualPorAlumnoYSemestreActual.estado_servicio.nombre}}
+                      </div>
+                    </div>
+                    <div class="card-title">
+                      {{servicioSolicitadoActualPorAlumnoYSemestreActual.codigoMatricula}}
                     </div>
                   </div>
                   <div class="card-action right-align">
-                    <a href="">UNO</a>
-                    <a href="">DOS</a>
-                    <a href="">TRES</a>
+                    <a matTooltip="Requisitos" class="btn-floating btn-small waves-effect fondo-ocda"><i
+                        class="material-icons">
+                        dehaze
+                      </i></a>
+
                   </div>
                 </div>
               </div>
@@ -113,10 +125,7 @@
             </div>
           </form>
         </mat-step>
-
-
       </mat-vertical-stepper>
-      {{stepper.completed}}
     </div>
     <div class="modal-footer">
       <a class="waves-effect btn  waves-light red" (click)="cerrarModal(idModalServicio)"><i
