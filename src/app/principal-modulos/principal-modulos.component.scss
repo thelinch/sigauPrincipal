@@ -58,12 +58,12 @@ aside.sidebar .single h3.side-title:after {
   overflow: hidden;
 }
 /////////////////////////////
-
+/*
 .gradient-45deg-light-blue-cyan {
   background: #0288d1;
   background: -webkit-linear-gradient(45deg, #0288d1 0%, #26c6da 100%);
   background: linear-gradient(45deg, #0288d1 0%, #26c6da 100%);
-}
+}*/
 nav {
   background-color: #00bcd4;
 }
@@ -94,7 +94,7 @@ nav {
 
 /////////////////////////////
 .sidenav {
-  width: 250px;
+  width: 265px;
 }
 
 .sidenav .user-view .email {
@@ -2743,7 +2743,7 @@ body.layout-semi-dark .footer-copyright {
 
 #main {
   min-height: calc(100% - 100px);
-  padding-left: 240px;
+  padding-left: 260px;
   -webkit-transition: .3s ease all;
   -o-transition: .3s ease all;
   -moz-transition: .3s ease all;
@@ -2824,13 +2824,13 @@ select {
 
 @media only screen and (min-width: 601px) {
   .container {
-    width: 98%;
+    width: 96%;
   }
 }
 
 @media only screen and (min-width: 993px) {
   .container {
-    width: 98%;
+    width: 96%;
   }
 }
 
@@ -5990,7 +5990,11 @@ li.home:before {
   background: -webkit-linear-gradient(45deg, #0288d1 0%, #26c6da 100%);
   background: linear-gradient(45deg, #0288d1 0%, #26c6da 100%);
 }
-
+.gradient-45deg-light-ocda-cyan {
+  background: #00bfa5;
+  background: -webkit-linear-gradient(45deg, #0288d1 0%, #26c6da 100%);
+  background: linear-gradient(45deg, #0288d1 0%, #00bfa5 100%);
+}
 .gradient-45deg-light-blue-cyan.gradient-shadow {
   box-shadow: 0 6px 20px 0 rgba(38, 198, 218, 0.5);
 }

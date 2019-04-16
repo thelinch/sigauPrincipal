@@ -11,11 +11,16 @@ import { RegistrobachillerComponent } from './componentAdmin/registrobachiller/r
 import { RegistrotituladoComponent } from './componentAdmin/registrotitulado/registrotitulado.component';
 import { RegistromaestriaComponent } from './componentAdmin/registromaestria/registromaestria.component';
 import { RegistrodoctoradoComponent } from './componentAdmin/registrodoctorado/registrodoctorado.component';
+import { BlockUIModule } from 'ng-block-ui';
 
 
 @NgModule({
-  declarations: [PrincipalComponent, BusquedaComponent,TitulosComponent, RegistrosComponent, RegistrobachillerComponent, RegistrotituladoComponent, RegistromaestriaComponent, RegistrodoctoradoComponent],
-  imports: [CommonModule,TitulosRoutingModule,MaterialModule, FormsModule, ReactiveFormsModule],
+  declarations: [PrincipalComponent, BusquedaComponent, TitulosComponent, RegistrosComponent, RegistrobachillerComponent, RegistrotituladoComponent, RegistromaestriaComponent, RegistrodoctoradoComponent],
+  imports: [CommonModule,
+    TitulosRoutingModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule, BlockUIModule.forRoot(),],
   exports: [],
   providers: [],
 })
