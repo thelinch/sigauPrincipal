@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { alumno } from '../Models/Alumno';
 import { servicio } from 'src/app/Modules/bienestar/Models/servicio';
 import { servicioSolicitados } from 'src/app/Modules/bienestar/Models/servicioSolicitados';
+import { alumnoRequisito } from 'src/app/Modules/bienestar/Models/alumnoRequisito';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,8 @@ export class AlumnoService {
   }
   servicioSolicitadoPorAlumnoYSemestreActual(json: any): Observable<servicioSolicitados> {
     return this.http.post<servicioSolicitados>(this.urlControlador + "alumno/servicios", JSON.stringify(json), { headers: this.header });
+  }
+  listarRequisitosPorAlumnoYSemestreActual(json: any): Observable<alumnoRequisito[]> {
+    return this.http.post<alumnoRequisito[]>(this.urlControlador + "alumno/requisitos", JSON.stringify(json), { headers: this.header });
   }
 }

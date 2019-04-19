@@ -1,10 +1,11 @@
+import { estadoArchivo } from './estadoArchivo';
+
 export interface archivo {
   id: number
-  nombreOriginalArchivo: string
-  nombreSistemaArchivo: string
+  nombreOriginal: string
+  nombreSistema: string
   url: string
+  estados_archivo: estadoArchivo
   estado: boolean
   extension: string
-  created_at: Date
-  updated_at: Date
 }
