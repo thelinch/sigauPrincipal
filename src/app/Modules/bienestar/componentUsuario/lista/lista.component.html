@@ -40,8 +40,9 @@
                     {{servicioSolicitadoActualPorAlumnoYSemestreActual.fechaRegistro}}
                   </div>
                   <div class="card-action right-align">
-                    <a matTooltip="Requisitos" class="btn-floating btn-small waves-effect fondo-ocda"><i
-                        class="material-icons">
+                    <a matTooltip="Requisitos"
+                      (click)="listaRequisitosPorAlumnoYSemestre(servicioSolicitadoActualPorAlumnoYSemestreActual)"
+                      class="btn-floating btn-small waves-effect fondo-ocda"><i class="material-icons">
                         description
                       </i></a>
                   </div>
@@ -136,17 +137,43 @@
     </div>
 
   </div>
-
+  <div [id]="modalListaRequisitoAlumno" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4 class="center-align">Requisitos Registrado</h4>
+      <div class="row">
+        <div class="col s12 m6" *ngFor="let alumnoRequisito of  listaAlumnoRequisitoPorALumnoYSemestre ">
+          <div class="card">
+            <div class="card-title center-align" [matTooltip]="alumnoRequisito.requisito.nombre">
+              {{alumnoRequisito.requisito.nombre}}
+            </div>
+            <div class="card-content">
+              <div class="row">
+                <div class="col s12 m6" *ngFor="let archivo of alumnoRequisito.archivos">
+                  <div class="card position_relative">
+                    <img src="../../../../../assets/imagenArchivos/archivo.png" alt="" class="responsive-img">
+                    <div class="truncate center-align">
+                      {{archivo.nombreOriginal}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-action">
+              <a class="btn btn-small btn-floating waves-effect waves-light" matTooltip="listar archivos"
+                (click)="listaArchivosPorAlumnoRequisito(alumnoRequisito)"><i class="material-icons">archive</i></a>
+              <a class="btn btn-small btn-floating waves-effect waves-light"><i
+                  class="material-icons">file_upload</i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a (click)="cerrarModal(modalListaRequisitoAlumno)"
+        class="modal-close waves-effect waves-light red btn-flat">cerrar</a>
+    </div>
+  </div>
+  <ng-template #spinner>
+    <mat-spinner></mat-spinner>
+  </ng-template>
 </block-ui>
-
-<div class="fixed-action-btn">
-  <a class="btn-floating btn-large blue" matTooltip="Notificaciones">
-    <i class="large material-icons">notifications</i>
-  </a>
-  <ul>
-    <li><a class="btn-floating red"> <i class="material-icons">insert_chart</i></a></li>
-    <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-    <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-    <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-  </ul>
-</div>

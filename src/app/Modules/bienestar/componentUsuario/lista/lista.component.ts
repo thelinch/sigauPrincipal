@@ -9,11 +9,13 @@ import { requisito } from '../../Models/Requisito';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import FileUploadWithPreview from 'file-upload-with-preview';
 import Swal from 'sweetalert2';
-import { flatMap, map, take, reduce, filter, mapTo, toArray, isEmpty } from 'rxjs/operators';
+import { flatMap, map, take, filter, toArray } from 'rxjs/operators';
 import { FileService } from 'src/app/global/services/file.service';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { servicioSolicitados } from '../../Models/servicioSolicitados';
 import { isUndefined } from 'util';
+import { alumnoRequisito } from './../../Models/alumnoRequisito';
+import { AlumnoRequisitoService } from '../../services/alumno-requisito.service';
 
 @Component({
   selector: 'app-lista',
@@ -22,11 +24,13 @@ import { isUndefined } from 'util';
 })
 export class ListaServiciosComponent implements OnInit {
   idModalServicio: string = "modalServicio"
+  modalListaRequisitoAlumno: string = "modalListaRequisitoAlumno"
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   formControlListaServicio: FormControl;
   listaServiciosActivados: servicio[]
+  listaAlumnoRequisitoPorALumnoYSemestre: alumnoRequisito[]
   servicioSolicitadoActualPorAlumnoYSemestreActual: servicioSolicitados;
   listaRequisitosPorServicio: any[]
   listaRequisitosLlenadosPorUsuario: requisito[]
@@ -36,7 +40,12 @@ export class ListaServiciosComponent implements OnInit {
   contadorTotalRequisitoEnviadoRequerido: number;
   @BlockUI() blockUI: NgBlockUI;
 
-  constructor(private _formBuilder: FormBuilder, private servicioService: ServicioService, private filseService: FileService, private render: Renderer2, private alumnoService: AlumnoService) { }
+  constructor(private _formBuilder: FormBuilder,
+    private servicioService: ServicioService,
+    private filseService: FileService,
+    private render: Renderer2,
+    private alumnoService: AlumnoService,
+    private alumnoRequisitoService: AlumnoRequisitoService) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -92,8 +101,10 @@ export class ListaServiciosComponent implements OnInit {
       listaDeServicioSolicitados: this.formControlListaServicio.value,
       codigoMatricula: "2019-I"
     }
+    this.abrirBlock();
     this.servicioService.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
       this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioRegistrado;
+      this.cerrarBlock();
     })
 
   }
@@ -102,7 +113,7 @@ export class ListaServiciosComponent implements OnInit {
     let validacionImagen: boolean = true;
     instanciaFotos.cachedFileArray.forEach(element => {
       if (tipoArchivoAdmitido == "image/*") {
-        if (!(/\.(jpg|png|gif)$/i).test(element.name)) {
+        if (!(/\.(jpg|png)$/i).test(element.name)) {
           validacionImagen = false;
           return
         }
@@ -127,7 +138,7 @@ export class ListaServiciosComponent implements OnInit {
             formData.append("archivo", file)
             formData.append("idRequisito", requisito.id.toString());
             formData.append("idUsuario", "1");
-            formData.append("nombreCarpeta", "Comedor_internado/antony/"+"2019-I");
+            formData.append("nombreCarpeta", "Comedor_internado/antony/" + "2019-I");
             return formData
           }),
             flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
@@ -198,8 +209,23 @@ export class ListaServiciosComponent implements OnInit {
       codigoMatricula: serviciosolicitado.codigoMatricula,
       idAlumno: "1"
     }
+    this.abrirBlock();
+    this.alumnoRequisitoService.listaAlumnoRequisitoPorAlumnoYSemestre(json).subscribe(listaAlumnoRequisito => {
+      this.listaAlumnoRequisitoPorALumnoYSemestre = listaAlumnoRequisito;
+      this.abrilModal(this.modalListaRequisitoAlumno);
+      this.cerrarBlock();
+    });
 
-
+  }
+  listaArchivosPorAlumnoRequisito(alumnoRequisitoParametro: alumnoRequisito) {
+    this.abrirBlock();
+    let json = {
+      id: alumnoRequisitoParametro.id
+    }
+    this.alumnoRequisitoService.listaArchivoPorAlumnoRequisito(json).subscribe(archivos => {
+      alumnoRequisitoParametro.archivos = archivos;
+      this.cerrarBlock();
+    })
   }
   verificarExistenciaDeServicioSolicitado(idModalServicio: string) {
     if (this.servicioSolicitadoActualPorAlumnoYSemestreActual) {
