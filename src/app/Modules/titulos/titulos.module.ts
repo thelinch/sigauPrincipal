@@ -12,6 +12,7 @@ import { RegistrotituladoComponent } from './componentAdmin/registrotitulado/reg
 import { RegistromaestriaComponent } from './componentAdmin/registromaestria/registromaestria.component';
 import { RegistrodoctoradoComponent } from './componentAdmin/registrodoctorado/registrodoctorado.component';
 import { BlockUIModule } from 'ng-block-ui';
+import { DenominacionesService } from './services/denominaciones.service';
 
 
 @NgModule({
@@ -22,6 +23,6 @@ import { BlockUIModule } from 'ng-block-ui';
     FormsModule,
     ReactiveFormsModule, BlockUIModule.forRoot(),],
   exports: [],
-  providers: [],
+  providers: [DenominacionesService],
 })
 export class TitulosModule { }

@@ -1,43 +1,63 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { PeriodicElement } from '../registros/registros.component';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { alumno } from 'src/app/global/Models/Alumno';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
+import { EscuelaProfesional } from 'src/app/global/Models/EscuelaProfesional';
+import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
+import { Observable } from 'rxjs';
+import { functionsGlobal } from 'src/app/global/funciontsGlobal';
+import { delay } from 'rxjs/operators';
+import Swal from 'sweetalert2';
+import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
+import { denominacionGradoTitulo } from '../../Models/denominacion_grado_titulo';
+import { DenominacionesService } from '../../services/denominaciones.service';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-registrobachiller',
   templateUrl: './registrobachiller.component.html',
   styleUrls: ['./registrobachiller.component.scss']
 })
-export class RegistrobachillerComponent implements OnInit {
-  displayedColumns: string[] = ['select', 'position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(true, []);
+export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
-  listaAlumnos: alumno[]
+  idModalAgregarAlumnoPregrado: string = "modalAgregarAlumnoPregrado"
+  idModalParaRegistroDeDenominaciones: string = "modalRegistroDenominaciones"
+  listaEscuelaprofesionales$: Observable<EscuelaProfesional[]>
+  listaAlumnosSeleccionados: Array<alumno>
+  listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
+  displayedColumns: string[] = ['select', 'nombre', "apellidos", "escuela profesional"];
+  dataSource = new MatTableDataSource<alumno>();
+  listaDenominacionesPorEspecialidad: denominacionGradoTitulo[]
+  listaAlumnoSeleccionados = new SelectionModel<alumno>(true);
+  alumnoBachillerSeleccionado: alumno
+  formularioRegistroBachiller: FormGroup;
+  checkedSeleccionado: any
+
+
   //dataSource = new MatTableDataSource<alumno>(this.listaAlumnos);
 
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
+    const numSelected = this.listaAlumnoSeleccionados.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+      this.listaAlumnoSeleccionados.clear() :
+      this.dataSource.data.forEach(row => this.listaAlumnoSeleccionados.select(row));
   }
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: PeriodicElement): string {
+  checkboxLabel(row?: alumno): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    return `${this.listaAlumnoSeleccionados.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
 
@@ -47,58 +67,135 @@ export class RegistrobachillerComponent implements OnInit {
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
   @BlockUI() blockUI: NgBlockUI;
   selecion: any
-  constructor(private alumnoService: AlumnoService) { }
 
+  constructor(private alumnoService: AlumnoService,
+    private escuelaprofesionalService: EscuelaprofesionalService,
+    private denominacionService: DenominacionesService,
+    private fb: FormBuilder) { }
+
+  /*CODIGO PARA INICIAR LOS METODOS*/
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
-    this.alumnosPregado();
+    this.listaAlumnosSeleccionados = new Array();
+    this.iniciarData();
+    this.formularioRegistroBachiller = this.fb.group({
+      codigoUniversidad: ["", Validators.required],
+      denominacionGradoTitulo: ["", Validators.required],
+    })
+    this.listaAlumnoGraduadoTitulado = new Array();
   }
+  ngAfterViewInit(): void {
+  }
+
+  registrarAlumnosBachiller() {
+
+
+  }
+  seleccionarAlumno(alumno: alumno, check: any) {
+    this.alumnoBachillerSeleccionado = alumno;
+    this.checkedSeleccionado = check;
+  }
+  verificacionDeAlumnoBachiller(alumnoParametro: alumno) {
+    let alumnoGraduadotitulado = this.listaAlumnoGraduadoTitulado.find(alumnoGraduado => alumnoGraduado.alumno_general_id == alumnoParametro.id)
+    if (alumnoGraduadotitulado) {
+      this.editarFormularioBachiller(alumnoGraduadotitulado)
+      return
+    }
+    this.limpiarFormularioAlumnoGraduadoTitulado();
+
+  }
+  compareObjeto(val1: any, val2) {
+    return val1 && val2 ? val1.id === val2 : val1 === val2;
+  }
+  limpiarFormularioAlumnoGraduadoTitulado() {
+    this.formularioRegistroBachiller.reset();
+  }
+  editarFormularioBachiller(alumnoParametro: alumnoGraduadoTitulado) {
+    this.formularioRegistroBachiller.get("codigoUniversidad").setValue(alumnoParametro.codigoUniversidad);
+    this.formularioRegistroBachiller.get("denominacionGradoTitulo").setValue({
+      id: alumnoParametro.denominacionGradoTitulo.id
+    });
+
+  }
+  listarDenominacionGradoPorEspecialidad(alumnoParametro: alumno) {
+    this.abrirBlock();
+    let json = {
+      id: alumnoParametro.escuela_profesional.id
+    }
+    console.log(json)
+    this.denominacionService.listarDenominacionesPorEspecialidad(json).subscribe(listaDenominacion => {
+      this.listaDenominacionesPorEspecialidad = listaDenominacion;
+      this.cerrarBlock();
+
+    })
+
+  }
+
+  agregarDatosAlumno(alumnoGraduadoTitulado: alumnoGraduadoTitulado) {
+    alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.id;
+    if (!this.listaAlumnoGraduadoTitulado.find(alumnoGraduado => alumnoGraduado.alumno_general_id == this.alumnoBachillerSeleccionado.id)) {
+      this.listaAlumnoGraduadoTitulado.push(alumnoGraduadoTitulado);
+    } else {
+      let index = this.listaAlumnoGraduadoTitulado.findIndex(alumnoGraduado => alumnoGraduado.alumno_general_id == this.alumnoBachillerSeleccionado.id)
+      this.listaAlumnoGraduadoTitulado[index] = alumnoGraduadoTitulado
+    }
+    console.log(this.listaAlumnoGraduadoTitulado)
+    this.checkedSeleccionado.checked = true;
+  }
+  removerAlumno(alumno: alumno) {
+    if (this.listaAlumnoSeleccionados.isSelected(alumno)) {
+      this.listaAlumnoSeleccionados.deselect(alumno);
+      let index = this.listaAlumnoGraduadoTitulado.findIndex(alumnoGraduado => alumnoGraduado.alumno_general_id == alumno.id)
+      this.listaAlumnoGraduadoTitulado.splice(index, 1)
+      console.log(this.listaAlumnoGraduadoTitulado)
+    }
+
+  }
+  iniciarData() {
+    this.alumnoService.AlumnosPregrado().subscribe({
+      next: (listaAlumnos) => {
+        this.dataSource.data = listaAlumnos
+      },
+      complete: () => {
+        this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
+      }
+
+    })
+
+  }
+  /*CODIGO PARA MOSTRAR LOS ESTUDIANTES DE PRE-GRADO
   public alumnosPregado() {
     this.abrirBlock();
     this.alumnoService.AlumnosPregrado().subscribe(listaAlumnos => {
       console.log(listaAlumnos)
-      this.listaAlumnos = listaAlumnos;
+
       this.cerrarBlock();
     })
   }
+
+  /*CODIGO PARA MOSTRAR LAS ESCUELAS PROFESIONALES
+  public escuelaProfesional() {
+    this.abrirBlock();
+
+  }
+*/
+
   abrirBlock() {
     this.blockUI.start()
   }
   cerrarBlock() {
     this.blockUI.stop();
   }
-  //*Arreglo para importar datos al overflow de filtar en el modal por facultad
-  states: string[] = [
-    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
-    'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
-    'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
-    'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
-    'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
-    'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-    'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-  ];
-
+  abrirModal(id: string) {
+    functionsGlobal.openModal(id);
+  }
+  cerrarModal(id: string) {
+    functionsGlobal.closeModal(id);
+  }
 }
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
 
