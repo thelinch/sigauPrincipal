@@ -28,15 +28,16 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   listaEscuelaprofesionales$: Observable<EscuelaProfesional[]>
   listaAlumnosSeleccionados: Array<alumno>
   listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
-  displayedColumns: string[] = ['select', 'nombre', "apellidos", "escuela profesional"];
+  displayedColumns: string[] = ['select', 'DNI','Nombre', "Apellidos", "Escuela profesional"];
   dataSource = new MatTableDataSource<alumno>();
   listaDenominacionesPorEspecialidad: denominacionGradoTitulo[]
   listaAlumnoSeleccionados = new SelectionModel<alumno>(true);
   alumnoBachillerSeleccionado: alumno
+  alumnoPregradoSeleccionado: alumno
   formularioRegistroBachiller: FormGroup;
   checkedSeleccionado: any
 
-
+  
   //dataSource = new MatTableDataSource<alumno>(this.listaAlumnos);
 
 
@@ -98,6 +99,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.alumnoBachillerSeleccionado = alumno;
     this.checkedSeleccionado = check;
   }
+
   verificacionDeAlumnoBachiller(alumnoParametro: alumno) {
     let alumnoGraduadotitulado = this.listaAlumnoGraduadoTitulado.find(alumnoGraduado => alumnoGraduado.alumno_general_id == alumnoParametro.id)
     if (alumnoGraduadotitulado) {
@@ -145,6 +147,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     console.log(this.listaAlumnoGraduadoTitulado)
     this.checkedSeleccionado.checked = true;
   }
+
   removerAlumno(alumno: alumno) {
     if (this.listaAlumnoSeleccionados.isSelected(alumno)) {
       this.listaAlumnoSeleccionados.deselect(alumno);
@@ -152,8 +155,24 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       this.listaAlumnoGraduadoTitulado.splice(index, 1)
       console.log(this.listaAlumnoGraduadoTitulado)
     }
+  }
+
+  clickAlumnoCard(alumno: alumno){
+    this.alumnoPregradoSeleccionado = alumno;
+    console.log(this.alumnoPregradoSeleccionado)
 
   }
+
+  gradoacademico(alumno: alumno)
+  {
+    this.alumnoPregradoSeleccionado = alumno;
+    if(this.alumnoPregradoSeleccionado.grado_alumno === true)
+    {
+      var grado: string = 'Alumno Pregrado';
+    }
+    return grado
+  }
+
   iniciarData() {
     this.alumnoService.AlumnosPregrado().subscribe({
       next: (listaAlumnos) => {
@@ -162,9 +181,11 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       complete: () => {
         this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
       }
-
     })
+  }
 
+  count(){
+  
   }
   /*CODIGO PARA MOSTRAR LOS ESTUDIANTES DE PRE-GRADO
   public alumnosPregado() {

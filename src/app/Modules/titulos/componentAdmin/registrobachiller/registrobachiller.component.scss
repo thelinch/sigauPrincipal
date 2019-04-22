@@ -48,10 +48,12 @@
 .boxshadow {
   -webkit-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.60);
+  box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.6);
 }
 
-td.mat-cell, td.mat-footer-cell, th.mat-header-cell {
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
   padding: 0;
   border-bottom-width: 1px;
   border-bottom-style: solid;
@@ -61,10 +63,152 @@ tr.mat-header-row {
   height: 56px;
   background: #00bfa5;
 }
-.colortablewhite{
+.colortablewhite {
   color: white;
 }
 
-.marginfiltertable{
+.marginfiltertable {
   margin-left: 50px;
+}
+.colorTR {
+  background: #00bfa5;
+  color: white;
+}
+
+.titleLista {
+  margin-right: 20px;
+}
+
+.example-container {
+  height: 400px;
+  overflow: auto;
+}
+
+.example-container {
+  height: 320px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.fonttable {
+  font-size: 13px;
+}
+
+
+/*CSS PARA DAR NUMERACION A LA TABLA*/
+.table1 tr {
+  counter-increment: rowNumber;
+}
+
+.table1 tr td:first-child::before {
+  content: counter(rowNumber);
+  min-width: 1em;
+  margin-right: 0.5em;
+}
+
+/*CSS DE LA TABLA DE CONTENIDO*/
+tbody {
+  display: block;
+  height: 500px;
+  width: 100%;
+  overflow: auto;
+}
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+thead {
+  width: calc(100%);
+}
+table {
+  width: 100%;
+}
+
+/*TABLE RESPONSIVE*/
+table.centered thead tr th,
+table.centered tbody tr td {
+  text-align: center;
+}
+
+@media only screen and (max-width: 992px) {
+  table.responsive-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    position: relative;
+  }
+  table.responsive-table td:empty:before {
+    content: "\00a0";
+  }
+  table.responsive-table th,
+  table.responsive-table td {
+    margin: 0;
+    vertical-align: top;
+  }
+  table.responsive-table th {
+    text-align: left;
+  }
+  table.responsive-table thead {
+    display: block;
+    float: left;
+  }
+  table.responsive-table thead tr {
+    display: block;
+    padding: 0 10px 0 0;
+  }
+  table.responsive-table thead tr th::before {
+    content: "\00a0";
+  }
+  table.responsive-table tbody {
+    display: block;
+    width: auto;
+    position: relative;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  table.responsive-table tbody tr {
+    display: inline-block;
+    vertical-align: top;
+  }
+  table.responsive-table th {
+    display: block;
+    text-align: right;
+  }
+  table.responsive-table td {
+    display: block;
+    min-height: 1.25em;
+    text-align: left;
+  }
+  table.responsive-table tr {
+    border-bottom: none;
+    padding: 0 10px;
+  }
+  table.responsive-table thead {
+    border: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  tbody {
+    display: inline-flex;
+    height: auto;
+    overflow: auto;
+  }
+  thead,
+  tbody tr {
+    display: table;
+    width: auto;
+    table-layout: auto;
+  }
+  thead {
+    width: auto;
+  }
+  table {
+    width: auto;
+  }
 }

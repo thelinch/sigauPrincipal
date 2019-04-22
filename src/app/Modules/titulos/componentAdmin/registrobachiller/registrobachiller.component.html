@@ -11,59 +11,169 @@
     <mat-divider></mat-divider>
 
     <!-- Modal Buscar estudiante Externo o interno -->
+    <!--
     <div class="card">
-      <div class="card-content teal accent-4 right-align">
+      <div class="card-content teal accent-4 ">
         <p class="left white-text"><b>Lista de Estudiantes para Graduar</b></p>
         <a class="waves-effect waves-light btn  white darken-4 black-text tooltipped"
           (click)="abrirModal(idModalAgregarAlumnoPregrado)" data-tooltip="Seleccionar"><i
             class="material-icons right">send</i>Agregar</a>
       </div>
     </div>
+    -->
+    <div>
+      <blockquote>
+        <p class="left black-text titleLista"><b>Lista de Estudiantes para Graduar</b></p>
+        <a class="waves-effect waves-light btn  white darken-4 black-text tooltipped"
+          (click)="abrirModal(idModalAgregarAlumnoPregrado)" data-tooltip="Seleccionar"><i
+            class="material-icons right">add</i>Agregar</a>
+      </blockquote>
+    </div>
     <mat-divider></mat-divider>
     <div class="row">
-      <div class="col s12 m8">
-
-        <table *ngIf="listaAlumnoSeleccionados.selected.length>0" class="striped centered responsive-table">
-          <thead>
+      <div class="col s12 m8 ">
+        <table *ngIf="listaAlumnoSeleccionados.selected.length>0" class=" centered responsive-table highlight table1">
+          <thead class="colorTR">
             <tr>
-              <th>check</th>
-              <th>Nombre</th>
+              <th> <i class="material-icons">check</i></th>
+              <th>DNI</th>
+              <th>Nombres</th>
               <th>Apellidos</th>
               <th>Escuela Profesional</th>
+              <th>Operaciones</th>
             </tr>
           </thead>
-
-          <tbody>
-
-            <tr *ngFor="let alumnoSeleccionado of listaAlumnoSeleccionados.selected ">
+          <tbody class="fonttable">
+            <tr (click)="clickAlumnoCard(alumnoSeleccionado)"
+              *ngFor="let alumnoSeleccionado of listaAlumnoSeleccionados.selected ">
               <td>
                 <mat-checkbox [disabled]="true" #check></mat-checkbox>
               </td>
+              <td>{{alumnoSeleccionado.persona.numero_documento}} </td>
               <td>{{alumnoSeleccionado.persona.nombre}} </td>
               <td>{{alumnoSeleccionado.persona.apellido_paterno +" "+alumnoSeleccionado.persona.apellido_materno}}</td>
               <td> {{alumnoSeleccionado.escuela_profesional.nombre}}</td>
               <td>
                 <a (click)="seleccionarAlumno(alumnoSeleccionado,check);verificacionDeAlumnoBachiller(alumnoSeleccionado);listarDenominacionGradoPorEspecialidad(alumnoSeleccionado);abrirModal(idModalParaRegistroDeDenominaciones)"
-                  matTooltip="Agregar datos al alumno" class="btn-floating blue waves-effect waves-light "><i
+                  matTooltip="Agregar datos al alumno" class="btn-floating btn-small waves-effect blue tooltipped"><i
                     class="material-icons">add</i></a>
-              </td>
-              <td>
-                <a matTooltip="visualizar  datos del alumno" class="btn-floating blue waves-effect waves-light "><i
+                <a matTooltip="visualizar  datos del alumno" class="btn-floating btn-small waves-effect tooltipped"><i
                     class="material-icons">remove_red_eye</i></a>
-              </td>
-              <td>
-                
-                <a matTooltip="remover  alumno" (click)="removerAlumno(alumnoSeleccionado)" class="btn-floating blue waves-effect waves-light "><i
-                    class="material-icons">delete</i></a>
+                <a matTooltip="remover  alumno" (click)="removerAlumno(alumnoSeleccionado)"
+                  class="btn-floating btn-small waves-effect red tooltipped"><i class="material-icons">delete</i></a>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="col s12 m4">
-        <p>hol</p>
+      <!--CARD DE DATOS DEL ALUMNO PPREGRADO-->
+      <div class="col s12 m4" *ngIf="listaAlumnoSeleccionados.selected.length>0 && alumnoPregradoSeleccionado">
+        <div class="card">
+          <div class="card-image waves-effect waves-block waves-light">
+            <img class="activator" src="{{alumnoPregradoSeleccionado.persona.foto}}">
+            <span class="card-title">UNAS</span>
+            <div
+              class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
+              <input class="colortablewhite" matInput placeholder="Documento de Identidad "
+                value="DNI: {{alumnoPregradoSeleccionado.persona.numero_documento}}" readonly>
+            </div>
+            <div class="estado position_absolute top_0  right_0">
+              <span
+                class="chip fondo-ocda white-text light-blue darken-4">{{gradoacademico(alumnoPregradoSeleccionado)}}</span>
+            </div>
+          </div>
+          <div class="card-content">
+            <span class="card-title activator grey-text text-darken-4">{{alumnoPregradoSeleccionado.persona.nombre}}
+              {{alumnoPregradoSeleccionado.persona.apellido_paterno}}
+              {{alumnoPregradoSeleccionado.persona.apellido_materno}} <i
+                class="material-icons right">more_vert</i></span>
+            <p><a>{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}</a></p>
+          </div>
+          <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4 center-align teal accent-4"><b
+                class="white-text">Datos</b><i class="material-icons right">close</i></span>
+            <mat-divider> </mat-divider>
+            <p></p>
+            <div class="row">
+              <mat-form-field class="col s7 m7 example-full-width  ">
+                <input matInput placeholder="Código de Estudiante" value="{{alumnoPregradoSeleccionado.codigo}}"
+                  readonly>
+              </mat-form-field>
+              <mat-form-field class="col s5 m5 example-full-width">
+                <input matInput placeholder="DNI" value="{{alumnoPregradoSeleccionado.persona.numero_documento}}"
+                  readonly>
+              </mat-form-field>
+              <mat-form-field class="col s7 m7 example-full-width">
+                <input matInput placeholder="Nombres" value="{{alumnoPregradoSeleccionado.persona.nombre}}" readonly>
+              </mat-form-field>
+              <mat-form-field class="col s5 m5 example-full-width">
+                <input matInput placeholder="Fecha de Nacimiento "
+                  value="{{alumnoPregradoSeleccionado.persona.fecha_nacimiento}}" readonly>
+              </mat-form-field>
+              <mat-form-field class="col s12 m12 example-full-width">
+                <input matInput placeholder="Apellidos "
+                  value="{{alumnoPregradoSeleccionado.persona.apellido_paterno}} {{alumnoPregradoSeleccionado.persona.apellido_materno}}"
+                  readonly>
+              </mat-form-field>
+              <mat-form-field class="col s12 m12 example-full-width">
+                <input matInput placeholder="Escuela Profesional "
+                  value="{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}" readonly>
+              </mat-form-field>
+              <mat-form-field class="col s12 m12 example-full-width">
+                <input matInput placeholder="Correo Institucional"
+                  value="{{alumnoPregradoSeleccionado.correo_institucional}}" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!--
+      <div class="col s12 m4" *ngIf="listaAlumnoSeleccionados.selected.length>0 && alumnoPregradoSeleccionado">
+        <div class="card">
+          <div class="card-image">
+            <img src="{{alumnoPregradoSeleccionado.persona.foto}}">
+            <span class="card-title">UNAS</span>
+            <div
+              class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
+              <input class="colortablewhite" matInput placeholder="Documento de Identidad "
+                value="Código: {{alumnoPregradoSeleccionado.codigo}}" readonly>
+            </div>
+          </div>
+          <div class="card-content">
+            <div class="estado position_absolute top_0  right_0">
+              <span
+                class="chip fondo-ocda white-text light-blue darken-4">{{gradoacademico(alumnoPregradoSeleccionado)}}</span>
+            </div>
+            <div class="row">
+              <mat-form-field class="col s6 m6 example-full-width  ">
+                <input matInput placeholder="Nombres " value="{{alumnoPregradoSeleccionado.persona.nombre}}" readonly>
+              </mat-form-field>
+              <mat-form-field class="col s6 m6 example-full-width">
+                <input matInput placeholder="DNI" value="{{alumnoPregradoSeleccionado.persona.numero_documento}}"
+                  readonly>
+              </mat-form-field>
+              <mat-form-field class="col s12 m12 example-full-width">
+                <input matInput placeholder="Apellidos "
+                  value="{{alumnoPregradoSeleccionado.persona.apellido_paterno}} {{alumnoPregradoSeleccionado.persona.apellido_materno}}"
+                  readonly>
+              </mat-form-field>
+              <mat-form-field class="col s12 m12 example-full-width">
+                <input matInput placeholder="Escuela Profesional "
+                  value="{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}" readonly>
+              </mat-form-field>
+              <mat-form-field class="col s12 m12 example-full-width">
+                <input matInput placeholder="Correo Institucional"
+                  value="{{alumnoPregradoSeleccionado.correo_institucional}}" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      -->
+      <!--FIN DE CARD DE DATOS DEL ALUMNO PPREGRADO-->
     </div>
+    <mat-divider></mat-divider>
   </div>
 </div>
 
@@ -81,7 +191,7 @@
       </mat-form-field>
 
       <mat-form-field class="col s12 m4 margen">
-        <mat-label>Seleccione facultad</mat-label>
+        <mat-label>Seleccione Especialidad</mat-label>
         <mat-select>
           <mat-option>Ninguna</mat-option>
           <ng-container *ngIf="listaEscuelaprofesionales$ | async;let listaEscuelaprofesionales;else efectoCarga">
@@ -94,8 +204,8 @@
     </div>
 
     <!--Codigo para hacer mostrar los estudiantes internos y externos-->
-    <div class="">
-      <table mat-table [dataSource]="dataSource">
+    <div class="example-container">
+      <table mat-table [dataSource]="dataSource" class=" centered  highlight">
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
@@ -117,23 +227,27 @@
 
 
         <!-- Name Column -->
-        <ng-container matColumnDef="nombre">
+        <ng-container matColumnDef="DNI">
+          <th mat-header-cell *matHeaderCellDef class="colortablewhite"> DNI.</th>
+          <td mat-cell *matCellDef="let alumno "> {{alumno.persona.numero_documento}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Nombre">
           <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Nombre.</th>
           <td mat-cell *matCellDef="let alumno "> {{alumno.persona.nombre}} </td>
         </ng-container>
-        <ng-container matColumnDef="apellidos">
+        <ng-container matColumnDef="Apellidos">
           <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Nombre.</th>
           <td mat-cell *matCellDef="let alumno ">
             {{alumno.persona.apellido_paterno +" "+alumno.persona.apellido_materno}}
           </td>
         </ng-container>
-        <ng-container matColumnDef="escuela profesional">
+        <ng-container matColumnDef="Escuela profesional">
           <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Escuela Profesional.</th>
           <td mat-cell *matCellDef="let alumno ">
             {{alumno.escuela_profesional.nombre}}
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns  sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="listaAlumnoSeleccionados.toggle(row)">
         </tr>
       </table>
@@ -148,6 +262,7 @@
 </div>
 <!-- Fin de Modal Buscar estudiante Externo o interno -->
 
+<!--MODAL PARA INGRESAR DATOS DEL BACHILLER-->
 <div [id]="idModalParaRegistroDeDenominaciones" class="modal">
   <form [formGroup]="formularioRegistroBachiller" (submit)="agregarDatosAlumno(formularioRegistroBachiller.value)">
     <div class="modal-content">
@@ -167,11 +282,13 @@
       </div>
     </div>
     <div class="modal-footer right-align">
-      <button type="submit" [disabled]="!formularioRegistroBachiller.valid"
-        class="waves-effect waves-green green btn-flat">agregar</button>
+      <button (click)="cerrarModal(idModalParaRegistroDeDenominaciones)" type="submit"
+        [disabled]="!formularioRegistroBachiller.valid" class="waves-effect waves-green green btn-flat">agregar</button>
     </div>
   </form>
 </div>
+<!--FIN DE MODAL PARA INGRESAR DATOS DEL BACHILLER-->
+
 <ng-template #efectoCarga>
   <mat-spinner></mat-spinner>
 </ng-template>
