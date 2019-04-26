@@ -78,7 +78,7 @@ export class ListaServiciosComponent implements OnInit {
       },
       complete: () => {
         this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async listaServiciosRegistrados => {
-          this.servicioSolicitadoActualPorAlumnoYSemestreActual = listaServiciosRegistrados == undefined ? null : listaServiciosRegistrados;
+          this.servicioSolicitadoActualPorAlumnoYSemestreActual = listaServiciosRegistrados;
           await this.cerrarBlock();
         })
       }
@@ -212,6 +212,11 @@ export class ListaServiciosComponent implements OnInit {
     this.abrirBlock();
     this.alumnoRequisitoService.listaAlumnoRequisitoPorAlumnoYSemestre(json).subscribe(listaAlumnoRequisito => {
       this.listaAlumnoRequisitoPorALumnoYSemestre = listaAlumnoRequisito;
+      this.listaAlumnoRequisitoPorALumnoYSemestre.forEach(listaRequisitos => {
+        listaRequisitos.archivos.forEach(archivo => {
+          archivo.estados_archivo = archivo.estados_archivo.filter(estadoArchivo => estadoArchivo.pivot.estado)
+        })
+      })
       this.abrilModal(this.modalListaRequisitoAlumno);
       this.cerrarBlock();
     });

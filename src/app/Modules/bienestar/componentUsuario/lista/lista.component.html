@@ -150,6 +150,10 @@
               <div class="row">
                 <div class="col s12 m6" *ngFor="let archivo of alumnoRequisito.archivos">
                   <div class="card position_relative">
+                    <div class="chip white-text {{estadoArchivo.color}} "
+                      *ngFor="let estadoArchivo of archivo.estados_archivo">
+                      {{estadoArchivo.nombre}}
+                    </div>
                     <img src="../../../../../assets/imagenArchivos/archivo.png" alt="" class="responsive-img">
                     <div class="truncate center-align">
                       {{archivo.nombreOriginal}}
@@ -159,8 +163,6 @@
               </div>
             </div>
             <div class="card-action">
-              <a class="btn btn-small btn-floating waves-effect waves-light" matTooltip="listar archivos"
-                (click)="listaArchivosPorAlumnoRequisito(alumnoRequisito)"><i class="material-icons">archive</i></a>
               <a class="btn btn-small btn-floating waves-effect waves-light"><i
                   class="material-icons">file_upload</i></a>
             </div>

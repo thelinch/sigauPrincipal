@@ -5,7 +5,7 @@ export interface archivo {
   nombreOriginal: string
   nombreSistema: string
   url: string
-  estados_archivo: estadoArchivo
+  estados_archivo: estadoArchivo[]
   estado: boolean
   extension: string
 }
