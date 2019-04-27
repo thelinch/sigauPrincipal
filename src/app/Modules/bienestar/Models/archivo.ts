@@ -6,6 +6,7 @@ export interface archivo {
   nombreSistema: string
   url: string
   estados_archivo: estadoArchivo[]
+  estadoActual: estadoArchivo
   estado: boolean
   extension: string
 }

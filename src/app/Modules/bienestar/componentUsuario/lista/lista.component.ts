@@ -213,8 +213,8 @@ export class ListaServiciosComponent implements OnInit {
     this.alumnoRequisitoService.listaAlumnoRequisitoPorAlumnoYSemestre(json).subscribe(listaAlumnoRequisito => {
       this.listaAlumnoRequisitoPorALumnoYSemestre = listaAlumnoRequisito;
       this.listaAlumnoRequisitoPorALumnoYSemestre.forEach(listaRequisitos => {
-        listaRequisitos.archivos.forEach(archivo => {
-          archivo.estados_archivo = archivo.estados_archivo.filter(estadoArchivo => estadoArchivo.pivot.estado)
+        listaRequisitos.archivos = listaRequisitos.archivos.map(archivo => {
+          return { ...archivo, estadoActual: archivo.estados_archivo.filter(estado => estado.pivot.estado)[0] }
         })
       })
       this.abrilModal(this.modalListaRequisitoAlumno);
