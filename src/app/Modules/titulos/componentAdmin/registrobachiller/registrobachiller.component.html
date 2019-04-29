@@ -211,7 +211,19 @@
                         [value]="listaNombreprogramaEstudio">
                         {{listaNombreprogramaEstudio.nombre}}</mat-option>
                     </ng-container>
+                  </mat-select>
+                </mat-form-field>
 
+                <mat-form-field class="col s12 m3 margen">
+                  <mat-label>Modalidad de Obtencion de Grado</mat-label>
+                  <mat-select formControlName="modalidaddeEstudio">
+                    <mat-option>Ninguna</mat-option>
+                    <ng-container
+                      *ngIf="listaModalidadEstudios$ | async;let listaModalidadEstudios;else efectoCarga">
+                      <mat-option *ngFor="let listaModalidadEstudio of listaModalidadEstudios"
+                        [value]="listaModalidadEstudio">
+                        {{listaModalidadEstudio.nombre}}</mat-option>
+                    </ng-container>
                   </mat-select>
                 </mat-form-field>
                 <!--

@@ -1,23 +1,23 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { PeriodicElement } from '../registros/registros.component';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { alumno } from 'src/app/global/Models/Alumno';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { EscuelaProfesional } from 'src/app/global/Models/EscuelaProfesional';
-import { nombreProgramaestudio } from '../../Models/nombre_programa_estudio';
-
-import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
 import { Observable } from 'rxjs';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
-import { delay } from 'rxjs/operators';
-import Swal from 'sweetalert2';
-import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+
+import { EscuelaProfesional } from 'src/app/global/Models/EscuelaProfesional';
+import { nombreProgramaestudio } from '../../Models/nombre_programa_estudio';
 import { denominacionGradoTitulo } from '../../Models/denominacion_grado_titulo';
+import { modalidadEstudio } from '../../Models/modalidad_estudio';
+import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
+
+import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
 import { DenominacionesService } from '../../services/denominaciones.service';
 import { NombreprogramasService } from '../../services/nombreprogramas.service';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { ModalidadestudiosService } from '../../services/modalidadestudios.service';
 
 
 @Component({
@@ -30,7 +30,9 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   idModalAgregarAlumnoPregrado: string = "modalAgregarAlumnoPregrado"
   idModalParaRegistroDeDenominaciones: string = "modalRegistroDenominaciones"
   listaEscuelaprofesionales$: Observable<EscuelaProfesional[]>
-  listaNombreProgramaEstudios$: Observable<nombreProgramaestudio[]> 
+  listaNombreProgramaEstudios$: Observable<nombreProgramaestudio[]>
+  listaModalidadEstudios$: Observable<modalidadEstudio[]>
+
   listaAlumnosSeleccionados: Array<alumno>
   listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
   displayedColumns: string[] = ['select', 'DNI', 'Nombre', "Apellidos", "Escuela profesional"];
@@ -85,6 +87,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     private escuelaprofesionalService: EscuelaprofesionalService,
     private denominacionService: DenominacionesService,
     private  nombreProgramaestudio: NombreprogramasService,
+    private modalidadEstudio : ModalidadestudiosService,
     private fb: FormBuilder) { }
 
 
@@ -103,6 +106,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       codigoUniversidad: ["", Validators.required],
       denominacionGradoTitulo: ["", Validators.required],
       nombreProgramaestudio: ["",Validators.required],
+      modalidaddeEstudio: ["",Validators.required],
       fechaingreso:["",Validators.required],
       fechaegreso:["",Validators.required],
       trabajo_investigacion: this.fb.group({ nombre: ["",], url: ["",] })
@@ -212,6 +216,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       complete: () => {
         this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
         this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
+        this.listaModalidadEstudios$ = this.modalidadEstudio.listaNombreprogramaEstudio();
       }
     })
   }
