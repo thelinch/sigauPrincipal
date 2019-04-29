@@ -67,10 +67,18 @@
                   <div class="card position_relative">
                     <div class="card-stacked">
                       <div class="card-content">
-                        <i [matTooltip]="archivo.estadoActual.nombre" class="material-icons"
-                          [style.color]="archivo.estadoActual.color">
-                          flag
-                        </i>
+                        <angular-popper #popper show=false closeButton="true" placement="right-end">
+                          <div class="target-block interactive border border-primary">
+                            <i [matTooltip]="archivo.estadoActual.nombre" (click)="abrirPopper(popper)"
+                              class="material-icons" [style.color]="archivo.estadoActual.color">
+                              flag
+                            </i>
+                          </div>
+                          <span close-button>CERRAR</span>
+                          <div content>
+                            NADA
+                          </div>
+                        </angular-popper>
                         <img src="../../../../../assets/imagenArchivos/archivo.png" alt="" class="responsive-img">
                         <div class="truncate center-align">{{archivo.nombreOriginal}}</div>
                       </div>

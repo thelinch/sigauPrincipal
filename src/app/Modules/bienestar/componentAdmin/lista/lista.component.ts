@@ -59,6 +59,9 @@ export class ListaComponent implements OnInit {
   seleccionarAlumno(alumno: alumno) {
     this.alumnoSeleccionado = alumno;
   }
+  abrirPopper(popper: any) {
+    popper.show = true
+  }
   abrirModal(id: string) {
     functionsGlobal.openModal(id);
   }
