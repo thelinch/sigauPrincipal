@@ -1,50 +1,90 @@
-<div class="row">
-  <div class="col s12 m4" *ngFor="let servicioSolicitado of serviciosSolicitado">
-    <div class="card horizontal hoverable">
-      <div class="card-image">
-        <img class="materialboxed" src="../../../../../assets/UsuarioDefecto/user-defect.jpg"
-          [attr.data-caption]="servicioSolicitado.alumno.persona.nombre" alt="" srcset="">
-        <div class="estado position_absolute top_0  left_0">
-          <span class="chip blue white-text">Ingresante</span>
-        </div>
-        <div class="facultad position_absolute bottom_0 left_0 with_100 fondo-ocda center-align white-text truncate">
-          {{servicioSolicitado.alumno.escuela_profesional.nombre}}
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content no-padding position_relative">
-          <div class="display_inline_block padding_2rem with_100 right-align">
-            <i class="fas padding_2rem  {{servicio.icono}}" *ngFor="let servicio of servicioSolicitado.servicios"
-              [matTooltip]="servicio.nombre"></i>
-            <i class="material-icons tiny" [style.color]="servicioSolicitado.estado_servicio.color"
-              [matTooltip]="servicioSolicitado.estado_servicio.nombre">
-              flag
-            </i>
-          </div>
-          <div class="display_inline_block hide-on-med-and-down">
-            <p class="truncate">
-              {{servicioSolicitado.alumno.persona.nombre_completo}}</p>
-            <p class="truncate">{{servicioSolicitado.alumno.persona.numero_documento}}</p>
-          </div>
+<block-ui>
 
+  <div class="row">
+    <div class="col s12 m4" *ngFor="let servicioSolicitado of serviciosSolicitado">
+      <div class="card horizontal hoverable">
+        <div class="card-image">
+          <img class="materialboxed" src="../../../../../assets/UsuarioDefecto/user-defect.jpg"
+            [attr.data-caption]="servicioSolicitado.alumno.persona.nombre" alt="" srcset="">
+          <div class="estado position_absolute top_0  left_0">
+            <span class="chip blue white-text">{{servicioSolicitado.alumno.tipo_alumno.nombre}}</span>
+          </div>
+          <div class="facultad position_absolute bottom_0 left_0 with_100 fondo-ocda center-align white-text truncate">
+            {{servicioSolicitado.alumno.escuela_profesional.nombre}}
+          </div>
         </div>
-        <div class="card-action right-align">
-          <a href="#" matTooltip="Ver Archivos" class="tooltipped"><i class="materials-icon brown-text fas fa-archive">
-            </i></a>
+        <div class="card-stacked">
+          <div class="card-content no-padding position_relative">
+            <div class="display_inline_block padding_2rem with_100 right-align">
+              <i class="fas padding_2rem  {{servicio.icono}}" *ngFor="let servicio of servicioSolicitado.servicios"
+                [matTooltip]="servicio.nombre"></i>
+              <i class="material-icons tiny" [style.color]="servicioSolicitado.estado_servicio.color"
+                [matTooltip]="servicioSolicitado.estado_servicio.nombre">
+                flag
+              </i>
+            </div>
+            <div class="display_inline_block hide-on-med-and-down">
+              <p class="truncate">
+                {{servicioSolicitado.alumno.persona.nombre_completo}}</p>
+              <p class="truncate">{{servicioSolicitado.alumno.persona.numero_documento}}</p>
+            </div>
 
-          <a href="#" matTooltip="Observaciones" class="tooltipped"><i
-              class="materials-icon fas fa-exclamation-circle blue-text">
-            </i></a>
-          <a href="#" matTooltip="Denegar el servicio" class="tooltipped"><i
-              class="materials-icon fas fa-trash-alt red-text">
-            </i></a>
+          </div>
+          <div class="card-action right-align">
+            <a (click)="listarRequisitoPorAlumnoYSemestreActual(servicioSolicitado)" matTooltip="Ver Archivos"
+              class="cursor"><i class="materials-icon brown-text fas fa-archive">
+              </i></a>
+            <a *ngIf="servicioSolicitado.estado_servicio.nombre=='OBSERVADO'" matTooltip="Observaciones"
+              class="cursor"><i class="materials-icon fas fa-exclamation-circle blue-text">
+              </i></a>
+            <a href="#" matTooltip="Denegar el servicio" class="cursor"><i
+                class="materials-icon fas fa-trash-alt red-text">
+              </i></a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-<mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
-</mat-paginator>
-<template #preload>
-  <mat-spinner></mat-spinner>
-</template>
+  <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+  <template #preload>
+    <mat-spinner></mat-spinner>
+  </template>
+
+  <div [id]="idModalListaRequisitos" class="modal modal-fixed-footer">
+
+    <div class="modal-content">
+      <h4 class="center-align" *ngIf="alumnoSeleccionado">{{alumnoSeleccionado.persona.nombre_completo}}</h4>
+      <div class="row">
+        <div class="col s12 m6" *ngFor="let alumnoRequisito of  listaAlumnoRequisitoPorAlumnoYSemestre ">
+          <div class="card">
+            <div class="card-title center-align" [matTooltip]="alumnoRequisito.requisito.nombre">
+              {{alumnoRequisito.requisito.nombre}}
+            </div>
+            <div class="card-content">
+              <div class="row">
+                <div class="col s12 m6" *ngFor="let archivo of alumnoRequisito.archivos">
+                  <div class="card position_relative">
+                    <div class="card-stacked">
+                      <div class="card-content">
+                        <i [matTooltip]="archivo.estadoActual.nombre" class="material-icons"
+                          [style.color]="archivo.estadoActual.color">
+                          flag
+                        </i>
+                        <img src="../../../../../assets/imagenArchivos/archivo.png" alt="" class="responsive-img">
+                        <div class="truncate center-align">{{archivo.nombreOriginal}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a (click)="cerrarModal(idModalListaRequisitos)" class="waves-effect waves-green btn red">Cerrar</a>
+    </div>
+  </div>
+</block-ui>
