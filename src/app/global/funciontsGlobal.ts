@@ -59,7 +59,7 @@ export class functionsGlobal {
   }
 
   static iniciarScrollSpy() {
-    M.ScrollSpy.init($('.scrollspy'));
+    M.ScrollSpy.init($('.scrollspy'),{ scrollOffset: 100 });
   }
   static iniciarDropdown() {
     M.Dropdown.init($('.dropdown-trigger'));

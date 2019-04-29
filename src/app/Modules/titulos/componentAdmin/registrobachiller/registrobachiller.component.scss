@@ -91,6 +91,7 @@ tr.mat-header-row {
 
 table {
   width: 100%;
+  margin-top: 10px;
 }
 
 .fonttable {
@@ -211,4 +212,21 @@ table.centered tbody tr td {
   table {
     width: auto;
   }
+}
+
+::ng-deep .mat-horizontal-stepper-header-container {
+  background: #eeeeee !important;
+}
+
+::ng-deep .mat-horizontal-content-container {
+  margin-top: 20px !important;
+}
+
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+::ng-deep .mat-horizontal-content-container {
+  overflow: hidden   !important; 
+  padding: 0 0px 0px 0px  !important;;
 }

@@ -6,6 +6,8 @@ import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { alumno } from 'src/app/global/Models/Alumno';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import { EscuelaProfesional } from 'src/app/global/Models/EscuelaProfesional';
+import { nombreProgramaestudio } from '../../Models/nombre_programa_estudio';
+
 import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
 import { Observable } from 'rxjs';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
@@ -14,7 +16,9 @@ import Swal from 'sweetalert2';
 import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
 import { denominacionGradoTitulo } from '../../Models/denominacion_grado_titulo';
 import { DenominacionesService } from '../../services/denominaciones.service';
+import { NombreprogramasService } from '../../services/nombreprogramas.service';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+
 
 @Component({
   selector: 'app-registrobachiller',
@@ -26,18 +30,23 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   idModalAgregarAlumnoPregrado: string = "modalAgregarAlumnoPregrado"
   idModalParaRegistroDeDenominaciones: string = "modalRegistroDenominaciones"
   listaEscuelaprofesionales$: Observable<EscuelaProfesional[]>
+  listaNombreProgramaEstudios$: Observable<nombreProgramaestudio[]> 
   listaAlumnosSeleccionados: Array<alumno>
   listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
-  displayedColumns: string[] = ['select', 'DNI','Nombre', "Apellidos", "Escuela profesional"];
+  displayedColumns: string[] = ['select', 'DNI', 'Nombre', "Apellidos", "Escuela profesional"];
   dataSource = new MatTableDataSource<alumno>();
   listaDenominacionesPorEspecialidad: denominacionGradoTitulo[]
   listaAlumnoSeleccionados = new SelectionModel<alumno>(true);
   alumnoBachillerSeleccionado: alumno
   alumnoPregradoSeleccionado: alumno
-  formularioRegistroBachiller: FormGroup;
   checkedSeleccionado: any
-
   
+  //codigo del stepper (pasar una transicion de pantalla)
+  isLinear = false;
+  firstFormGroup: FormGroup;
+  formularioRegistroBachiller: FormGroup;
+  //secondFormGroup: FormGroup;
+
   //dataSource = new MatTableDataSource<alumno>(this.listaAlumnos);
 
 
@@ -75,22 +84,42 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   constructor(private alumnoService: AlumnoService,
     private escuelaprofesionalService: EscuelaprofesionalService,
     private denominacionService: DenominacionesService,
+    private  nombreProgramaestudio: NombreprogramasService,
     private fb: FormBuilder) { }
+
 
   /*CODIGO PARA INICIAR LOS METODOS*/
   ngOnInit() {
+    functionsGlobal.iniciarScrollSpy();
     this.dataSource.paginator = this.paginator;
     this.listaAlumnosSeleccionados = new Array();
     this.iniciarData();
+    //codigo para Stepper
+    this.firstFormGroup = this.fb.group({
+      firstCtrl: ['', Validators.required]
+    });
     this.formularioRegistroBachiller = this.fb.group({
+      tipo_alumno_id:["",],
       codigoUniversidad: ["", Validators.required],
       denominacionGradoTitulo: ["", Validators.required],
-    })
+      nombreProgramaestudio: ["",Validators.required],
+      fechaingreso:["",Validators.required],
+      fechaegreso:["",Validators.required],
+      trabajo_investigacion: this.fb.group({ nombre: ["",], url: ["",] })
+    });
+    //Fin de codigo Stepper
     this.listaAlumnoGraduadoTitulado = new Array();
+    
   }
+  /*FIN DE CODIGO PARA INICIAR LOS METODOS*/
+
   ngAfterViewInit(): void {
   }
 
+  ingresardatosbachiller(stepper){
+    console.log(stepper)
+    stepper.next()
+  }
   registrarAlumnosBachiller() {
 
 
@@ -117,10 +146,13 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   }
   editarFormularioBachiller(alumnoParametro: alumnoGraduadoTitulado) {
     this.formularioRegistroBachiller.get("codigoUniversidad").setValue(alumnoParametro.codigoUniversidad);
-    this.formularioRegistroBachiller.get("denominacionGradoTitulo").setValue({
-      id: alumnoParametro.denominacionGradoTitulo.id
-    });
-
+    this.formularioRegistroBachiller.get("fechaingreso").setValue(alumnoParametro.fechaingreso);
+    this.formularioRegistroBachiller.get("fechaegreso").setValue(alumnoParametro.fechaegreso);
+    this.formularioRegistroBachiller.get("denominacionGradoTitulo").setValue({ nombre: alumnoParametro.denominacionGradoTitulo.nombre });
+    this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre });
+    this.formularioRegistroBachiller.get("trabajo_investigacion").get("nombre").setValue(alumnoParametro.trabajo_investigacion.nombre);
+    this.formularioRegistroBachiller.get("trabajo_investigacion").get("url").setValue(alumnoParametro.trabajo_investigacion.url);
+    console.log(this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre }))
   }
   listarDenominacionGradoPorEspecialidad(alumnoParametro: alumno) {
     this.abrirBlock();
@@ -131,13 +163,12 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.denominacionService.listarDenominacionesPorEspecialidad(json).subscribe(listaDenominacion => {
       this.listaDenominacionesPorEspecialidad = listaDenominacion;
       this.cerrarBlock();
-
     })
-
   }
 
-  agregarDatosAlumno(alumnoGraduadoTitulado: alumnoGraduadoTitulado) {
+  agregarDatosAlumno(alumnoGraduadoTitulado: any) {
     alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.id;
+    alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
     if (!this.listaAlumnoGraduadoTitulado.find(alumnoGraduado => alumnoGraduado.alumno_general_id == this.alumnoBachillerSeleccionado.id)) {
       this.listaAlumnoGraduadoTitulado.push(alumnoGraduadoTitulado);
     } else {
@@ -146,6 +177,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     }
     console.log(this.listaAlumnoGraduadoTitulado)
     this.checkedSeleccionado.checked = true;
+    //console.log(alumnoGraduadoTitulado)
   }
 
   removerAlumno(alumno: alumno) {
@@ -157,17 +189,16 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  clickAlumnoCard(alumno: alumno){
+  clickAlumnoCard(alumno: alumno) {
     this.alumnoPregradoSeleccionado = alumno;
     console.log(this.alumnoPregradoSeleccionado)
+    //this.isLinear = false;
 
   }
 
-  gradoacademico(alumno: alumno)
-  {
+  gradoacademico(alumno: alumno) {
     this.alumnoPregradoSeleccionado = alumno;
-    if(this.alumnoPregradoSeleccionado.grado_alumno === true)
-    {
+    if (this.alumnoPregradoSeleccionado.grado_alumno === true) {
       var grado: string = 'Alumno Pregrado';
     }
     return grado
@@ -180,12 +211,14 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       },
       complete: () => {
         this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
+        this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
       }
     })
   }
 
-  count(){
-  
+
+  count() {
+
   }
   /*CODIGO PARA MOSTRAR LOS ESTUDIANTES DE PRE-GRADO
   public alumnosPregado() {
