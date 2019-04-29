@@ -164,11 +164,27 @@
                             <i class="material-icons">
                               visibility
                             </i>
-                          </a><a class="btn btn-small  btn-floating" *ngIf="archivo.estadoActual.nombre=='OBSERVADO'">
+                          </a><a class="btn btn-small blue darken-4  btn-floating"
+                            *ngIf="archivo.estadoActual.nombre=='OBSERVADO'" #anchor
+                            (click)="modalResubirArchivo(archivo,kendo)">
                             <i class="material-icons">
                               settings_backup_restore
                             </i>
                           </a>
+                          <kendo-popup *ngIf="showPopup" #kendo [anchor]="anchor" [offset]="{ left: 100, top: 100 }">
+                            <div class="custom-file-container" data-upload-id="subirArchivo">
+                              <label>Archivos: <a href="javascript:void(0)"
+                                  class="custom-file-container__image-clear  red-text" title="Clear Image"><i
+                                    class="material-icons">cancel</i></a></label>
+                              <label class="custom-file-container__custom-file">
+                                <input type="file" class="custom-file-container__custom-file__custom-file-input"
+                                  name="file" required aria-label="Subir Archivos">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="12485760" />
+                                <span class="custom-file-container__custom-file__custom-file-control"></span>
+                              </label>
+                              <div class="custom-file-container__image-preview"></div>
+                            </div>
+                          </kendo-popup>
                         </div>
                         <div class="background-shadow">
                         </div>
@@ -191,7 +207,6 @@
         class="modal-close waves-effect waves-light red btn-flat">cerrar</a>
     </div>
   </div>
-  <ng-template #spinner>
-    <mat-spinner></mat-spinner>
-  </ng-template>
+
+
 </block-ui>

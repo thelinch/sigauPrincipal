@@ -16,6 +16,7 @@ import { servicioSolicitados } from '../../Models/servicioSolicitados';
 import { isUndefined } from 'util';
 import { alumnoRequisito } from './../../Models/alumnoRequisito';
 import { AlumnoRequisitoService } from '../../services/alumno-requisito.service';
+import { archivo } from '../../Models/archivo';
 
 @Component({
   selector: 'app-lista',
@@ -25,17 +26,21 @@ import { AlumnoRequisitoService } from '../../services/alumno-requisito.service'
 export class ListaServiciosComponent implements OnInit {
   idModalServicio: string = "modalServicio"
   modalListaRequisitoAlumno: string = "modalListaRequisitoAlumno"
+  modalSubirArchivo: string = "modalSubirArchivo";
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   formControlListaServicio: FormControl;
+  showPopup: boolean = false;
   listaServiciosActivados: servicio[]
   listaAlumnoRequisitoPorALumnoYSemestre: alumnoRequisito[]
   servicioSolicitadoActualPorAlumnoYSemestreActual: servicioSolicitados;
+  archivoSeleccionado: archivo;
   listaRequisitosPorServicio: any[]
   listaRequisitosLlenadosPorUsuario: requisito[]
   listaRequisitoRegistrodoAlumno: Array<number>
   listaFotosParaSubir: Array<FileUploadWithPreview>
+  artefactoParaSubirArchivo: FileUploadWithPreview
   numeroTotalDeRequisitoRequerido: number;
   contadorTotalRequisitoEnviadoRequerido: number;
   @BlockUI() blockUI: NgBlockUI;
@@ -56,7 +61,7 @@ export class ListaServiciosComponent implements OnInit {
     });
     this.listaFotosParaSubir = new Array<FileUploadWithPreview>();
     this.formControlListaServicio = new FormControl();
-
+    //this.artefactoParaSubirArchivo = new FileUploadWithPreview("subirArchivo");
     this.contadorTotalRequisitoEnviadoRequerido = 0;
     this.iniciarDatos();
 
@@ -221,6 +226,9 @@ export class ListaServiciosComponent implements OnInit {
       this.cerrarBlock();
     });
 
+  }
+  modalResubirArchivo(archivo: archivo,kendo:any) {
+    console.log(kendo)
   }
   listaArchivosPorAlumnoRequisito(alumnoRequisitoParametro: alumnoRequisito) {
     this.abrirBlock();

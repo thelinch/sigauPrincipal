@@ -1,212 +1,41 @@
 <div class="row">
-  <div class="container">
-    <div class="col s12">
-      <div class="row">
-        <mat-form-field class="col s12 m6">
-          <input matInput placeholder="Buscar" formControlName="nombre">
-          <mat-icon matPrefix>account_circle</mat-icon>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-  <div class="col s12 m5">
-    <div class="card horizontal">
+  <div class="col s12 m4" *ngFor="let servicioSolicitado of serviciosSolicitado">
+    <div class="card horizontal hoverable">
       <div class="card-image">
         <img class="materialboxed" src="../../../../../assets/UsuarioDefecto/user-defect.jpg"
-          data-caption="ANTONY INGA ATUNGA" alt="" srcset="">
+          [attr.data-caption]="servicioSolicitado.alumno.persona.nombre" alt="" srcset="">
         <div class="estado position_absolute top_0  left_0">
           <span class="chip blue white-text">Ingresante</span>
         </div>
         <div class="facultad position_absolute bottom_0 left_0 with_100 fondo-ocda center-align white-text truncate">
-          INGRE.SISTEMASD
+          {{servicioSolicitado.alumno.escuela_profesional.nombre}}
         </div>
       </div>
       <div class="card-stacked">
         <div class="card-content no-padding position_relative">
           <div class="display_inline_block padding_2rem with_100 right-align">
-            <i class="tooltipped fas padding_2rem  fa-utensils blue-text" data-position="bottom"
-              data-tooltip="Comedor"></i>
-            <i class=" fas padding_2rem fa-home brown-text tooltipped" data-position="bottom"
-              data-tooltip="Internado"></i>
+            <i class="fas padding_2rem  {{servicio.icono}}" *ngFor="let servicio of servicioSolicitado.servicios"
+              [matTooltip]="servicio.nombre"></i>
+            <i class="material-icons tiny" [style.color]="servicioSolicitado.estado_servicio.color"
+              [matTooltip]="servicioSolicitado.estado_servicio.nombre">
+              flag
+            </i>
           </div>
           <div class="display_inline_block hide-on-med-and-down">
-            <p class="truncate">ANTONY INGA ATUNGA</p>
-            <p class="truncate">71837677</p>
+            <p class="truncate">
+              {{servicioSolicitado.alumno.persona.nombre_completo}}</p>
+            <p class="truncate">{{servicioSolicitado.alumno.persona.numero_documento}}</p>
           </div>
 
         </div>
         <div class="card-action right-align">
-          <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-              class="materials-icon brown-text fas fa-archive">
+          <a href="#" matTooltip="Ver Archivos" class="tooltipped"><i class="materials-icon brown-text fas fa-archive">
             </i></a>
 
-          <a href="#" data-position="bottom" data-tooltip="Observaciones" class="tooltipped"><i
+          <a href="#" matTooltip="Observaciones" class="tooltipped"><i
               class="materials-icon fas fa-exclamation-circle blue-text">
             </i></a>
-          <a href="#" data-position="bottom" data-tooltip="Denegar el servicio" class="tooltipped"><i
-              class="materials-icon fas fa-trash-alt red-text">
-            </i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col s12 m5">
-    <div class="card horizontal hoverable">
-      <div class="card-image">
-        <img class="materialboxed" data-caption="ANTONY INGA ATUNGA"
-          src="../../../../../assets/UsuarioDefecto/user-defect.jpg" alt="" srcset="">
-        <div class="estado position_absolute top_0  left_0">
-          <span class="chip blue white-text">Ingresante</span>
-        </div>
-        <div class="facultad position_absolute bottom_0 left_0 with_100 fondo-ocda center-align white-text truncate">
-          INGRE.SISTEMASD
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content no-padding">
-          <div class="display_inline_block with_100 padding_2rem right-align">
-            <i class="material-icons tooltipped fas padding_2rem fa-utensils blue-text" data-position="bottom"
-              data-tooltip="Comedor"></i>
-            <i class="material-icons fas padding_2rem tooltipped fa-home brown-text" data-position="bottom"
-              data-tooltip="internado"></i>
-          </div>
-          <div class="display_inline_block hide-on-med-and-down">
-            <p class="truncate">ANTONY INGA ATUNGA</p>
-            <p class="truncate">71837677</p>
-          </div>
-        </div>
-        <div class="card-action  right-align">
-          <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-              class="materials-icon brown-text fas fa-archive">
-            </i></a>
-
-          <a href="#" data-position="bottom" data-tooltip="Observaciones" class="tooltipped"><i
-              class="materials-icon fas fa-exclamation-circle blue-text">
-            </i></a>
-          <a href="#" data-position="bottom" data-tooltip="Denegar el servicio" class="tooltipped"><i
-              class="materials-icon fas fa-trash-alt red-text">
-            </i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col s12 m5">
-    <div class="card horizontal hoverable  sticky-action">
-      <div class="card-image">
-        <img class="materialboxed" data-caption="ANTONY INGA ATUNGA"
-          src="../../../../../assets/UsuarioDefecto/user-defect.jpg" alt="" srcset="">
-        <div class="estado position_absolute top_0  left_0">
-          <span class="chip blue white-text">Ingresante</span>
-        </div>
-        <div class="facultad position_absolute bottom_0 left_0 with_100 fondo-ocda center-align white-text truncate">
-          INGRE.SISTEMASD
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content no-padding">
-          <div class="display_inline_block with_100 padding_2rem right-align">
-            <i class="material-icons padding_2rem fas fa-utensils blue-text tooltipped" data-position="bottom"
-              data-tooltip="Comedor"></i>
-            <i class="material-icons padding_2rem fas fa-home brown-text tooltipped" data-position="bottom"
-              data-tooltip="Internado"></i>
-          </div>
-          <div class="display_inline_block hide-on-med-and-down">
-            <p class="truncate">ANTONY INGA ATUNGA</p>
-            <p class="truncate">71837677</p>
-          </div>
-        </div>
-
-        <div class="card-action  right-align">
-          <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-              class="materials-icon brown-text fas fa-archive">
-            </i></a>
-
-          <a href="#" data-position="bottom" data-tooltip="Observaciones" class="tooltipped"><i
-              class="materials-icon fas fa-exclamation-circle blue-text">
-            </i></a>
-          <a href="#" data-position="bottom" data-tooltip="Denegar el servicio" class="tooltipped"><i
-              class="materials-icon fas fa-trash-alt red-text">
-            </i></a>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-  <div class="col s12 m5">
-    <div class="card horizontal hoverable">
-      <div class="card-image">
-        <img class="materialboxed" data-caption="ANTONY INGA ATUNGA"
-          src="../../../../../assets/UsuarioDefecto/user-defect.jpg" alt="" srcset="">
-        <div class="estado position_absolute top_0  left_0">
-          <span class="chip blue white-text">Ingresante</span>
-        </div>
-        <div class="facultad position_absolute bottom_0 left_0 with_100 fondo-ocda center-align white-text truncate">
-          INGRE.SISTEMASD
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content no-padding">
-          <div class="display_inline_block with_100 padding_2rem right-align">
-            <i class="material-icons padding_2rem tooltipped fas fa-utensils blue-text" data-position="bottom"
-              data-tooltip="Comedor"></i>
-            <i class="material-icons padding_2rem tooltipped  fas fa-home brown-text" data-position="bottom"
-              data-tooltip="Internado"></i>
-          </div>
-          <div class="display_inline_block hide-on-med-and-down">
-            <p class="truncate">ANTONY INGA ATUNGA</p>
-            <p class="truncate">71837677</p>
-          </div>
-        </div>
-        <div class="card-action  right-align">
-          <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-              class="materials-icon brown-text fas fa-archive">
-            </i></a>
-
-          <a href="#" data-position="bottom" data-tooltip="Observaciones" class="tooltipped"><i
-              class="materials-icon fas fa-exclamation-circle blue-text">
-            </i></a>
-          <a href="#" data-position="bottom" data-tooltip="Denegar el servicio" class="tooltipped"><i
-              class="materials-icon fas fa-trash-alt red-text">
-            </i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col s12 m5">
-    <div class="card horizontal hoverable">
-      <div class="card-image position_relative">
-        <img class="materialboxed" data-caption="ANTONY INGA ATUNGA"
-          src="../../../../../assets/UsuarioDefecto/user-defect.jpg" alt="" srcset="">
-        <div class="estado position_absolute top_0  left_0">
-          <span class="chip blue white-text">Ingresante</span>
-        </div>
-        <div class="facultad position_absolute bottom_0 left_0 with_100 fondo-ocda center-align white-text truncate">
-          INGRE.SISTEMASD
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content no-padding">
-          <div class="display_inline_block with_100 padding_2rem right-align">
-            <i class="material-icons fas padding_2rem tooltipped fa-utensils blue-text" data-position="bottom"
-              data-tooltip="Comedor"></i>
-            <i class="material-icons fas padding_2rem tooltipped fa-home brown-text" data-position="bottom"
-              data-tooltip="Internado"></i>
-          </div>
-          <div class="display_inline_block hide-on-med-and-down">
-            <p class="truncate">ANTONY INGA ATUNGA</p>
-            <p class="truncate">71837677</p>
-          </div>
-        </div>
-        <div class="card-action  right-align">
-          <a href="#" data-position="bottom" data-tooltip="Ver Archivos" class="tooltipped"><i
-              class="materials-icon brown-text fas fa-archive">
-            </i></a>
-
-          <a href="#" data-position="bottom" data-tooltip="Observaciones" class="tooltipped"><i
-              class="materials-icon fas fa-exclamation-circle blue-text">
-            </i></a>
-          <a href="#" data-position="bottom" data-tooltip="Denegar el servicio" class="tooltipped"><i
+          <a href="#" matTooltip="Denegar el servicio" class="tooltipped"><i
               class="materials-icon fas fa-trash-alt red-text">
             </i></a>
         </div>
@@ -216,18 +45,6 @@
 </div>
 <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
 </mat-paginator>
-
-<div class="fixed-action-btn">
-  <a class="btn-floating btn-large red" matTooltip="Notificaciones">
-    <i class="large material-icons">notifications</i>
-  </a>
-  <ul>
-    <li><a class="btn-floating red"> <i class="material-icons">insert_chart</i></a></li>
-    <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-    <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-    <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-  </ul>
-</div>
-<template #navegacion>
-  <div>HOLA</div>
+<template #preload>
+  <mat-spinner></mat-spinner>
 </template>

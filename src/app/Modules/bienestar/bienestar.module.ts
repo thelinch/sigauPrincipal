@@ -1,3 +1,4 @@
+import { PopupModule } from '@progress/kendo-angular-popup';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReportesComponent } from './componentAdmin/reportes/reportes.component';
@@ -50,6 +51,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BlockUIModule.forRoot(),
     HttpClientModule,
     DropzoneModule,
+    PopupModule,
     ReactiveFormsModule,
     MaterialModule, Select2Module],
   exports: [PrincipalComponent],
