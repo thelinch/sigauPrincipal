@@ -19,6 +19,7 @@ import { ServicioService } from './services/servicio.service';
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { FilterEstadoActualPipe } from './pipes/filter-estado-actual.pipe';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: 'https://httpbin.org/post',
@@ -30,18 +31,18 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   dictRemoveFile: "Quitar Archivo",
   dictRemoveFileConfirmation: "¿Esta seguro de quitar el archivo?",
   maxFiles: 50,
-  uploadMultiple:true,
+  uploadMultiple: true,
 
 };
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
     AdminComponent,
-
     RequisitoComponent,
     ListaComponent,
     ListaServiciosComponent,
-    ServiciosComponent
+    ServiciosComponent,
+    FilterEstadoActualPipe
   ],
   imports: [CommonModule,
     BienestarRoutingModule,
