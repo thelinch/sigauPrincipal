@@ -67,18 +67,26 @@
                   <div class="card position_relative">
                     <div class="card-stacked">
                       <div class="card-content">
-                        <angular-popper #popper show=false closeButton="true" placement="right-end">
-                          <div class="target-block interactive border border-primary">
-                            <i [matTooltip]="archivo.estadoActual.nombre" (click)="abrirPopper(popper)"
-                              class="material-icons" [style.color]="archivo.estadoActual.color">
-                              flag
-                            </i>
+                        <i [popper]="popper1Content" (click)="listarEstadoPorArchivo(archivo)" popoverTitle="NUEVO"
+                          [popperShowOnStart]="false" [popperTrigger]="'click'" [popperPlacement]="'left'"
+                          [matTooltip]=" archivo.estadoActual.nombre" class="material-icons cursor"
+                          [style.color]="archivo.estadoActual.color">
+                          flag
+                        </i>
+                        <popper-content #popper1Content>
+                          <div class="card-panel position_relative "
+                            [style.backgroundColor]="estado.estado_archivo.color"
+                            *ngFor="let estado of listaEstadoPorArchivo ">
+                            <span class="card-title"> {{estado.fechaRegistro | date:'mediumDate'}}</span>
+                            <div class="card-content white-text">
+                              {{estado.estado_archivo.nombre}}
+                            </div>
+                            <div class="position_absolute top_0 right_0" *ngIf="estado.estado">
+                              <i class="material-icons green-text" matTooltip="Estado actual">done</i>
+                            </div>
                           </div>
-                          <span close-button>CERRAR</span>
-                          <div content>
-                            NADA
-                          </div>
-                        </angular-popper>
+                        </popper-content>
+
                         <img src="../../../../../assets/imagenArchivos/archivo.png" alt="" class="responsive-img">
                         <div class="truncate center-align">{{archivo.nombreOriginal}}</div>
                       </div>

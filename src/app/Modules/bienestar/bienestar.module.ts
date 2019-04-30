@@ -21,7 +21,7 @@ import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { FilterEstadoActualPipe } from './pipes/filter-estado-actual.pipe';
-import { NgxPopper } from 'angular-popper';
+import { NgxPopperModule } from 'ngx-popper';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: 'https://httpbin.org/post',
@@ -50,8 +50,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     BienestarRoutingModule,
     FormsModule,
     BlockUIModule.forRoot(),
-    NgxPopper,
     HttpClientModule,
+    NgxPopperModule,
     DropzoneModule,
     PopupModule,
     ReactiveFormsModule,
