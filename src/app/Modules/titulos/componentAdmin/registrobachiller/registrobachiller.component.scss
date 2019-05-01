@@ -1,3 +1,4 @@
+
 .tituloModalM {
   color: #01579b;
   padding: 1px;
@@ -219,7 +220,8 @@ table.centered tbody tr td {
 }
 
 ::ng-deep .mat-horizontal-content-container {
-  margin-top: 20px !important;
+  margin-top: 0px !important;
+  padding: 0 5px 5px 5px !important;
 }
 
 .example-tab-icon {
@@ -228,5 +230,57 @@ table.centered tbody tr td {
 
 ::ng-deep .mat-horizontal-content-container {
   overflow: hidden   !important; 
-  padding: 0 0px 0px 0px  !important;;
+  padding: none  !important;;
+}
+
+::ng-deep .sidenav{
+  padding-bottom: 150px !important; 
+}
+
+///// color 
+::ng-deep .mat-form-field-underline .mat-form-field-ripple {
+  color: #c0c0c0 !important;
+  background-color: #c0c0c0 !important;
+}
+
+::ng-deep .mat-form-field-underline {
+  color: #c0c0c0 !important;
+  background-color: #c0c0c0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
+  transform: perspective(100px);
+  -ms-transform: none;
+  color: #9e9e9e;
+}
+
+::ng-deep  .mat-form-field-appearance-legacy .mat-form-field-label {
+  -webkit-transform: perspective(100px);
+  transform: perspective(100px);
+  -ms-transform: none;
+  color: #c0c0c0;
+}
+
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: #757575 ;
+}
+
+::ng-deep .mat-form-field-invalid .mat-input-element {
+  caret-color: #757575 ;
+}
+
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label .mat-form-field-required-marker {
+  color: #757575 ;
+}
+
+::ng-deep .mat-focused .mat-form-field-required-marker {
+  color:#757575 ;
+}
+
+::ng-deep section{
+  background: #eeeeee !important;
+}
+
+::ng-deep .mat-stepper-horizontal, .mat-stepper-vertical {
+  background-color: #eeeeee !important;
 }

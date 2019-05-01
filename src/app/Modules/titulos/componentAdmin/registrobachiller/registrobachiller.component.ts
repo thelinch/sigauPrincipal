@@ -13,11 +13,14 @@ import { nombreProgramaestudio } from '../../Models/nombre_programa_estudio';
 import { denominacionGradoTitulo } from '../../Models/denominacion_grado_titulo';
 import { modalidadEstudio } from '../../Models/modalidad_estudio';
 import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
+import { obtencion_grados_titulo } from '../../Models/obtencion_grados_titulo';
 
 import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
 import { DenominacionesService } from '../../services/denominaciones.service';
 import { NombreprogramasService } from '../../services/nombreprogramas.service';
 import { ModalidadestudiosService } from '../../services/modalidadestudios.service';
+import {ObtenciongradosService } from '../../services/obtenciongrados.service';
+
 
 
 @Component({
@@ -32,6 +35,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   listaEscuelaprofesionales$: Observable<EscuelaProfesional[]>
   listaNombreProgramaEstudios$: Observable<nombreProgramaestudio[]>
   listaModalidadEstudios$: Observable<modalidadEstudio[]>
+  listaObtencionGrados$: Observable<obtencion_grados_titulo[]>
 
   listaAlumnosSeleccionados: Array<alumno>
   listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
@@ -88,6 +92,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     private denominacionService: DenominacionesService,
     private  nombreProgramaestudio: NombreprogramasService,
     private modalidadEstudio : ModalidadestudiosService,
+    private obtencionGrado : ObtenciongradosService,
     private fb: FormBuilder) { }
 
 
@@ -107,6 +112,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       denominacionGradoTitulo: ["", Validators.required],
       nombreProgramaestudio: ["",Validators.required],
       modalidaddeEstudio: ["",Validators.required],
+      obetencionGrado: ["",Validators.required],
       fechaingreso:["",Validators.required],
       fechaegreso:["",Validators.required],
       trabajo_investigacion: this.fb.group({ nombre: ["",], url: ["",] })
@@ -154,6 +160,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.formularioRegistroBachiller.get("fechaegreso").setValue(alumnoParametro.fechaegreso);
     this.formularioRegistroBachiller.get("denominacionGradoTitulo").setValue({ nombre: alumnoParametro.denominacionGradoTitulo.nombre });
     this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre });
+    this.formularioRegistroBachiller.get("obtencionGrado").setValue({ nombre: alumnoParametro.obtencionGrado.nombre });
+
     this.formularioRegistroBachiller.get("trabajo_investigacion").get("nombre").setValue(alumnoParametro.trabajo_investigacion.nombre);
     this.formularioRegistroBachiller.get("trabajo_investigacion").get("url").setValue(alumnoParametro.trabajo_investigacion.url);
     console.log(this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre }))
@@ -216,7 +224,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       complete: () => {
         this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
         this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
-        this.listaModalidadEstudios$ = this.modalidadEstudio.listaNombreprogramaEstudio();
+        this.listaModalidadEstudios$ = this.modalidadEstudio.listaModalidadEstudio();
+        this.listaObtencionGrados$ = this.obtencionGrado.listaObtencionGrado();
       }
     })
   }
