@@ -63,14 +63,14 @@ export class ListaComponent implements OnInit {
     this.alumnoSeleccionado = alumno;
   }
   listarEstadoPorArchivo(archivo: archivo) {
-    //this.abrirBlock();
+    this.abrirBlock();
     let json = {
       idArchivo: archivo.id
     }
     this.alumnoRequisitoService.historialDeEstadosPorArchivo(json).subscribe(listaEstadoArchivo => {
       this.listaEstadoPorArchivo = listaEstadoArchivo;
       console.log(this.listaEstadoPorArchivo)
-      //this.cerrarBlock();
+      this.cerrarBlock();
     })
   }
   abrirModal(id: string) {

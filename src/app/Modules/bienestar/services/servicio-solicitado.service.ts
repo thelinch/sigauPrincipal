@@ -16,4 +16,7 @@ export class ServicioSolicitadoService {
   listarServicioSolicitadoPorSemestreActual(json: any): Observable<servicioSolicitados[]> {
     return this.http.post<servicioSolicitados[]>(this.urlControlador + "listaServicioSolicitadoPorSemestreActual", JSON.stringify(json), { headers: this.header });
   }
+  registrarServicioSolicitadoPorAlumnoYSemestreActual(json: any): Observable<servicioSolicitados> {
+    return this.http.post<servicioSolicitados>(this.urlControlador + "registroServicioSolicitadoPorAlumno", JSON.stringify(json), { headers: this.header });
+  }
 }

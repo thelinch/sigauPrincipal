@@ -13,10 +13,10 @@ import { flatMap, map, take, filter, toArray } from 'rxjs/operators';
 import { FileService } from 'src/app/global/services/file.service';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { servicioSolicitados } from '../../Models/servicioSolicitados';
-import { isUndefined } from 'util';
 import { alumnoRequisito } from './../../Models/alumnoRequisito';
 import { AlumnoRequisitoService } from '../../services/alumno-requisito.service';
 import { archivo } from '../../Models/archivo';
+import { ServicioSolicitadoService } from '../../services/servicio-solicitado.service';
 
 @Component({
   selector: 'app-lista',
@@ -50,7 +50,8 @@ export class ListaServiciosComponent implements OnInit {
     private filseService: FileService,
     private render: Renderer2,
     private alumnoService: AlumnoService,
-    private alumnoRequisitoService: AlumnoRequisitoService) { }
+    private alumnoRequisitoService: AlumnoRequisitoService,
+    private servicioSolicitado: ServicioSolicitadoService) { }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -75,7 +76,7 @@ export class ListaServiciosComponent implements OnInit {
    */
   iniciarDatos() {
     this.abrirBlock();
-    let json = { idAlumno: "1", semestreActual: "2019-I" };
+    let json = { idAlumno: "1", semestreActual: "2019-1" };
     this.servicioService.serviciosActivados().subscribe({
       next: (listaServicios) => {
         this.listaServiciosActivados = listaServicios;
@@ -104,10 +105,10 @@ export class ListaServiciosComponent implements OnInit {
     let json = {
       idAlumno: "1",
       listaDeServicioSolicitados: this.formControlListaServicio.value,
-      codigoMatricula: "2019-I"
+      codigoMatricula: "2019-1"
     }
     this.abrirBlock();
-    this.servicioService.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
+    this.servicioSolicitado.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
       this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioRegistrado;
       this.cerrarBlock();
     })
@@ -143,7 +144,7 @@ export class ListaServiciosComponent implements OnInit {
             formData.append("archivo", file)
             formData.append("idRequisito", requisito.id.toString());
             formData.append("idUsuario", "1");
-            formData.append("nombreCarpeta", "Comedor_internado/antony/" + "2019-I");
+            formData.append("nombreCarpeta", "Comedor_internado/antony/" + "2019-1");
             return formData
           }),
             flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
@@ -194,7 +195,7 @@ export class ListaServiciosComponent implements OnInit {
     let json = {
       listaServiciosSolicitados: this.formControlListaServicio.value,
       idAlumno: "1",
-      codigoMatricula: "2019-I"
+      codigoMatricula: "2019-1"
     }
     this.servicioService.requisitosPorArrayServicio(json).subscribe(listaRequisito => {
       //listaRequisito.sort(requisito => requisito.requerido ? -1 : 1);
@@ -227,7 +228,7 @@ export class ListaServiciosComponent implements OnInit {
     });
 
   }
-  modalResubirArchivo(archivo: archivo,kendo:any) {
+  modalResubirArchivo(archivo: archivo, kendo: any) {
     console.log(kendo)
   }
   listaArchivosPorAlumnoRequisito(alumnoRequisitoParametro: alumnoRequisito) {

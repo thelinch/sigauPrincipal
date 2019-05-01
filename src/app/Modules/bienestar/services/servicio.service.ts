@@ -41,9 +41,7 @@ export class ServicioService {
   requisitosPorArrayServicio(json: any): Observable<requisito[]> {
     return this.http.post<requisito[]>(this.urlControlador + "/alumno/requisitos", JSON.stringify(json), { headers: this.header });
   }
-  registrarServicioSolicitadoPorAlumnoYSemestreActual(json: any): Observable<servicioSolicitados> {
-    return this.http.post<servicioSolicitados>(this.urlControlador + "/registro", JSON.stringify(json), { headers: this.header });
-  }
+ 
   listaServiciosRegistradosPorAlumno(json: any): Observable<servicio[]> {
     return this.http.post<servicio[]>(this.urlControlador + "/alumno/servicios", JSON.stringify(json), { headers: this.header });
   }

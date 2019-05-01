@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ContentChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, TemplateRef, ContentChild, ElementRef, AfterViewInit, ViewChildren, ViewContainerRef } from '@angular/core';
 import { NavegacionService } from 'src/app/global/services/navegacion.service';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 
@@ -7,13 +7,14 @@ import { functionsGlobal } from 'src/app/global/funciontsGlobal';
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent implements OnInit {
-  @ViewChild("navegacion") navegacionTemplate: TemplateRef<any>
-  constructor(private navegacionService: NavegacionService) { }
+export class AdminComponent implements OnInit, AfterViewInit {
 
+  @ViewChild("navegacion") navegacionTemplate;
+  constructor(private navegacionService: NavegacionService) { }
+  ngAfterViewInit(): void {
+  }
   ngOnInit() {
     this.iniciarNavegacion()
-    functionsGlobal.iniciarFloatinButton({ direction: "right", hoverEnabled: false })
   }
 
   iniciarNavegacion() {
