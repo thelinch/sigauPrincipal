@@ -54,12 +54,7 @@ export class ListaServiciosComponent implements OnInit {
     private servicioSolicitado: ServicioSolicitadoService) { }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
+
     this.listaFotosParaSubir = new Array<FileUploadWithPreview>();
     this.formControlListaServicio = new FormControl();
     //this.artefactoParaSubirArchivo = new FileUploadWithPreview("subirArchivo");
@@ -110,28 +105,14 @@ export class ListaServiciosComponent implements OnInit {
     this.abrirBlock();
     this.servicioSolicitado.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
       this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioRegistrado;
+      this.cerrarModal(this.idModalServicio)
       this.cerrarBlock();
     })
 
   }
   subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string, nombreArchivPermitido: string, requisito: requisito, stepper, matSteep, boton: ElementRef) {
     let instanciaFotos = this.listaFotosParaSubir.find(fileUploader => fileUploader.uploadId == id);
-    let validacionImagen: boolean = true;
-    instanciaFotos.cachedFileArray.forEach(element => {
-      if (tipoArchivoAdmitido == "image/*") {
-        if (!(/\.(jpg|png)$/i).test(element.name)) {
-          validacionImagen = false;
-          return
-        }
-      } else {
-        if (element.type != tipoArchivoAdmitido) {
-
-          validacionImagen = false;
-          return;
-        }
-      }
-
-    });
+    let validacionImagen: boolean = functionsGlobal.validarArchivoImagen(instanciaFotos.cachedFileArray, tipoArchivoAdmitido);
     if (validacionImagen) {
       Swal.fire({
         title: "Los archivos son correctos",

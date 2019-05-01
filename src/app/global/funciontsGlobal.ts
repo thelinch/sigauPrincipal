@@ -59,7 +59,7 @@ export class functionsGlobal {
   }
 
   static iniciarScrollSpy() {
-    M.ScrollSpy.init($('.scrollspy'),{ scrollOffset: 100 });
+    M.ScrollSpy.init($('.scrollspy'), { scrollOffset: 100 });
   }
   static iniciarDropdown() {
     M.Dropdown.init($('.dropdown-trigger'));
@@ -76,4 +76,22 @@ export class functionsGlobal {
   static destroyDropdown(idDropdown: string) {
     M.Dropdown.getInstance($("#" + idDropdown)).destroy();
   }
+  static validarArchivoImagen(listaArchivo: Array<File>, tipoArchivoAdmitido: string) {
+    let validacionArchivo = true;
+    listaArchivo.forEach(element => {
+      if (tipoArchivoAdmitido == "image/*") {
+        if (!(/\.(jpg|png)$/i).test(element.name)) {
+          validacionArchivo = false;
+        }
+      } else {
+        if (element.type != tipoArchivoAdmitido) {
+
+          validacionArchivo = false;
+        }
+      }
+
+    });
+    return validacionArchivo;
+  }
+
 }
