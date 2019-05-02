@@ -33,7 +33,7 @@ export class ListaComponent implements OnInit {
   listarServicioSolicitadoPorSemestreActual() {
     this.abrirBlock();
     let json = {
-      codigoMatricula: "2019-I"
+      codigoMatricula: "2019-1"
     }
     this.servicioSolicitadoService.listarServicioSolicitadoPorSemestreActual(json).subscribe(async listaServicioSolicitado => {
       this.serviciosSolicitado = await listaServicioSolicitado;

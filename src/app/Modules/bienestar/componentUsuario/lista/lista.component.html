@@ -90,6 +90,7 @@
             (selectionChange)="changeSelectListaServicios($event)">
             <mat-option [value]="servicio.id" *ngFor="let servicio of listaServiciosActivados">
               {{servicio.nombre}}
+              <i class="fas  {{servicio.icono}} "></i>
             </mat-option>
           </mat-select>
         </mat-form-field>
