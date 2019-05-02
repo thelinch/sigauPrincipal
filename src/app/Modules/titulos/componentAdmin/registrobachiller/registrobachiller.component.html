@@ -70,7 +70,7 @@
                       <td> {{alumnoSeleccionado.escuela_profesional.nombre}}</td>
                       <td>
                         <button mat-button matStepperNext class="btn-floating btn-small waves-effect blue tooltipped"
-                          (click)="seleccionarAlumno(alumnoSeleccionado,check);verificacionDeAlumnoBachiller(alumnoSeleccionado);listarDenominacionGradoPorEspecialidad(alumnoSeleccionado);clickAlumnoCard(alumnoSeleccionado)"
+                          (click)="seleccionarAlumno(alumnoSeleccionado,check);verificacionDeAlumnoBachiller(alumnoSeleccionado);listarDenominacionGradoPorEspecialidad(alumnoSeleccionado);clickAlumnoCard(alumnoSeleccionado);listarUniversidades()"
                           matTooltip="Agregar datos al alumno"><i class="material-icons">border_color</i></button>
                         <!--
                         <a matTooltip="visualizar  datos del alumno"
@@ -186,10 +186,14 @@
                       <p></p>
                     </div>
 
-                    <mat-form-field class="col s12 m2 margin">
-                      <mat-icon matSuffix>fingerprint</mat-icon>
-                      <mat-label>Código Univeridad</mat-label>
-                      <input matInput placeholder="Codigo Universiad" formControlName="codigoUniversidad">
+                    <mat-form-field class="col s12 m5 margin">
+                      <mat-label>Universidad</mat-label>
+                      <mat-select [compareWith]="compareObjeto" formControlName="codigoUniversidad">
+                        <mat-option *ngFor="let empresa of listaEmpresas"
+                          [value]="empresa">
+                          {{empresa.codigo}} / {{empresa.nombre | uppercase }}
+                        </mat-option>
+                      </mat-select>
                     </mat-form-field>
 
                     <mat-form-field class="col s12 m5 margin">
@@ -203,14 +207,14 @@
                     </mat-form-field>
 
                     <mat-form-field class="col s12 m2 margin">
-                      <input matInput [matDatepicker]="picker" placeholder="Fecha de Matricula"
+                      <input matInput [matDatepicker]="picker" (click)="picker.open()" placeholder="Fecha de Matricula"
                         formControlName="fechaingreso">
                       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                       <mat-datepicker #picker></mat-datepicker>
                     </mat-form-field>
 
                     <mat-form-field class="col s12 m2 margin">
-                      <input matInput [matDatepicker]="pickerto" placeholder="Fecha de Egresaso"
+                      <input matInput [matDatepicker]="pickerto" (click)="pickerto.open()" placeholder="Fecha de Egresaso"
                         formControlName="fechaegreso">
                       <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
                       <mat-datepicker #pickerto></mat-datepicker>

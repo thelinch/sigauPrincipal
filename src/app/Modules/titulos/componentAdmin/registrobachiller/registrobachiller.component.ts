@@ -14,12 +14,14 @@ import { denominacionGradoTitulo } from '../../Models/denominacion_grado_titulo'
 import { modalidadEstudio } from '../../Models/modalidad_estudio';
 import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
 import { obtencion_grados_titulo } from '../../Models/obtencion_grados_titulo';
+import { empresa } from '../../Models/empresa';
 
 import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
 import { DenominacionesService } from '../../services/denominaciones.service';
 import { NombreprogramasService } from '../../services/nombreprogramas.service';
 import { ModalidadestudiosService } from '../../services/modalidadestudios.service';
 import {ObtenciongradosService } from '../../services/obtenciongrados.service';
+import { EmpresasService } from '../../services/empresas.service';
 
 
 
@@ -36,6 +38,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   listaNombreProgramaEstudios$: Observable<nombreProgramaestudio[]>
   listaModalidadEstudios$: Observable<modalidadEstudio[]>
   listaObtencionGrados$: Observable<obtencion_grados_titulo[]>
+  listaEmpresas: Array<empresa>
 
   listaAlumnosSeleccionados: Array<alumno>
   listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
@@ -93,7 +96,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     private  nombreProgramaestudio: NombreprogramasService,
     private modalidadEstudio : ModalidadestudiosService,
     private obtencionGrado : ObtenciongradosService,
-    private fb: FormBuilder) { }
+    private fb: FormBuilder,
+    private empresaservice: EmpresasService) { }
 
 
   /*CODIGO PARA INICIAR LOS METODOS*/
@@ -102,6 +106,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.listaAlumnosSeleccionados = new Array();
     this.iniciarData();
+    //this.listarUniversidades()
     //codigo para Stepper
     this.firstFormGroup = this.fb.group({
       firstCtrl: ['', Validators.required]
@@ -155,7 +160,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.formularioRegistroBachiller.reset();
   }
   editarFormularioBachiller(alumnoParametro: alumnoGraduadoTitulado) {
-    this.formularioRegistroBachiller.get("codigoUniversidad").setValue(alumnoParametro.codigoUniversidad);
+    this.formularioRegistroBachiller.get("codigoUniversidad").setValue({nombre: alumnoParametro.codigoUniversidad.nombre});
     this.formularioRegistroBachiller.get("fechaingreso").setValue(alumnoParametro.fechaingreso);
     this.formularioRegistroBachiller.get("fechaegreso").setValue(alumnoParametro.fechaegreso);
     this.formularioRegistroBachiller.get("denominacionGradoTitulo").setValue({ nombre: alumnoParametro.denominacionGradoTitulo.nombre });
@@ -166,6 +171,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.formularioRegistroBachiller.get("trabajo_investigacion").get("url").setValue(alumnoParametro.trabajo_investigacion.url);
     console.log(this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre }))
   }
+
   listarDenominacionGradoPorEspecialidad(alumnoParametro: alumno) {
     this.abrirBlock();
     let json = {
@@ -196,7 +202,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     if (this.listaAlumnoSeleccionados.isSelected(alumno)) {
       this.listaAlumnoSeleccionados.deselect(alumno);
       let index = this.listaAlumnoGraduadoTitulado.findIndex(alumnoGraduado => alumnoGraduado.alumno_general_id == alumno.id)
-      this.listaAlumnoGraduadoTitulado.splice(index, 1)
+      this.listaAlumnoGraduadoTitulado.splice(index, 1) 
+      this.alumnoPregradoSeleccionado = null
       console.log(this.listaAlumnoGraduadoTitulado)
     }
   }
@@ -233,6 +240,13 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
   count() {
 
+  }
+
+  listarUniversidades(){
+    let json = {empresa_id:2}
+    this.empresaservice.listaEmpresaPorTipoEmpresa(json).subscribe(listauniversidades =>{
+      this.listaEmpresas = listauniversidades
+    })
   }
   /*CODIGO PARA MOSTRAR LOS ESTUDIANTES DE PRE-GRADO
   public alumnosPregado() {

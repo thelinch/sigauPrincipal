@@ -13,6 +13,7 @@ import { RegistromaestriaComponent } from './componentAdmin/registromaestria/reg
 import { RegistrodoctoradoComponent } from './componentAdmin/registrodoctorado/registrodoctorado.component';
 import { BlockUIModule } from 'ng-block-ui';
 import { DenominacionesService } from './services/denominaciones.service';
+import { EmpresasService } from './services/empresas.service';
 
 
 @NgModule({
@@ -23,6 +24,6 @@ import { DenominacionesService } from './services/denominaciones.service';
     FormsModule,
     ReactiveFormsModule, BlockUIModule.forRoot(),],
   exports: [],
-  providers: [DenominacionesService],
+  providers: [DenominacionesService,EmpresasService],
 })
 export class TitulosModule { }
