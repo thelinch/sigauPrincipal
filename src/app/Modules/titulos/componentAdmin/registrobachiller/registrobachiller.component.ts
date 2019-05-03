@@ -13,7 +13,7 @@ import { nombreProgramaestudio } from '../../Models/nombre_programa_estudio';
 import { denominacionGradoTitulo } from '../../Models/denominacion_grado_titulo';
 import { modalidadEstudio } from '../../Models/modalidad_estudio';
 import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
-import { obtencion_grados_titulo } from '../../Models/obtencion_grados_titulo';
+import { obtenciongradostitulo } from '../../Models/obtencion_grados_titulo';
 import { empresa } from '../../Models/empresa';
 
 import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
@@ -37,7 +37,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   listaEscuelaprofesionales$: Observable<EscuelaProfesional[]>
   listaNombreProgramaEstudios$: Observable<nombreProgramaestudio[]>
   listaModalidadEstudios$: Observable<modalidadEstudio[]>
-  listaObtencionGrados$: Observable<obtencion_grados_titulo[]>
+  listaObtencionGrados$: Observable<obtenciongradostitulo[]>
   listaEmpresas: Array<empresa>
 
   listaAlumnosSeleccionados: Array<alumno>
@@ -49,7 +49,22 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   alumnoBachillerSeleccionado: alumno
   alumnoPregradoSeleccionado: alumno
   checkedSeleccionado: any
-  
+  imageUrl: string = "../../../../../assets/UsuarioDefecto/noimage.png";
+  fileToUpload : File = null;
+
+
+  handleFileInput(file: FileList){
+    this.fileToUpload = file.item(0);
+
+    //show image preview
+    var reader = new FileReader();
+    reader.onload = (event:any) => {
+      this.imageUrl = event.target.result;
+    }
+    reader.readAsDataURL(this.fileToUpload);
+  }
+
+
   //codigo del stepper (pasar una transicion de pantalla)
   isLinear = false;
   firstFormGroup: FormGroup;
@@ -113,6 +128,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     });
     this.formularioRegistroBachiller = this.fb.group({
       tipo_alumno_id:["",],
+      creditos_aprobados:["", Validators.required],
       codigoUniversidad: ["", Validators.required],
       denominacionGradoTitulo: ["", Validators.required],
       nombreProgramaestudio: ["",Validators.required],
@@ -160,16 +176,18 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.formularioRegistroBachiller.reset();
   }
   editarFormularioBachiller(alumnoParametro: alumnoGraduadoTitulado) {
-    this.formularioRegistroBachiller.get("codigoUniversidad").setValue({nombre: alumnoParametro.codigoUniversidad.nombre});
+    this.formularioRegistroBachiller.get("creditos_aprobados").setValue(alumnoParametro.creditos_aprobados);
+    this.formularioRegistroBachiller.get("codigoUniversidad").setValue({id: alumnoParametro.codigoUniversidad.nombre});
     this.formularioRegistroBachiller.get("fechaingreso").setValue(alumnoParametro.fechaingreso);
     this.formularioRegistroBachiller.get("fechaegreso").setValue(alumnoParametro.fechaegreso);
     this.formularioRegistroBachiller.get("denominacionGradoTitulo").setValue({ nombre: alumnoParametro.denominacionGradoTitulo.nombre });
-    this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre });
-    this.formularioRegistroBachiller.get("obtencionGrado").setValue({ nombre: alumnoParametro.obtencionGrado.nombre });
-
+    //this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre });
+    //this.formularioRegistroBachiller.get("obetencionGrado").setValue({ nombre: alumnoParametro.obtencionGrado.id });
+    //this.formularioRegistroBachiller.get("modalidaddeEstudio").setValue({ nombre: alumnoParametro.modalidadEstudio.nombre });
+    
     this.formularioRegistroBachiller.get("trabajo_investigacion").get("nombre").setValue(alumnoParametro.trabajo_investigacion.nombre);
     this.formularioRegistroBachiller.get("trabajo_investigacion").get("url").setValue(alumnoParametro.trabajo_investigacion.url);
-    console.log(this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre }))
+    console.log(this.formularioRegistroBachiller.value)
   }
 
   listarDenominacionGradoPorEspecialidad(alumnoParametro: alumno) {
@@ -248,6 +266,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       this.listaEmpresas = listauniversidades
     })
   }
+
+
   /*CODIGO PARA MOSTRAR LOS ESTUDIANTES DE PRE-GRADO
   public alumnosPregado() {
     this.abrirBlock();

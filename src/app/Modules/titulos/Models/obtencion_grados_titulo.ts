@@ -1,4 +1,4 @@
-export interface obtencion_grados_titulo {
+export interface obtenciongradostitulo {
     id: number
     nombre: string
     estado: boolean

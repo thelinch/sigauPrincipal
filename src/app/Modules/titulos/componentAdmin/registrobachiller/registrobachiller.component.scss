@@ -30,7 +30,9 @@
 .margen {
   margin-top: 0%;
 }
-
+.margintop{
+  margin-top: 10px;
+}
 .margenBsucar {
   margin-top: 2%;
 }
@@ -283,4 +285,9 @@ table.centered tbody tr td {
 
 ::ng-deep .mat-stepper-horizontal, .mat-stepper-vertical {
   background-color: #eeeeee !important;
+}
+
+::ng-deep .mat-card>.mat-card-actions:last-child {
+  margin-bottom: 0px !important;
+  padding-bottom: 0 !important;
 }

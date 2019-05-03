@@ -91,7 +91,7 @@
               <div class="col s12 m4">
                 <div class="card" *ngIf="listaAlumnoSeleccionados.selected.length>0 && alumnoPregradoSeleccionado">
                   <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="{{alumnoPregradoSeleccionado.persona.foto}}">
+                    <img class="activator" src="{{alumnoPregradoSeleccionado.persona.foto}}" style="height: 350px">
                     <span class="card-title">UNAS</span>
                     <div
                       class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
@@ -151,6 +151,10 @@
                 </div>
               </div>
               <!--FIN DE CARD DE DATOS DEL ALUMNO PPREGRADO-->
+              <div class="col s12 m12 right-align">
+                <button mat-button matStepperPrevious class="waves-effect waves-light btn"><i
+                    class="material-icons right">save</i>Registrar</button>
+              </div>
             </div>
           </div>
         </div>
@@ -186,88 +190,102 @@
                       <p></p>
                     </div>
 
-                    <mat-form-field class="col s12 m5 margin">
-                      <mat-label>Universidad</mat-label>
-                      <mat-select [compareWith]="compareObjeto" formControlName="codigoUniversidad">
-                        <mat-option *ngFor="let empresa of listaEmpresas"
-                          [value]="empresa">
-                          {{empresa.codigo}} / {{empresa.nombre | uppercase }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                    <!--Imagen-->
 
-                    <mat-form-field class="col s12 m5 margin">
-                      <mat-label>Denominación de grado académico</mat-label>
-                      <mat-select [compareWith]="compareObjeto" formControlName="denominacionGradoTitulo">
-                        <mat-option *ngFor="let denominacion of listaDenominacionesPorEspecialidad"
-                          [value]="denominacion">
-                          {{denominacion.nombre}}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                    <div class="col s12 m4 margintop">
+                      <mat-card class="example-card ">
+                        <img mat-card-image [src]="imageUrl" alt="Photo of a Shiba Inu" class="" style="height: 300px">
+                        <mat-card-actions>
+                          <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)">
+                        </mat-card-actions>
+                      </mat-card>
+                    </div>
 
-                    <mat-form-field class="col s12 m2 margin">
-                      <input matInput [matDatepicker]="picker" (click)="picker.open()" placeholder="Fecha de Matricula"
-                        formControlName="fechaingreso">
-                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
+                    <div class="col s12 m8">
+                      <div class="card-panel">
+                        <div class="row">
+                          <mat-form-field class="col s12 m12 margen">
+                            <mat-label>Universidad que otorga el Grado Académico</mat-label>
+                            <mat-select [compareWith]="compareObjeto" formControlName="codigoUniversidad">
+                              <mat-option *ngFor="let empresa of listaEmpresas" [value]="empresa">
+                                {{empresa.codigo}} / {{empresa.nombre | uppercase }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
 
-                    <mat-form-field class="col s12 m2 margin">
-                      <input matInput [matDatepicker]="pickerto" (click)="pickerto.open()" placeholder="Fecha de Egresaso"
-                        formControlName="fechaegreso">
-                      <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
-                      <mat-datepicker #pickerto></mat-datepicker>
-                    </mat-form-field>
 
-                    <mat-form-field class="col s12 m3 margen">
-                      <mat-label>Nombre de programa de Estudios</mat-label>
-                      <mat-select formControlName="nombreProgramaestudio">
-                        <mat-option>Ninguna</mat-option>
-                        <ng-container
-                          *ngIf="listaNombreProgramaEstudios$ | async;let listaNombreProgramaEstudios;else efectoCarga">
-                          <mat-option *ngFor="let listaNombreprogramaEstudio of listaNombreProgramaEstudios"
-                            [value]="listaNombreprogramaEstudio">
-                            {{listaNombreprogramaEstudio.nombre}}</mat-option>
-                        </ng-container>
-                      </mat-select>
-                    </mat-form-field>
+                          <mat-form-field class="col s12 m12 margen">
+                            <mat-label>Denominación de grado académico</mat-label>
+                            <mat-select [compareWith]="compareObjeto" formControlName="denominacionGradoTitulo">
+                              <mat-option *ngFor="let denominacion of listaDenominacionesPorEspecialidad"
+                                [value]="denominacion">
+                                {{denominacion.nombre}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
 
-                    <mat-form-field class="col s12 m3 margen">
-                      <mat-label>Modalidad de Estudios</mat-label>
-                      <mat-select formControlName="modalidaddeEstudio">
-                        <mat-option>Ninguna</mat-option>
-                        <ng-container
-                          *ngIf="listaModalidadEstudios$ | async;let listaModalidadEstudios;else efectoCarga">
-                          <mat-option *ngFor="let listaModalidadEstudio of listaModalidadEstudios"
-                            [value]="listaModalidadEstudio">
-                            {{listaModalidadEstudio.nombre}}</mat-option>
-                        </ng-container>
-                      </mat-select>
-                    </mat-form-field>
+                          <mat-form-field class="col s12 m6">
+                            <mat-label>Créditos Aprobados</mat-label>
+                            <input matInput placeholder="Créditos Aprobados" formControlName="creditos_aprobados"
+                              size="3">
+                          </mat-form-field>
 
-                    <mat-form-field class="col s12 m3 margen">
-                      <mat-label>Modalidad de Obtención de grado </mat-label>
-                      <mat-select formControlName="obetencionGrado">
-                        <mat-option>Ninguna</mat-option>
-                        <ng-container *ngIf="listaObtencionGrados$ | async;let listaObtencionGrados;else efectoCarga">
-                          <mat-option *ngFor="let listaObtencionGrado of listaObtencionGrados"
-                            [value]="listaObtencionGrado">
-                            {{listaObtencionGrado.nombre}}</mat-option>
-                        </ng-container>
-                      </mat-select>
-                    </mat-form-field>
-                    <!--
-                <mat-form-field>
-                  <mat-label>State</mat-label>
-                  <mat-select>
-                    <mat-option>None</mat-option>
-                    <mat-option *ngFor="let state of states" [value]="state">
-                      {{state}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                -->
+                          <mat-form-field class="col s12 m6 margen">
+                            <input matInput [matDatepicker]="picker" (click)="picker.open()"
+                              placeholder="Fecha de Matricula" formControlName="fechaingreso">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <input matInput [matDatepicker]="pickerto" (click)="pickerto.open()"
+                              placeholder="Fecha de Egresaso" formControlName="fechaegreso">
+                            <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerto></mat-datepicker>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <mat-label>Nombre de programa de Estudios</mat-label>
+                            <mat-select formControlName="nombreProgramaestudio">
+                              <mat-option>Ninguna</mat-option>
+                              <ng-container
+                                *ngIf="listaNombreProgramaEstudios$ | async;let listaNombreProgramaEstudios;else efectoCarga">
+                                <mat-option *ngFor="let listaNombreprogramaEstudio of listaNombreProgramaEstudios"
+                                  [value]="listaNombreprogramaEstudio">
+                                  {{listaNombreprogramaEstudio.nombre}}</mat-option>
+                              </ng-container>
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <mat-label>Modalidad de Estudios</mat-label>
+                            <mat-select formControlName="modalidaddeEstudio">
+                              <mat-option>Ninguna</mat-option>
+                              <ng-container
+                                *ngIf="listaModalidadEstudios$ | async;let listaModalidadEstudios;else efectoCarga">
+                                <mat-option *ngFor="let listaModalidadEstudio of listaModalidadEstudios"
+                                  [value]="listaModalidadEstudio">
+                                  {{listaModalidadEstudio.nombre}}</mat-option>
+                              </ng-container>
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <mat-label>Modalidad de Obtención de grado </mat-label>
+                            <mat-select formControlName="obetencionGrado">
+                              <mat-option>Ninguna</mat-option>
+                              <ng-container
+                                *ngIf="listaObtencionGrados$ | async;let listaObtencionGrados;else efectoCarga">
+                                <mat-option *ngFor="let listaObtencionGrado of listaObtencionGrados"
+                                  [value]="listaObtencionGrado">
+                                  {{listaObtencionGrado.nombre}}</mat-option>
+                              </ng-container>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="col s12 m12">
                       <div class="card-panel">
                         <h5> Trabajo de investigación</h5>
