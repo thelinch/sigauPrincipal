@@ -14,7 +14,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { RequisitoService } from './services/requisito.service';
 import { BlockUIModule } from 'ng-block-ui';
 import { TipoRequisitoService } from './services/tipo-requisito.service';
-import { Select2Module } from 'ng2-select2';
 import { ServiciosComponent } from './componentAdmin/servicios/servicios.component';
 import { ServicioService } from './services/servicio.service';
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
@@ -40,7 +39,7 @@ import { ServicioSolicitadoService } from './services/servicio-solicitado.servic
     DropzoneModule,
     PopupModule,
     ReactiveFormsModule,
-    MaterialModule, Select2Module],
+    MaterialModule],
   exports: [PrincipalComponent],
   providers: [RequisitoService, TipoRequisitoService, ServicioService, ServicioSolicitadoService],
 })

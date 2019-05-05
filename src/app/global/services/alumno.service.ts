@@ -30,7 +30,6 @@ export class AlumnoService {
   servicioSolicitadoPorAlumnoYSemestreActual(json: any): Observable<servicioSolicitados> {
     const request$ = this.http.post<servicioSolicitados>(this.urlControlador + "alumno/servicios", JSON.stringify(json), { headers: this.header }).pipe(tap(servicioSolicitado => {
       this.servicioSolicitadoStore.add(servicioSolicitado)
-      this.servicioSolicitadoStore.setActive(servicioSolicitado.id);
     }));
     return this.servicioSolicitadoQuery.getHasCache() ? of() : request$;
   }

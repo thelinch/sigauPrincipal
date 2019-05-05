@@ -9,7 +9,7 @@
           </div>
           <div class="padding_2rem right-align ">
             <a matTooltip="Nueva solicitud" class="btn-floating z-depth-3 btn-large waves-effect waves-light blue"
-              [ngClass]="{disabled:servicioSolicitadoActualPorAlumnoYSemestreActual$}"
+              [ngClass]="{disabled:servicioSolicitadoActualPorAlumnoYSemestreActual$ | async}"
               (click)="verificarExistenciaDeServicioSolicitado(idModalServicio)">
               <i class="material-icons">add</i>
             </a>

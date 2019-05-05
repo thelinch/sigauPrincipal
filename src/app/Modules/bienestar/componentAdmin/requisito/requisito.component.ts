@@ -1,23 +1,19 @@
 import { VISIBILITY_FILTER } from './../../filter/filterRequisito.model';
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
-import { swal } from './../../../../global/swal';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray, NgModel } from '@angular/forms';
-import { Observable, Observer, Subject, from } from 'rxjs';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { Observable, from } from 'rxjs';
 import { requisito } from '../../Models/Requisito';
 import { RequisitoService } from '../../services/requisito.service';
-import { scan, concat, startWith, flatMap, take, map } from 'rxjs/operators';
+import { flatMap, take, map } from 'rxjs/operators';
 import { ModelFactory, Model } from '@angular-extensions/model';
 import Swal from 'sweetalert2';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import { tipoRequisito } from '../../Models/tipoRequisito';
 import { TipoRequisitoService } from '../../services/tipo-requisito.service';
 import FileUploadWithPreview from 'file-upload-with-preview'
-import { Select2OptionData } from 'ng2-select2';
 import { ServicioService } from '../../services/servicio.service';
 import { servicio } from '../../Models/servicio';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatSelect } from '@angular/material';
 import * as $ from 'jquery';
 import { FileService } from 'src/app/global/services/file.service';
 import { archivo } from '../../Models/archivo';

@@ -223,15 +223,18 @@ export class ListaServiciosComponent implements OnInit {
     })
   }
   verificarExistenciaDeServicioSolicitado(idModalServicio: string) {
-    if (this.servicioSolicitadoActualPorAlumnoYSemestreActual$) {
-      Swal.fire({
-        html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
-        type: "info"
-      })
-      return
+    this.servicioSolicitadoActualPorAlumnoYSemestreActual$.subscribe(servicioSolicitado => {
+      console.log(servicioSolicitado)
+      if (servicioSolicitado !== undefined) {
+        Swal.fire({
+          html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
+          type: "info"
+        })
+        return
 
-    }
-    this.abrilModal(idModalServicio)
+      }
+      this.abrilModal(idModalServicio)
+    })
   }
   abrirBlock() {
     this.blockUI.start();
