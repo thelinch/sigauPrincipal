@@ -1,7 +1,7 @@
 <block-ui>
-
-  <div class="row">
-    <div class="col s12 m4" *ngFor="let servicioSolicitado of serviciosSolicitado">
+  <div class="row" *ngIf="serviciosSolicitado$ | async as listaServicioSolicitado">
+    <div>{{numeroTotalServicioSolicitado$ | async}}</div>
+    <div class="col s12 m5" *ngFor="let servicioSolicitado of listaServicioSolicitado">
       <div class="card horizontal hoverable">
         <div class="card-image">
           <img class="materialboxed" src="../../../../../assets/UsuarioDefecto/user-defect.jpg"
@@ -31,13 +31,13 @@
 
           </div>
           <div class="card-action right-align">
-            <a (click)="listarRequisitoPorAlumnoYSemestreActual(servicioSolicitado)" matTooltip="Ver Archivos"
+            <a (click)="listarRequisitoPorAlumnoYSemestreActual(servicioSolicitado.id)" matTooltip="Ver Archivos"
               class="cursor"><i class="materials-icon brown-text fas fa-archive">
               </i></a>
             <a *ngIf="servicioSolicitado.estado_servicio.nombre=='OBSERVADO'" matTooltip="Observaciones"
               class="cursor"><i class="materials-icon fas fa-exclamation-circle blue-text">
               </i></a>
-            <a href="#" matTooltip="Denegar el servicio" class="cursor"><i
+            <a (click)="clickBoton(servicioSolicitado.id)" matTooltip="Denegar el servicio" class="cursor"><i
                 class="materials-icon fas fa-trash-alt red-text">
               </i></a>
           </div>
@@ -45,11 +45,11 @@
       </div>
     </div>
   </div>
-  <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
-  </mat-paginator>
   <template #preload>
     <mat-spinner></mat-spinner>
   </template>
+  <mat-paginator [length]="100" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
 
   <div [id]="idModalListaRequisitos" class="modal modal-fixed-footer">
 

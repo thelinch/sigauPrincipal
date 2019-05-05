@@ -1,9 +1,10 @@
 import { tipoRequisito } from './tipoRequisito';
 import { servicio } from './servicio';
 import { archivo } from './archivo';
+import { ID } from '@datorama/akita';
 
 export interface requisito {
-  id?: number
+  id: ID
   nombre: string
   descripcion: string
   requerido: boolean

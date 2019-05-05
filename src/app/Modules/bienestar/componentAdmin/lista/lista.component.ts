@@ -9,6 +9,9 @@ import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { alumno } from 'src/app/global/Models/Alumno';
 import { archivo } from '../../Models/archivo';
 import { estadoArchivoRequisito } from '../../Models/estadoArchivoRequisito';
+import { servicioSolicitadoQuery } from '../../query/servicioSolitadoQuery';
+import { ID } from '@datorama/akita';
+import { flatMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lista',
@@ -17,17 +20,20 @@ import { estadoArchivoRequisito } from '../../Models/estadoArchivoRequisito';
 })
 export class ListaComponent implements OnInit {
 
-  serviciosSolicitado: servicioSolicitados[]
+  serviciosSolicitado$: Observable<servicioSolicitados[]>
   idModalListaRequisitos: string = "idModalListaRequisitos";
   alumnoSeleccionado: alumno;
+  numeroTotalServicioSolicitado$: Observable<number>;
   listaAlumnoRequisitoPorAlumnoYSemestre: alumnoRequisito[];
   listaEstadoPorArchivo: estadoArchivoRequisito[]
   @BlockUI() blockUI: NgBlockUI;
   constructor(private servicioSolicitadoService: ServicioSolicitadoService,
+    private servicioSolicitadoQuery: servicioSolicitadoQuery,
     private alumnoRequisitoService: AlumnoRequisitoService) { }
 
   ngOnInit() {
     this.listarServicioSolicitadoPorSemestreActual();
+
     functionsGlobal.iniciarModal();
   }
   listarServicioSolicitadoPorSemestreActual() {
@@ -35,29 +41,37 @@ export class ListaComponent implements OnInit {
     let json = {
       codigoMatricula: "2019-1"
     }
-    this.servicioSolicitadoService.listarServicioSolicitadoPorSemestreActual(json).subscribe(async listaServicioSolicitado => {
-      this.serviciosSolicitado = await listaServicioSolicitado;
-      this.cerrarBlock();
-    });
+    this.servicioSolicitadoService.listarServicioSolicitadoPorSemestreActual(json).subscribe(servicios => this.cerrarBlock());
+    this.serviciosSolicitado$ = this.servicioSolicitadoQuery.selectAll();
+    this.numeroTotalServicioSolicitado$ = this.servicioSolicitadoQuery.selectCount();
   }
-  listarRequisitoPorAlumnoYSemestreActual(servicioSolicitado: servicioSolicitados) {
+  listarRequisitoPorAlumnoYSemestreActual(idServicioSolicitado: ID) {
     this.abrirBlock();
-    let json = {
-      codigoMatricula: servicioSolicitado.codigoMatricula,
-      idAlumno: servicioSolicitado.alumno.id
-    }
-    this.alumnoRequisitoService.listaAlumnoRequisitoPorAlumnoYSemestre(json).subscribe(listaAlumnoRequisito => {
-      this.listaAlumnoRequisitoPorAlumnoYSemestre = listaAlumnoRequisito;
-      this.listaAlumnoRequisitoPorAlumnoYSemestre.forEach(listaRequisitos => {
+    this.servicioSolicitadoQuery.selectEntity(idServicioSolicitado).pipe(flatMap(servicioSolicitado => {
+      let json = {
+        codigoMatricula: servicioSolicitado.codigoMatricula,
+        idAlumno: servicioSolicitado.alumno.id
+      }
+      this.seleccionarAlumno(servicioSolicitado.alumno)
+      return this.alumnoRequisitoService.listaAlumnoRequisitoPorAlumnoYSemestre(json);
+    }), map(listaAlumnoRequisito => {
+      listaAlumnoRequisito.forEach(listaRequisitos => {
         listaRequisitos.archivos = listaRequisitos.archivos.map(archivo => {
           return { ...archivo, estadoActual: archivo.estados_archivo.filter(estado => estado.pivot.estado)[0] }
         })
       })
-      this.seleccionarAlumno(servicioSolicitado.alumno)
+      return listaAlumnoRequisito;
+    })).subscribe(listaAlumnoRequisito => {
+      this.listaAlumnoRequisitoPorAlumnoYSemestre = listaAlumnoRequisito;
       this.cerrarBlock();
       this.abrirModal(this.idModalListaRequisitos);
     })
 
+
+
+  }
+  clickBoton(id: ID) {
+    this.servicioSolicitadoQuery.selectEntity(id).subscribe(console.log);
   }
   seleccionarAlumno(alumno: alumno) {
     this.alumnoSeleccionado = alumno;
@@ -69,6 +83,7 @@ export class ListaComponent implements OnInit {
     }
     this.alumnoRequisitoService.historialDeEstadosPorArchivo(json).subscribe(listaEstadoArchivo => {
       this.listaEstadoPorArchivo = listaEstadoArchivo;
+
       console.log(this.listaEstadoPorArchivo)
       this.cerrarBlock();
     })

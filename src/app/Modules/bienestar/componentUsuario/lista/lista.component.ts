@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { servicio } from '../../Models/servicio';
 import { ServicioService } from '../../services/servicio.service';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
@@ -17,6 +17,7 @@ import { alumnoRequisito } from './../../Models/alumnoRequisito';
 import { AlumnoRequisitoService } from '../../services/alumno-requisito.service';
 import { archivo } from '../../Models/archivo';
 import { ServicioSolicitadoService } from '../../services/servicio-solicitado.service';
+import { servicioSolicitadoQuery } from '../../query/servicioSolitadoQuery';
 
 @Component({
   selector: 'app-lista',
@@ -34,7 +35,7 @@ export class ListaServiciosComponent implements OnInit {
   showPopup: boolean = false;
   listaServiciosActivados: servicio[]
   listaAlumnoRequisitoPorALumnoYSemestre: alumnoRequisito[]
-  servicioSolicitadoActualPorAlumnoYSemestreActual: servicioSolicitados;
+  servicioSolicitadoActualPorAlumnoYSemestreActual$: Observable<servicioSolicitados>;
   archivoSeleccionado: archivo;
   listaRequisitosPorServicio: any[]
   listaRequisitosLlenadosPorUsuario: requisito[]
@@ -51,7 +52,8 @@ export class ListaServiciosComponent implements OnInit {
     private render: Renderer2,
     private alumnoService: AlumnoService,
     private alumnoRequisitoService: AlumnoRequisitoService,
-    private servicioSolicitado: ServicioSolicitadoService) { }
+    private servicioSolicitado: ServicioSolicitadoService,
+    private servicioSolicitadoQuery: servicioSolicitadoQuery) { }
 
   ngOnInit() {
 
@@ -72,18 +74,16 @@ export class ListaServiciosComponent implements OnInit {
   iniciarDatos() {
     this.abrirBlock();
     let json = { idAlumno: "1", semestreActual: "2019-1" };
-    this.servicioService.serviciosActivados().subscribe({
-      next: (listaServicios) => {
-        this.listaServiciosActivados = listaServicios;
-
-      },
-      complete: () => {
-        this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async listaServiciosRegistrados => {
-          this.servicioSolicitadoActualPorAlumnoYSemestreActual = listaServiciosRegistrados;
-          await this.cerrarBlock();
+    this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async servicioSolicitado => {
+      if (!servicioSolicitado) {
+        this.servicioService.serviciosActivados().subscribe(listaServiciosActivados => {
+          this.listaServiciosActivados = listaServiciosActivados;
         })
+        console.log("entro al if")
       }
+      await this.cerrarBlock();
     });
+    this.servicioSolicitadoActualPorAlumnoYSemestreActual$ = this.servicioSolicitadoQuery.selectFirst();
 
   }
 
@@ -104,7 +104,7 @@ export class ListaServiciosComponent implements OnInit {
     }
     this.abrirBlock();
     this.servicioSolicitado.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
-      this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioRegistrado;
+
       this.cerrarModal(this.idModalServicio)
       this.cerrarBlock();
     })
@@ -194,7 +194,7 @@ export class ListaServiciosComponent implements OnInit {
   listaRequisitosPorAlumnoYSemestre(serviciosolicitado: servicioSolicitados) {
     let json = {
       codigoMatricula: serviciosolicitado.codigoMatricula,
-      idAlumno: "1"
+      idAlumno: serviciosolicitado.alumno.id
     }
     this.abrirBlock();
     this.alumnoRequisitoService.listaAlumnoRequisitoPorAlumnoYSemestre(json).subscribe(listaAlumnoRequisito => {
@@ -223,7 +223,7 @@ export class ListaServiciosComponent implements OnInit {
     })
   }
   verificarExistenciaDeServicioSolicitado(idModalServicio: string) {
-    if (this.servicioSolicitadoActualPorAlumnoYSemestreActual) {
+    if (this.servicioSolicitadoActualPorAlumnoYSemestreActual$) {
       Swal.fire({
         html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
         type: "info"

@@ -150,5 +150,8 @@
       }
     }
   },
-  "defaultProject": "sigauPrincipal"
+  "defaultProject": "sigauPrincipal",
+  "cli": {
+    "defaultCollection": "@datorama/akita"
+  }
 }

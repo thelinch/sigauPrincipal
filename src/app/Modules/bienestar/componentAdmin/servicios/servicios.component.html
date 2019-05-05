@@ -12,7 +12,7 @@
             </div>
             <div class="card-stacked">
               <div class="card-action  position_relative center-align">
-                <span class="card-title truncate">{{servicio.nombre}}</span>
+                <span class="card-title truncate">{{servicio.nombre | uppercase}}</span>
                 <div matTooltip="{{servicio.activador? 'Servicio Activado':'Servicio Desactivado'}}"
                   aria-label="Button that displays a tooltip when focused or hovered over"
                   class="position_absolute top_0 left_0 cursor"
@@ -45,9 +45,7 @@
                 </p>
                 <div *ngIf="servicio.activador" class="center-align">
                   <span>
-                    <i matTooltip="Temporada de activacion"
-                      aria-label="Button that displays a tooltip when focused or hovered over"
-                      class="fas fa-calendar-alt"></i>:
+                    <i matTooltip="Temporada de activacion" class="fas fa-calendar-alt"></i>:
                     <time>{{servicio.fechaInicio | date}}</time>
                     <strong>-</strong>
                     <time>{{servicio.fechaFin | date}}</time>
@@ -57,24 +55,19 @@
               </div>
               <div class="card-action right-align">
                 <a (click)="setServicio(servicio);todososAlumnosPorIdServicio()" *ngIf="servicio.activador"
-                  class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Alumnos Registrados"
-                  aria-label="Button that displays a tooltip when focused or hovered over"><i
+                  class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Alumnos Registrados"><i
                     class="material-icons white-text cursor">
                     account_circle </i></a>
                 <a (click)="setServicio(servicio);requisitosPorIdServicio()" matTooltip="Ver Requisitos"
                   class="btn-floating btn-small waves-effect fondo-ocda"><i class="material-icons">
                     description</i></a>
                 <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Editar Servicio"
-                  aria-label="Button that displays a tooltip when focused or hovered over"
                   (click)="setServicio(servicio);mostrarDatosFormularioServicio();abrirModal(idModalRegistroServicio)"><i
                     class="material-icons white-text cursor">edit
                   </i></a>
                 <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Eliminar Servicio"
-                  aria-label="Button that displays a tooltip when focused or hovered over"
-                  (click)="setServicio(servicio);eliminarServicio()"><i class="material-icons white-text cursor">
+                  (click)="eliminarServicio(servicio)"><i class="material-icons white-text cursor">
                     delete_forever </i></a>
-
-
               </div>
             </div>
           </div>
@@ -218,7 +211,7 @@
           <tbody>
             <tr *ngFor="let alumno of listaAlumnos">
               <td>{{alumno.codigo}}</td>
-             
+
             </tr>
 
           </tbody>

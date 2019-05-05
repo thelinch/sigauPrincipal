@@ -18,24 +18,9 @@ import { Select2Module } from 'ng2-select2';
 import { ServiciosComponent } from './componentAdmin/servicios/servicios.component';
 import { ServicioService } from './services/servicio.service';
 import { DropzoneModule } from 'ngx-dropzone-wrapper';
-import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
-import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { FilterEstadoActualPipe } from './pipes/filter-estado-actual.pipe';
 import { NgxPopperModule } from 'ngx-popper';
-const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
-  // Change this to your upload POST address:
-  url: 'https://httpbin.org/post',
-  acceptedFiles: 'image/*,application/pdf',
-  autoProcessQueue: false,
-  addRemoveLinks: true,
-  clickable: true,
-  dictInvalidFileType: "El archivo no es Aceptado",
-  dictRemoveFile: "Quitar Archivo",
-  dictRemoveFileConfirmation: "¿Esta seguro de quitar el archivo?",
-  maxFiles: 50,
-  uploadMultiple: true,
-
-};
+import { ServicioSolicitadoService } from './services/servicio-solicitado.service';
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
@@ -57,9 +42,6 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     ReactiveFormsModule,
     MaterialModule, Select2Module],
   exports: [PrincipalComponent],
-  providers: [RequisitoService, TipoRequisitoService, ServicioService, {
-    provide: DROPZONE_CONFIG,
-    useValue: DEFAULT_DROPZONE_CONFIG
-  }],
+  providers: [RequisitoService, TipoRequisitoService, ServicioService, ServicioSolicitadoService],
 })
 export class BienestarModule { }
