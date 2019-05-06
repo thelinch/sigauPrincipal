@@ -28,7 +28,7 @@
     {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
   </button>
   -->
-  <mat-horizontal-stepper [linear]="'false'" #stepper *ngIf="listaAlumnoSeleccionados.selected.length>0">
+  <mat-horizontal-stepper [linear]="isLinear" #stepper *ngIf="listaAlumnoSeleccionados.selected.length>0">
     <!---->
     <mat-step [stepControl]="firstFormGroup" [completed]="false">
       <form [formGroup]="firstFormGroup">
@@ -205,8 +205,8 @@
                       <div class="card-panel">
                         <div class="row">
                           <mat-form-field class="col s12 m12 margen">
-                            <mat-label>Universidad que otorga el Grado Académico</mat-label>
-                            <mat-select [compareWith]="compareObjeto" formControlName="codigoUniversidad">
+                            <mat-label>Universidad que otorga el Grado académico *</mat-label>
+                            <mat-select [compareWith]="compareObjeto" formControlName="codigo_universidad">
                               <mat-option *ngFor="let empresa of listaEmpresas" [value]="empresa">
                                 {{empresa.codigo}} / {{empresa.nombre | uppercase }}
                               </mat-option>
@@ -215,8 +215,8 @@
 
 
                           <mat-form-field class="col s12 m12 margen">
-                            <mat-label>Denominación de grado académico</mat-label>
-                            <mat-select [compareWith]="compareObjeto" formControlName="denominacionGradoTitulo">
+                            <mat-label>Denominación de grado académico *</mat-label>
+                            <mat-select [compareWith]="compareObjeto" formControlName="denominacion_grado_titulo">
                               <mat-option *ngFor="let denominacion of listaDenominacionesPorEspecialidad"
                                 [value]="denominacion">
                                 {{denominacion.nombre}}
@@ -225,28 +225,28 @@
                           </mat-form-field>
 
                           <mat-form-field class="col s12 m6">
-                            <mat-label>Créditos Aprobados</mat-label>
-                            <input matInput placeholder="Créditos Aprobados" formControlName="creditos_aprobados"
+                            <mat-label>Créditos Aprobados *</mat-label>
+                            <input matInput placeholder="Créditos Aprobados *" formControlName="creditos_aprobados"
                               size="3">
                           </mat-form-field>
 
                           <mat-form-field class="col s12 m6 margen">
                             <input matInput [matDatepicker]="picker" (click)="picker.open()"
-                              placeholder="Fecha de Matricula" formControlName="fechaingreso">
+                              placeholder="Fecha de Matricula *" formControlName="fecha_ingreso">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                           </mat-form-field>
 
                           <mat-form-field class="col s12 m6 margen">
                             <input matInput [matDatepicker]="pickerto" (click)="pickerto.open()"
-                              placeholder="Fecha de Egresaso" formControlName="fechaegreso">
+                              placeholder="Fecha de Egreso *" formControlName="fecha_egreso">
                             <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
                             <mat-datepicker #pickerto></mat-datepicker>
                           </mat-form-field>
 
                           <mat-form-field class="col s12 m6 margen">
-                            <mat-label>Nombre de programa de Estudios</mat-label>
-                            <mat-select formControlName="nombreProgramaestudio">
+                            <mat-label>Nombre de programa de Estudios *</mat-label>
+                            <mat-select formControlName="nombre_programa_estudio">
                               <mat-option>Ninguna</mat-option>
                               <ng-container
                                 *ngIf="listaNombreProgramaEstudios$ | async;let listaNombreProgramaEstudios;else efectoCarga">
@@ -258,8 +258,8 @@
                           </mat-form-field>
 
                           <mat-form-field class="col s12 m6 margen">
-                            <mat-label>Modalidad de Estudios</mat-label>
-                            <mat-select formControlName="modalidaddeEstudio">
+                            <mat-label>Modalidad de Estudios *</mat-label>
+                            <mat-select formControlName="modalidad_de_estudio">
                               <mat-option>Ninguna</mat-option>
                               <ng-container
                                 *ngIf="listaModalidadEstudios$ | async;let listaModalidadEstudios;else efectoCarga">
@@ -271,8 +271,8 @@
                           </mat-form-field>
 
                           <mat-form-field class="col s12 m6 margen">
-                            <mat-label>Modalidad de Obtención de grado </mat-label>
-                            <mat-select formControlName="obetencionGrado">
+                            <mat-label>Modalidad de Obtención de grado *</mat-label>
+                            <mat-select formControlName="obtencion_grado">
                               <mat-option>Ninguna</mat-option>
                               <ng-container
                                 *ngIf="listaObtencionGrados$ | async;let listaObtencionGrados;else efectoCarga">
@@ -316,7 +316,7 @@
                   -->
                     </div>
                     <div class="col s6 m6 right-align">
-                      <button (click)="idModalParaRegistroDeDenominaciones" type="submit"
+                      <button mat-button matStepperNext (click)="idModalParaRegistroDeDenominaciones" type="submit"
                         [disabled]="!formularioRegistroBachiller.valid" class="waves-effect waves-light btn"><i
                           class="material-icons right">save</i>agregar</button>
                     </div>
@@ -331,12 +331,84 @@
     </mat-step>
     <!--FIN DE AGREGAR DATOS DEL ALUMNO PARA GRADUAR-->
     <!--//////////////////////////////////////-->
+
+    <!--REGISTRO DE DOCUMENTOS DEL ALUMNO GRADUADO-->
     <mat-step>
-      <ng-template matStepLabel>Vista de Graduados</ng-template>
-      You are now done.
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+      <ng-template matStepLabel>REGISTRO</ng-template>
+      <div class="card">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12 m12">
+              <div class="row">
+                <mat-form-field class="col s12 m6">
+                  <mat-label>Número de Oficio *</mat-label>
+                  <input matInput placeholder="Número de Oficio *">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="col s12 m6">
+              <div class="card-panel">
+                <h6> Resolución</h6>
+                <div class="row">
+                  <mat-form-field class="col s12 m12">
+                    <mat-label>Número de Resolución *</mat-label>
+                    <input matInput placeholder="Número de Resolución *">
+                  </mat-form-field>
+
+                  <mat-form-field class="col s12 m12">
+                    <input matInput [matDatepicker]="pickertwo" (click)="pickertwo.open()"
+                      placeholder="Fecha de Emisión *">
+                    <mat-datepicker-toggle matSuffix [for]="pickertwo"></mat-datepicker-toggle>
+                    <mat-datepicker #pickertwo></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="col s12 m6">
+              <div class="card-panel">
+                <h6> Diploma</h6>
+                <div class="row">
+                  <mat-form-field class="col s12 m12">
+                    <mat-label>Número de Diploma *</mat-label>
+                    <input matInput placeholder="Número de Diploma *">
+                  </mat-form-field>
+
+                  <mat-form-field class="col s12 m12">
+                    <input matInput [matDatepicker]="pickerbi" (click)="pickerbi.open()"
+                      placeholder="Fecha de Emisión *">
+                    <mat-datepicker-toggle matSuffix [for]="pickerbi"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerbi></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="col s12 m12">
+              <div class="card-panel">
+                <h6> Autoridades</h6>
+                <div class="row">
+                  <mat-form-field class="col s12 m12">
+                    <mat-label>Número de Diploma *</mat-label>
+                    <input matInput placeholder="Número de Diploma *">
+                  </mat-form-field>
+                  <mat-form-field class="col s12 m12">
+                    <mat-label>Número de Diploma *</mat-label>
+                    <input matInput placeholder="Número de Diploma *">
+                  </mat-form-field>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          You are now done.
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </div>
       </div>
     </mat-step>
   </mat-horizontal-stepper>
@@ -344,6 +416,9 @@
   <mat-divider></mat-divider>
 </div>
 
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- ESTRUCTURA DE MODALES -->
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
 <!-- Modal Structure Buscar estudiantes-->
 <div [id]="idModalAgregarAlumnoPregrado" class="modal modal-fixed-footer">
@@ -429,6 +504,11 @@
   </div>
 </div>
 <!-- Fin de Modal Buscar estudiante Externo o interno -->
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- FIN ESTRUCTURA DE MODALES -->
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
 <!--
 <mat-tab-group>
   <mat-tab>

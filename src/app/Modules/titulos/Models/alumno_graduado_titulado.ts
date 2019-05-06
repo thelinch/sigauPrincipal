@@ -8,16 +8,16 @@ import { modalidadEstudio } from './modalidad_estudio';
 
 export interface alumnoGraduadoTitulado {
     id: number
-    codigoUniversidad: empresa
+    codigo_universidad: empresa
     creditos_aprobados: string
-    fechaingreso: Date
-    fechaegreso: Date
-    denominacionGradoTitulo: denominacionGradoTitulo
+    fecha_ingreso: Date
+    fecha_egreso: Date
+    denominacion_grado_titulo: denominacionGradoTitulo
     alumno_general_id: number
     tipo_alumno_id: number
-    imageUrl: string
-    nombreProgramaestudio: nombreProgramaestudio
-    obtencionGrado : obtenciongradostitulo
-    modalidadEstudio : modalidadEstudio
+    foto: string
+    nombre_programa_estudio: nombreProgramaestudio
+    obtencion_grado : obtenciongradostitulo
+    modalidad_estudio : modalidadEstudio
     trabajo_investigacion: trabajo_investigacion
 }
