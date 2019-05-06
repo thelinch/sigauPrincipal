@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { requisito } from '../../Models/Requisito';
 import { alumno } from 'src/app/global/Models/Alumno';
 import { servicioQuery } from '../../query/servicioQuery';
+import { ID } from '@datorama/akita';
 /**
  *
  *
@@ -72,14 +73,17 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio.reset();
   }
 
-  mostrarDatosFormularioServicio() {
-    this.formularioServicio.get("id").setValue(this.servicioSeleccionado.id);
-    this.formularioServicio.get("nombre").setValue(this.servicioSeleccionado.nombre);
-    this.formularioServicio.get("total").setValue(this.servicioSeleccionado.total);
-    this.formularioServicio.get("vacantesHombre").setValue(this.servicioSeleccionado.vacantesHombre);
-    this.formularioServicio.get("vacantesMujer").setValue(this.servicioSeleccionado.vacantesMujer);
-    this.formularioServicio.get("icono").setValue(this.servicioSeleccionado.icono);
-    this.formularioServicio.get("codigoMatricula").setValue(this.servicioSeleccionado.codigoMatricula)
+  mostrarDatosFormularioServicio(idServicio: ID) {
+    this.servicioQuery.selectEntity(idServicio).subscribe(servicioSeleccionado => {
+      this.formularioServicio.get("id").setValue(servicioSeleccionado.id);
+      this.formularioServicio.get("nombre").setValue(servicioSeleccionado.nombre);
+      this.formularioServicio.get("total").setValue(servicioSeleccionado.total);
+      this.formularioServicio.get("vacantesHombre").setValue(servicioSeleccionado.vacantesHombre);
+      this.formularioServicio.get("vacantesMujer").setValue(servicioSeleccionado.vacantesMujer);
+      this.formularioServicio.get("icono").setValue(servicioSeleccionado.icono);
+      this.formularioServicio.get("codigoMatricula").setValue(servicioSeleccionado.codigoMatricula)
+    })
+
   }
   eliminarServicio(servicio: servicio) {
     Swal.fire({

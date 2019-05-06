@@ -52,12 +52,11 @@
             <a class="btn-floating btn-small waves-effect fondo-ocda" (click)="getArhivosPorRequisitoId(requisito.id)"
               matTooltip="Ver Archivos"><i class="material-icons  cursor">
                 archive </i></a>
-            <a class="btn-floating btn-small waves-effect fondo-ocda"
-              (click)="setRequisito(requisito);visualizarRequisito()" matTooltip="Ver Requisito"><i
-                class="material-icons">
+            <a class="btn-floating btn-small waves-effect fondo-ocda" (click)="visualizarRequisito(requisito.id)"
+              matTooltip="Ver Requisito"><i class="material-icons">
                 visibility </i></a>
             <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Editar Requisito"
-              (click)="setRequisito(requisito);mostrarDatosFormularioRequisito();enabledFormularioRequisito();abrirModal(idModalRegistroRequisito)"><i
+              (click)="mostrarDatosFormularioRequisito(requisito.id);enabledFormularioRequisito();abrirModal(idModalRegistroRequisito)"><i
                 class="material-icons  cursor">edit
               </i></a>
             <a class="btn-floating btn-small waves-effect fondo-ocda" (click)="eliminarRequisito(requisito.id)"
@@ -121,7 +120,7 @@
         <div class="row">
           <mat-form-field class="col s12 m6">
             <mat-select placeholder="Aplica a:" class="filter-select" multiple formControlName="tipos">
-              <mat-option (onSelectionChange)="changeTipo($event)" *ngFor="let tipo of  listaTipoRequisito$ | async"
+              <mat-option (onSelectionChange)="changeTipo($event)" *ngFor="let tipo of  listaTipoRequisito"
                 [value]="tipo.id">
                 {{tipo.nombre}}
                 <i class="fas  {{tipo.icono}} "></i>
@@ -139,7 +138,7 @@
           <mat-form-field class="col s12 m6">
             <mat-select placeholder="Servicios" multiple formControlName="servicios">
               <mat-option [value]="servicio.id" (onSelectionChange)="changeServicio($event)"
-                *ngFor="let servicio of listaServicio$ | async">{{servicio.nombre}}
+                *ngFor="let servicio of listaServicio">{{servicio.nombre}}
                 <i class="fas  {{servicio.icono}} "></i>
               </mat-option>
             </mat-select>

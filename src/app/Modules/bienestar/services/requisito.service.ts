@@ -3,9 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { requisito } from '../Models/Requisito';
 import { Observable, Observer, of } from 'rxjs';
 import { archivo } from '../Models/archivo';
-import { tap } from 'rxjs/operators';
-import { requisitoStore } from '../store/Requisito.store';
-import { requisitoQuery } from '../query/requisitoQuery';
 import { VISIBILITY_FILTER } from '../filter/filterRequisito.model';
 import { ID } from '@datorama/akita';
 
@@ -17,9 +14,7 @@ export class RequisitoService {
   header: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  constructor(private http: HttpClient,
-    private requisitoStore: requisitoStore,
-    private requisitoQuery: requisitoQuery) {
+  constructor(private http: HttpClient) {
 
 
   }
@@ -27,29 +22,26 @@ export class RequisitoService {
     this.http.get(this.urlControlador).subscribe(console.log)
   }
   gurdarRequisito(requisito: requisito): Observable<requisito> {
-    return this.http.post<requisito>(this.urlControlador + "/create", JSON.stringify(requisito), { headers: this.header }).pipe(tap(requisitoCreado => this.requisitoStore.add(requisitoCreado)))
+    return this.http.post<requisito>(this.urlControlador + "/create", JSON.stringify(requisito), { headers: this.header });
   }
   listarRequisitos(): Observable<requisito[]> {
-    const request$ = this.http.get<requisito[]>(this.urlControlador + "/all").pipe(tap(listaRequisitos => this.requisitoStore.set(listaRequisitos)))
-    return this.requisitoQuery.getHasCache() ? of() : request$;
+    return this.http.get<requisito[]>(this.urlControlador + "/all");
   }
   editarRequisito(requisito: requisito): Observable<requisito> {
-    return this.http.post<requisito>(this.urlControlador + "/" + requisito.id.toString() + "/edit", JSON.stringify(requisito), { headers: this.header }).pipe(tap(requisitoEditado => this.requisitoStore.update(requisito.id, requisitoEditado)));
+    return this.http.post<requisito>(this.urlControlador + "/" + requisito.id.toString() + "/edit", JSON.stringify(requisito), { headers: this.header })
   }
   borrarRequisito(id: ID): Observable<requisito> {
-    return this.http.get<requisito>(this.urlControlador + "/" + id.toString() + "/delete").pipe(tap(requisitoEliminado => this.requisitoStore.remove(id)));
+    return this.http.get<requisito>(this.urlControlador + "/" + id.toString() + "/delete");
   }
   editarOpcionTipo(json: any) {
-    return this.http.post<requisito>(this.urlControlador + "/updateTipo", JSON.stringify(json), { headers: this.header }).pipe(tap(requisitoEditado => this.requisitoStore.update(requisitoEditado.id, requisitoEditado)));
+    return this.http.post<requisito>(this.urlControlador + "/updateTipo", JSON.stringify(json), { headers: this.header })
   }
   editarOpcionServicio(json: any) {
-    return this.http.post<requisito>(this.urlControlador + "/updateServicio", JSON.stringify(json), { headers: this.header }).pipe(tap(requisitoEditado => this.requisitoStore.update(requisitoEditado.id, requisitoEditado)));
+    return this.http.post<requisito>(this.urlControlador + "/updateServicio", JSON.stringify(json), { headers: this.header })
   }
   getArchivosPorRequisitoId(idRequisitio: number): Observable<archivo[]> {
     let json = { id: idRequisitio }
     return this.http.post<archivo[]>(this.urlControlador + "/archivos", JSON.stringify(json));
   }
-  actualizarFiltrado(filter: VISIBILITY_FILTER) {
-    this.requisitoStore.update({ filter })
-  }
+ 
 }

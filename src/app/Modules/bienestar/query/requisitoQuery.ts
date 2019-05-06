@@ -16,6 +16,8 @@ export class requisitoQuery extends QueryEntity<requisitoState, requisito>{
             case VISIBILITY_FILTER.MOSTRAR_PRIORITARIOS:
                 console.log("entro")
                 return requisitos.filter(r => r.prioridad);
+            case VISIBILITY_FILTER.MOSTRAR_REQUERIDOS:
+                return requisitos.filter(r => r.requerido);
             default:
                 return requisitos;
         }
