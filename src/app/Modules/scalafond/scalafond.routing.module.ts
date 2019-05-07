@@ -1,13 +1,17 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { ScalafondComponent } from './scalafond.component';
-//  import {PrincipalComponent} from './'
 import { PrincipalComponent } from '../../Modules/scalafond/componentAdmin/principal/principal.component';
+import { RegistroareaComponent } from '../../Modules/scalafond/componentAdmin/registroarea/registroarea.component';
+import { RegistrodocenteComponent } from './componentAdmin/registrodocente/registrodocente.component';
+
+
 const routes: Routes = [
     {
         path: "admin", component: ScalafondComponent, children: [
-            { path: "principal", component: PrincipalComponent }
-            // { path: "busqueda", component: BusquedaComponent },
+            { path: "principal", component: PrincipalComponent},
+            { path: "registroarea", component: RegistroareaComponent},
+            { path: "registrodocente", component: RegistrodocenteComponent},         
             ]
     }
 

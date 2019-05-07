@@ -1,13 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScalafondComponent } from './scalafond.component';
-// import { PrincipalComponent } from '../../Modules/scalafond/componentAdmin/principal/principal.component';
 import {PrincipalComponent} from './componentAdmin/principal/principal.component';
 import { ScalafondRoutingModule } from './scalafond.routing.module';
+import { RegistroareaComponent } from './componentAdmin/registroarea/registroarea.component';
+import { MaterialModule } from 'src/app/global/global.module';
+import { RegistrodocenteComponent } from './componentAdmin/registrodocente/registrodocente.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatDividerModule} from '@angular/material/divider';
+
 
 @NgModule({
-  declarations: [ScalafondComponent,PrincipalComponent],
-  imports: [CommonModule,ScalafondRoutingModule],
+  declarations: [ScalafondComponent,PrincipalComponent,RegistroareaComponent, RegistrodocenteComponent],
+  imports: [CommonModule,ScalafondRoutingModule,MaterialModule,FormsModule,ReactiveFormsModule,MatDividerModule],
   exports: [],
   providers: [],
 })

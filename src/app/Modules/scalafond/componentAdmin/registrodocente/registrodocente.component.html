@@ -1,0 +1,253 @@
+<button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+  {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+</button>
+
+<!-- ingresa datos personales de cada docente  -->
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Datos Personales</ng-template>
+
+      <div class="row card-panel div_container">
+        <div class="col s8">
+          <div class="row div_child">
+            <mat-form-field class="col s12 m4">
+              <input matInput placeholder="Dni" formControlName="firstCtrl" required>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m8">
+              <input matInput placeholder="Nombre" formControlName="firstCtrl" required>
+            </mat-form-field>
+
+
+
+            <mat-form-field class="col s12 m12">
+              <input matInput placeholder="Apellido Paterno" formControlName="firstCtrl" required>
+            </mat-form-field>
+
+
+            <mat-form-field class="col s12 m12">
+              <input matInput placeholder="Apellido Materno" formControlName="firstCtrl" required>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col s4">
+          <div class="row div_child ">
+            <mat-form-field class="col s12 m3 ">
+              <input matInput placeholder="Edad" formControlName="firstCtrl" required>
+            </mat-form-field>
+
+
+            <mat-form-field class="col s12 m9 ">
+              <input matInput placeholder="Telefono" formControlName="firstCtrl" required>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m6">
+              <mat-label>Sexo</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of sexos" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button class="btn waves-effect waves-light boton_position" mat-button matStepperNext><i
+                class="material-icons right">skip_next</i>Next</button>
+          </div>
+        </div>
+
+        <div class="line_vertical"></div>
+      </div>
+      <!-- <button class="btn waves-effect waves-light" mat-button matStepperNext><i class="material-icons right">skip_next</i>Next</button> -->
+    </form>
+  </mat-step>
+
+  <!-- ingresa datos Profesionales de cada docente  -->
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Datos Profesionales</ng-template>
+
+      <div class="row card-panel div_containerDateProfesion">
+        <div class="col s6">
+          <div class="row div_child">
+            <mat-form-field class="col s12 m4">
+              <input matInput placeholder="Codigo" formControlName="secondCtrl" required>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m8">
+              <input matInput placeholder="Codigo Institusional" formControlName="secondCtrl" required>
+            </mat-form-field>
+
+
+
+            <mat-form-field class="col s12 m12">
+              <input matInput placeholder="Numero de Colegiatura" formControlName="secondCtrl" required>
+            </mat-form-field>
+
+
+            <mat-form-field class="col s12 m12">
+              <input matInput placeholder="URL de CV" formControlName="secondCtrl" required>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m12">
+              <input matInput placeholder="Codigo de ESSALUD" formControlName="secondCtrl" required>
+            </mat-form-field>
+
+          </div>
+        </div>
+
+        <div class="col s6">
+          <div class="row div_child ">
+
+            <mat-form-field class="col s12 m12">
+              <mat-label>Tipo de Regimen Pensionario</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of TipoRegPensionarios" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m6">
+              <mat-label>Regimen Pensionario</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of RegPensionarios" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m6">
+              <mat-label>Entidad de Regimen Pensionario</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of EntidadesRegPensionarios" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button class="btn waves-effect waves-light boton_positionDateProfesion" mat-button matStepperPrevious><i
+                class="material-icons left">skip_previous</i>Back</button>
+            <button class="btn waves-effect waves-light boton_positionDateProfesion" mat-button matStepperNext><i
+                class="material-icons right">skip_next</i>Next</button>
+          </div>
+        </div>
+
+        <div class="line_verticalDateLaorales"></div>
+      </div>
+    </form>
+  </mat-step>
+
+  <!-- registrar datos laborales de cada docentes -->
+  <mat-step [stepControl]="thirdFormGroup">
+    <form [formGroup]="thirdFormGroup">
+      <ng-template matStepLabel>Datos Laborales</ng-template>
+      <div class="row card-panel div_containerDateProfesion">
+        <div class="col s6">
+          <div class="row div_child">
+            <mat-form-field class="col s12 m6">
+              <input matInput placeholder="Numero de Resolucion" formControlName="thirdCtrl" required>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" placeholder="Fecha de Inicio">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker1" placeholder="Fecha Fin">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m6">
+              <mat-label>Departamento</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of Departamentos" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m6">
+              <mat-label>Cargo</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of Cargos" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m6">
+              <mat-label>Categoria</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of Categorias" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col s12 m6">
+              <mat-label>Dedicacion</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of  Dedicaciones" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- <mat-form-field class="col s12 m6">
+              <input matInput placeholder="Departamento" formControlName="thirdCtrl" required>
+            </mat-form-field> -->
+
+          </div>
+          <!-- <div class="col s1 "></div> -->
+        </div>
+             
+
+        <div class="col s6">
+          <div class="row div_child ">
+
+            <mat-form-field class="col s12 m12">
+              <mat-label>Regimen de contrato</mat-label>
+              <mat-select>
+                <mat-option *ngFor="let lista of RegimenContratos" [value]="lista.value">
+                  {{lista.viewValue}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+              <input matInput placeholder="Sueldo" formControlName="thirdCtrl" required>
+            </mat-form-field>
+
+
+            <button class="btn waves-effect waves-light boton_positionDateProfesion" mat-button matStepperPrevious><i
+                class="material-icons left">skip_previous</i>Back</button>
+            <button class="btn waves-effect waves-light boton_positionDateProfesion" mat-button matStepperNext><i
+                class="material-icons right">skip_next</i>Next</button>
+          </div>
+        </div>
+
+        <div class="line_verticalDateLaorales"></div>
+      </div>
+
+      <!-- <mat-form-field>
+        <input matInput placeholder="Address" formControlName="thirdCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div> -->
+
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Datos Academicos</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

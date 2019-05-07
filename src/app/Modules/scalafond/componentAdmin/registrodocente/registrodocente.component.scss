@@ -1,0 +1,47 @@
+.boton_position{
+ position: relative;
+ right: 0;
+ top: 150px;
+}
+
+.div_container{
+    position: relative;
+    height: 300px;
+    padding: 25px;
+     }
+.div_child {
+    padding: 10px;
+}
+
+.line_vertical{
+ width: 2px;
+ height: 180px;
+ background-color: #26a69a;
+ position: relative;
+ left:630px;
+ top:30px;
+//  border:4px dashed #d4d4d4  ;
+// box-shadow: 0px 2px 5px #c0c0c0; 
+}
+
+.line_verticalDateLaorales{
+    width: 2px;
+    height: 180px;
+    background-color: #26a69a;
+    position: relative;
+    left:470px;
+    top:30px;
+   }
+
+  .div_containerDateProfesion{
+    position: relative;
+    height: 310px;
+    padding: 25px;
+     }
+
+.boton_positionDateProfesion{
+    position: relative;
+    left: 250px;
+    top: 100px;
+    margin: 5px;
+    }
