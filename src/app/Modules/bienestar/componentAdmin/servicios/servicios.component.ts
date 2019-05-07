@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 import * as moment from 'moment';
 import { requisito } from '../../Models/Requisito';
 import { alumno } from 'src/app/global/Models/Alumno';
+import { servicioQuery } from '../../query/servicioQuery';
 /**
  *
  *
@@ -39,7 +40,10 @@ export class ServiciosComponent implements OnInit {
   formularioServicio: FormGroup;
   @BlockUI() blockUI: NgBlockUI;
   servicioSeleccionado: servicio;
-  constructor(private fb: FormBuilder, private servicioService: ServicioService, private modelFactory: ModelFactory<servicio[]>) { }
+  constructor(private fb: FormBuilder,
+    private servicioService: ServicioService,
+    private modelFactory: ModelFactory<servicio[]>,
+    private servicioQuery: servicioQuery) { }
 
   ngOnInit() {
     this.formularioServicio = this.fb.group({
@@ -60,11 +64,8 @@ export class ServiciosComponent implements OnInit {
   }
   listarServicios() {
     this.abrirBlock();
-    this.servicioService.listarServicio().subscribe(servicios => {
-      this.modelServicio = this.modelFactory.create(servicios);
-      this.listaServicio$ = this.modelServicio.data$;
-      this.cerrarBlock();
-    })
+    this.servicioService.listarServicio().subscribe(listaServicio => this.cerrarBlock());
+    this.listaServicio$ = this.servicioQuery.selectAll();
   }
 
   nuevoServicio() {
@@ -80,8 +81,7 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio.get("icono").setValue(this.servicioSeleccionado.icono);
     this.formularioServicio.get("codigoMatricula").setValue(this.servicioSeleccionado.codigoMatricula)
   }
-  eliminarServicio() {
-    let servicios = this.modelServicio.get();
+  eliminarServicio(servicio: servicio) {
     Swal.fire({
       title: "¿Desea Eliminar el Servicio?",
       showCancelButton: true,
@@ -92,14 +92,9 @@ export class ServiciosComponent implements OnInit {
 
     }).then(respuesta => {
       if (respuesta.value) {
-        console.log(this.servicioSeleccionado)
         this.abrirBlock()
-        this.servicioService.eliminarServicio(this.servicioSeleccionado.id).subscribe(servicioEliminado => {
-          let index = this.buscarServicio(servicios, servicioEliminado)
-          servicios.splice(index, 1);
-          this.modelServicio.set(servicios);
-          this.listaServicio$ = this.modelServicio.data$;
-          functionsGlobal.getToast("Se elimino correctamanete el servicio")
+        this.servicioService.eliminarServicio(servicio.id).subscribe(servicioEliminado => {
+          functionsGlobal.getToast("Se elimino correctamanete el servicio " + servicioEliminado.nombre)
           this.cerrarBlock();
         })
       }
@@ -107,30 +102,19 @@ export class ServiciosComponent implements OnInit {
   }
   guardarYEditarServicio(valorFomulario: any) {
     this.abrirBlock();
-    let servicios = this.modelServicio.get()
+
     if (valorFomulario.id == null) {
       delete valorFomulario.id
       this.servicioService.guardarServicio(valorFomulario as servicio).subscribe(nuevoServicio => {
-        servicios.push(nuevoServicio);
-        this.modelServicio.set(servicios);
         this.closeModal(this.idModalRegistroServicio);
-        functionsGlobal.getToast("Se Registro Correctamente")
+        functionsGlobal.getToast("Se Registro Correctamente el servicio " + nuevoServicio.nombre)
         this.cerrarBlock();
       })
     } else {
-      this.servicioSeleccionado.nombre = valorFomulario.nombre;
-      this.servicioSeleccionado.total = valorFomulario.total;
-      this.servicioSeleccionado.vacantesHombre = valorFomulario.vacantesHombre;
-      this.servicioSeleccionado.vacantesMujer = valorFomulario.vacantesMujer;
-      this.servicioSeleccionado.icono = valorFomulario.icono;
-      this.servicioSeleccionado.codigoMatricula = valorFomulario.codigoMatricula;
+
       // this.servicioSeleccionado.icono=valorFomulario.icono;
-      this.servicioService.editarServicio(this.servicioSeleccionado).subscribe(servicioActualizado => {
-        let index = this.buscarServicio(servicios, servicioActualizado);
-        servicios[index] = servicioActualizado;
-        this.modelServicio.set(servicios);
-        this.listaServicio$ = this.modelServicio.data$;
-        functionsGlobal.getToast("Se Edito Correctamente")
+      this.servicioService.editarServicio(valorFomulario).subscribe(servicioActualizado => {
+        functionsGlobal.getToast("Se Edito Correctamente " + servicioActualizado.nombre)
         this.closeModal(this.idModalRegistroServicio);
         this.cerrarBlock();
       });
@@ -163,17 +147,13 @@ export class ServiciosComponent implements OnInit {
   }
   activarServicio(formValue: any) {
     this.abrirBlock();
-    let modeloServicio = this.modelServicio.get();
     let jsonFecha: any = {
       id: this.servicioSeleccionado.id,
       fechaInicio: formValue.fechaInicio,
       fechaFin: formValue.fechaFin
     }
     this.servicioService.activacionServicio(jsonFecha).subscribe(serviciosActualizado => {
-      let index = this.buscarServicio(modeloServicio, serviciosActualizado);
-      modeloServicio[index] = serviciosActualizado;
-      this.modelServicio.set(modeloServicio);
-      this.listaServicio$ = this.modelServicio.data$;
+
       functionsGlobal.getToast("Se Edito Correctamente el Servicio")
       this.cerrarModal(this.idModalRegistroRegistroFecha);
       this.cerrarBlock();
@@ -202,9 +182,7 @@ export class ServiciosComponent implements OnInit {
     functionsGlobal.closeModal(id);
   }
   //FUNCIONES COMUNES
-  buscarServicio(servicios: servicio[], servicio: servicio): number {
-    return servicios.findIndex(requisitoB => requisitoB.id == servicio.id)
-  }
+
   /**
    *
    * @param id

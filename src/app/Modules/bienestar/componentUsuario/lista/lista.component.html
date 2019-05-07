@@ -9,7 +9,7 @@
           </div>
           <div class="padding_2rem right-align ">
             <a matTooltip="Nueva solicitud" class="btn-floating z-depth-3 btn-large waves-effect waves-light blue"
-              [ngClass]="{disabled:servicioSolicitadoActualPorAlumnoYSemestreActual}"
+              [ngClass]="{disabled:servicioSolicitadoActualPorAlumnoYSemestreActual$ | async}"
               (click)="verificarExistenciaDeServicioSolicitado(idModalServicio)">
               <i class="material-icons">add</i>
             </a>
@@ -20,7 +20,8 @@
           <div class="card-content">
             <div class="row">
               <div class="col s12">
-                <div class="card hoverable" *ngIf="servicioSolicitadoActualPorAlumnoYSemestreActual">
+                <div class="card hoverable"
+                  *ngIf="servicioSolicitadoActualPorAlumnoYSemestreActual$ | async as servicioSolicitadoActualPorAlumnoYSemestreActual">
                   <div class="card-title">
                     <h5 class="padding_4">
                       {{servicioSolicitadoActualPorAlumnoYSemestreActual.codigoMatricula}}
@@ -90,6 +91,7 @@
             (selectionChange)="changeSelectListaServicios($event)">
             <mat-option [value]="servicio.id" *ngFor="let servicio of listaServiciosActivados">
               {{servicio.nombre}}
+              <i class="fas  {{servicio.icono}} "></i>
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -149,18 +151,52 @@
             <div class="card-content">
               <div class="row">
                 <div class="col s12 m6" *ngFor="let archivo of alumnoRequisito.archivos">
-                  <div class="card position_relative">
-                    <img src="../../../../../assets/imagenArchivos/archivo.png" alt="" class="responsive-img">
-                    <div class="truncate center-align">
-                      {{archivo.nombreOriginal}}
+                  <div class="card position_relative card_animation">
+                    <div class="card-stacked">
+                      <div class="card-content">
+                        <i [matTooltip]="archivo.estadoActual.nombre" class="material-icons"
+                          [ngStyle]="{'color':archivo.estadoActual.color}">
+                          flag
+                        </i>
+                        <img src="../../../../../assets/imagenArchivos/archivo.png" alt="" class="responsive-img">
+                      </div>
+                      <div class="card-action-float position_absolute">
+                        <div class="buttons button_card_float position_absolute">
+                          <a class="btn btn-small  btn-floating">
+                            <i class="material-icons">
+                              visibility
+                            </i>
+                          </a><a class="btn btn-small blue darken-4  btn-floating"
+                            *ngIf="archivo.estadoActual.nombre=='OBSERVADO'" #anchor
+                            (click)="modalResubirArchivo(archivo,kendo)">
+                            <i class="material-icons">
+                              settings_backup_restore
+                            </i>
+                          </a>
+                          <kendo-popup *ngIf="showPopup" #kendo [anchor]="anchor" [offset]="{ left: 100, top: 100 }">
+                            <div class="custom-file-container" data-upload-id="subirArchivo">
+                              <label>Archivos: <a href="javascript:void(0)"
+                                  class="custom-file-container__image-clear  red-text" title="Clear Image"><i
+                                    class="material-icons">cancel</i></a></label>
+                              <label class="custom-file-container__custom-file">
+                                <input type="file" class="custom-file-container__custom-file__custom-file-input"
+                                  name="file" required aria-label="Subir Archivos">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="12485760" />
+                                <span class="custom-file-container__custom-file__custom-file-control"></span>
+                              </label>
+                              <div class="custom-file-container__image-preview"></div>
+                            </div>
+                          </kendo-popup>
+                        </div>
+                        <div class="background-shadow">
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="card-action">
-              <a class="btn btn-small btn-floating waves-effect waves-light" matTooltip="listar archivos"
-                (click)="listaArchivosPorAlumnoRequisito(alumnoRequisito)"><i class="material-icons">archive</i></a>
               <a class="btn btn-small btn-floating waves-effect waves-light"><i
                   class="material-icons">file_upload</i></a>
             </div>
@@ -173,7 +209,6 @@
         class="modal-close waves-effect waves-light red btn-flat">cerrar</a>
     </div>
   </div>
-  <ng-template #spinner>
-    <mat-spinner></mat-spinner>
-  </ng-template>
+
+
 </block-ui>

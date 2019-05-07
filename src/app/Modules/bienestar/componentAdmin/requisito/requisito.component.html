@@ -2,12 +2,19 @@
   <div class="row">
     <div class="col s12 ">
       <div class="row">
-        <div class="col s12  center-align">
+        <mat-form-field class="col s12 m6">
+          <mat-select placeholder="filtrado" [formControl]="controlFiltrado">
+            <mat-option [value]="filtrado.value" *ngFor="let filtrado of this.listaFiltroRequisito">{{filtrado.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="col s12 m6  center-align">
           <a matTooltip="Nuevo Requisito" class="waves-effect button_create  btn-floating btn-large blue "
             (click)="nuevoRequisito();abrirModal(idModalRegistroRequisito)">
             <i class="material-icons">add</i>
           </a>
         </div>
+
       </div>
     </div>
     <div class="col s12 m4" *ngFor="let requisito of listaRequisito$ | async;let i=index">
@@ -53,9 +60,8 @@
               (click)="setRequisito(requisito);mostrarDatosFormularioRequisito();enabledFormularioRequisito();abrirModal(idModalRegistroRequisito)"><i
                 class="material-icons  cursor">edit
               </i></a>
-            <a class="btn-floating btn-small waves-effect fondo-ocda"
-              (click)="setRequisito(requisito);eliminarRequisito()" matTooltip="Eliminar  Requisito"><i
-                class="material-icons  cursor">
+            <a class="btn-floating btn-small waves-effect fondo-ocda" (click)="eliminarRequisito(requisito.id)"
+              matTooltip="Eliminar  Requisito"><i class="material-icons  cursor">
                 delete_forever </i></a>
 
           </div>

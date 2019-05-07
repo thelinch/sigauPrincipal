@@ -1,7 +1,8 @@
 import { requisito } from './Requisito';
 import { alumno } from 'src/app/global/Models/Alumno';
+import { ID } from '@datorama/akita';
 export interface servicio {
-  id?: number
+  id: ID
   nombre: string
   estado: number
   total: number

@@ -1,181 +1,424 @@
 <div>
+  <!--CODIGO DE TITULO GENERAL-->
   <div class="row">
-    <div class="row">
-      <div class="col s12 m6 putLeft ">
-        <div class="dvContentTitMod ">
-          <span class="putLeft tituloModalG">REGISTRO NACIONAL DE </span>
-          <span class="putLeft tituloModalM">GRADOS ACADEMICOS Y TITULOS PROFESIONALES</span>
-        </div>
+    <div class="col s12 m6 putLeft ">
+      <div class="dvContentTitMod ">
+        <span class="putLeft tituloModalG">REGISTRO NACIONAL DE </span>
+        <span class="putLeft tituloModalM">GRADOS ACADEMICOS Y TITULOS PROFESIONALES</span>
       </div>
     </div>
-    <mat-divider></mat-divider>
-
-    <!-- Modal Buscar estudiante Externo o interno -->
-    <!--
-    <div class="card">
-      <div class="card-content teal accent-4 ">
-        <p class="left white-text"><b>Lista de Estudiantes para Graduar</b></p>
-        <a class="waves-effect waves-light btn  white darken-4 black-text tooltipped"
-          (click)="abrirModal(idModalAgregarAlumnoPregrado)" data-tooltip="Seleccionar"><i
-            class="material-icons right">send</i>Agregar</a>
-      </div>
-    </div>
-    -->
-    <div>
-      <blockquote>
-        <p class="left black-text titleLista"><b>Lista de Estudiantes para Graduar</b></p>
-        <a class="waves-effect waves-light btn  white darken-4 black-text tooltipped"
-          (click)="abrirModal(idModalAgregarAlumnoPregrado)" data-tooltip="Seleccionar"><i
-            class="material-icons right">add</i>Agregar</a>
-      </blockquote>
-    </div>
-    <mat-divider></mat-divider>
-    <div class="row">
-      <div class="col s12 m8 ">
-        <table *ngIf="listaAlumnoSeleccionados.selected.length>0" class=" centered responsive-table highlight table1">
-          <thead class="colorTR">
-            <tr>
-              <th> <i class="material-icons">check</i></th>
-              <th>DNI</th>
-              <th>Nombres</th>
-              <th>Apellidos</th>
-              <th>Escuela Profesional</th>
-              <th>Operaciones</th>
-            </tr>
-          </thead>
-          <tbody class="fonttable">
-            <tr (click)="clickAlumnoCard(alumnoSeleccionado)"
-              *ngFor="let alumnoSeleccionado of listaAlumnoSeleccionados.selected ">
-              <td>
-                <mat-checkbox [disabled]="true" #check></mat-checkbox>
-              </td>
-              <td>{{alumnoSeleccionado.persona.numero_documento}} </td>
-              <td>{{alumnoSeleccionado.persona.nombre}} </td>
-              <td>{{alumnoSeleccionado.persona.apellido_paterno +" "+alumnoSeleccionado.persona.apellido_materno}}</td>
-              <td> {{alumnoSeleccionado.escuela_profesional.nombre}}</td>
-              <td>
-                <a (click)="seleccionarAlumno(alumnoSeleccionado,check);verificacionDeAlumnoBachiller(alumnoSeleccionado);listarDenominacionGradoPorEspecialidad(alumnoSeleccionado);abrirModal(idModalParaRegistroDeDenominaciones)"
-                  matTooltip="Agregar datos al alumno" class="btn-floating btn-small waves-effect blue tooltipped"><i
-                    class="material-icons">add</i></a>
-                <a matTooltip="visualizar  datos del alumno" class="btn-floating btn-small waves-effect tooltipped"><i
-                    class="material-icons">remove_red_eye</i></a>
-                <a matTooltip="remover  alumno" (click)="removerAlumno(alumnoSeleccionado)"
-                  class="btn-floating btn-small waves-effect red tooltipped"><i class="material-icons">delete</i></a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!--CARD DE DATOS DEL ALUMNO PPREGRADO-->
-      <div class="col s12 m4" *ngIf="listaAlumnoSeleccionados.selected.length>0 && alumnoPregradoSeleccionado">
-        <div class="card">
-          <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="{{alumnoPregradoSeleccionado.persona.foto}}">
-            <span class="card-title">UNAS</span>
-            <div
-              class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
-              <input class="colortablewhite" matInput placeholder="Documento de Identidad "
-                value="DNI: {{alumnoPregradoSeleccionado.persona.numero_documento}}" readonly>
-            </div>
-            <div class="estado position_absolute top_0  right_0">
-              <span
-                class="chip fondo-ocda white-text light-blue darken-4">{{gradoacademico(alumnoPregradoSeleccionado)}}</span>
-            </div>
-          </div>
-          <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4">{{alumnoPregradoSeleccionado.persona.nombre}}
-              {{alumnoPregradoSeleccionado.persona.apellido_paterno}}
-              {{alumnoPregradoSeleccionado.persona.apellido_materno}} <i
-                class="material-icons right">more_vert</i></span>
-            <p><a>{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}</a></p>
-          </div>
-          <div class="card-reveal">
-            <span class="card-title grey-text text-darken-4 center-align teal accent-4"><b
-                class="white-text">Datos</b><i class="material-icons right">close</i></span>
-            <mat-divider> </mat-divider>
-            <p></p>
-            <div class="row">
-              <mat-form-field class="col s7 m7 example-full-width  ">
-                <input matInput placeholder="Código de Estudiante" value="{{alumnoPregradoSeleccionado.codigo}}"
-                  readonly>
-              </mat-form-field>
-              <mat-form-field class="col s5 m5 example-full-width">
-                <input matInput placeholder="DNI" value="{{alumnoPregradoSeleccionado.persona.numero_documento}}"
-                  readonly>
-              </mat-form-field>
-              <mat-form-field class="col s7 m7 example-full-width">
-                <input matInput placeholder="Nombres" value="{{alumnoPregradoSeleccionado.persona.nombre}}" readonly>
-              </mat-form-field>
-              <mat-form-field class="col s5 m5 example-full-width">
-                <input matInput placeholder="Fecha de Nacimiento "
-                  value="{{alumnoPregradoSeleccionado.persona.fecha_nacimiento}}" readonly>
-              </mat-form-field>
-              <mat-form-field class="col s12 m12 example-full-width">
-                <input matInput placeholder="Apellidos "
-                  value="{{alumnoPregradoSeleccionado.persona.apellido_paterno}} {{alumnoPregradoSeleccionado.persona.apellido_materno}}"
-                  readonly>
-              </mat-form-field>
-              <mat-form-field class="col s12 m12 example-full-width">
-                <input matInput placeholder="Escuela Profesional "
-                  value="{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}" readonly>
-              </mat-form-field>
-              <mat-form-field class="col s12 m12 example-full-width">
-                <input matInput placeholder="Correo Institucional"
-                  value="{{alumnoPregradoSeleccionado.correo_institucional}}" readonly>
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!--
-      <div class="col s12 m4" *ngIf="listaAlumnoSeleccionados.selected.length>0 && alumnoPregradoSeleccionado">
-        <div class="card">
-          <div class="card-image">
-            <img src="{{alumnoPregradoSeleccionado.persona.foto}}">
-            <span class="card-title">UNAS</span>
-            <div
-              class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
-              <input class="colortablewhite" matInput placeholder="Documento de Identidad "
-                value="Código: {{alumnoPregradoSeleccionado.codigo}}" readonly>
-            </div>
-          </div>
-          <div class="card-content">
-            <div class="estado position_absolute top_0  right_0">
-              <span
-                class="chip fondo-ocda white-text light-blue darken-4">{{gradoacademico(alumnoPregradoSeleccionado)}}</span>
-            </div>
-            <div class="row">
-              <mat-form-field class="col s6 m6 example-full-width  ">
-                <input matInput placeholder="Nombres " value="{{alumnoPregradoSeleccionado.persona.nombre}}" readonly>
-              </mat-form-field>
-              <mat-form-field class="col s6 m6 example-full-width">
-                <input matInput placeholder="DNI" value="{{alumnoPregradoSeleccionado.persona.numero_documento}}"
-                  readonly>
-              </mat-form-field>
-              <mat-form-field class="col s12 m12 example-full-width">
-                <input matInput placeholder="Apellidos "
-                  value="{{alumnoPregradoSeleccionado.persona.apellido_paterno}} {{alumnoPregradoSeleccionado.persona.apellido_materno}}"
-                  readonly>
-              </mat-form-field>
-              <mat-form-field class="col s12 m12 example-full-width">
-                <input matInput placeholder="Escuela Profesional "
-                  value="{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}" readonly>
-              </mat-form-field>
-              <mat-form-field class="col s12 m12 example-full-width">
-                <input matInput placeholder="Correo Institucional"
-                  value="{{alumnoPregradoSeleccionado.correo_institucional}}" readonly>
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </div>
-      -->
-      <!--FIN DE CARD DE DATOS DEL ALUMNO PPREGRADO-->
-    </div>
-    <mat-divider></mat-divider>
   </div>
+  <!--FIN DE CODIGO DE TITULO GENERAL-->
+  <mat-divider></mat-divider>
+  <!--CODIGO PARA LISTAR LOS ALUMNOS-->
+  <div class="">
+    <blockquote>
+      <p class="left black-text titleLista"><b>Lista de Estudiantes para Graduar</b></p>
+      <a class="waves-effect waves-light btn  white darken-4 black-text tooltipped"
+        (click)="abrirModal(idModalAgregarAlumnoPregrado)" data-tooltip="Seleccionar"><i
+          class="material-icons right">group_add</i>Agregar</a>
+    </blockquote>
+  </div>
+  <!--FIN DE CODIGO PARA LISTAR LOS ALUMNOS-->
+  <mat-divider></mat-divider>
+
+  <!--CODIGO PARA MOSTRAR LA LISTA DE ALUMNOS A GRADUAR-->
+  <!--
+    <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+    {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+  </button>
+  -->
+  <mat-horizontal-stepper [linear]="isLinear" #stepper *ngIf="listaAlumnoSeleccionados.selected.length>0">
+    <!---->
+    <mat-step [stepControl]="firstFormGroup" [completed]="false">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Lista de Alumnos</ng-template>
+        <!--LISTA DE ALUMNOS CON CARDS-->
+        <div class="card">
+          <div class="card-panel">
+            <div class="row">
+              <!--
+              <mat-form-field class="col s12 m6">
+                <input matInput placeholder="First name, First name" formControlName="firstCtrl" required>
+              </mat-form-field>
+              -->
+              <!--LISTA DE ALMUNOS-->
+              <div class="col s12 m8 ">
+                <table *ngIf="listaAlumnoSeleccionados.selected.length>0"
+                  class=" centered responsive-table highlight table1 ">
+                  <thead class="colorTR">
+                    <tr>
+                      <th> <i class="material-icons">check</i></th>
+                      <th>DNI</th>
+                      <th>Nombres</th>
+                      <th>Apellidos</th>
+                      <th>Escuela Profesional</th>
+                      <th>Operaciones</th>
+                    </tr>
+                  </thead>
+                  <tbody class="fonttable">
+                    <tr (click)="clickAlumnoCard(alumnoSeleccionado)"
+                      *ngFor="let alumnoSeleccionado of listaAlumnoSeleccionados.selected ">
+                      <td>
+                        <mat-checkbox [disabled]="true" #check></mat-checkbox>
+                      </td>
+                      <td>{{alumnoSeleccionado.persona.numero_documento}} </td>
+                      <td>{{alumnoSeleccionado.persona.nombre}} </td>
+                      <td>
+                        {{alumnoSeleccionado.persona.apellido_paterno +" "+alumnoSeleccionado.persona.apellido_materno}}
+                      </td>
+                      <td> {{alumnoSeleccionado.escuela_profesional.nombre}}</td>
+                      <td>
+                        <button mat-button matStepperNext class="btn-floating btn-small waves-effect blue tooltipped"
+                          (click)="seleccionarAlumno(alumnoSeleccionado,check);verificacionDeAlumnoBachiller(alumnoSeleccionado);listarDenominacionGradoPorEspecialidad(alumnoSeleccionado);clickAlumnoCard(alumnoSeleccionado);listarUniversidades()"
+                          matTooltip="Agregar datos al alumno"><i class="material-icons">border_color</i></button>
+                        <!--
+                        <a matTooltip="visualizar  datos del alumno"
+                          class="btn-floating btn-small waves-effect tooltipped"><i
+                            class="material-icons">remove_red_eye</i></a>
+                         -->
+                        <a matTooltip="remover  alumno" (click)="removerAlumno(alumnoSeleccionado)"
+                          class="btn-floating btn-small waves-effect red tooltipped"><i
+                            class="material-icons">delete</i></a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--FIN DE LISTA DE ALUMNOS-->
+
+              <!--CARD DE DATOS DEL ALUMNO PPREGRADO-->
+              <div class="col s12 m4">
+                <div class="card" *ngIf="listaAlumnoSeleccionados.selected.length>0 && alumnoPregradoSeleccionado">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" src="{{alumnoPregradoSeleccionado.persona.foto}}" style="height: 350px">
+                    <span class="card-title">UNAS</span>
+                    <div
+                      class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
+                      <input class="colortablewhite" matInput placeholder="Documento de Identidad "
+                        value="DNI: {{alumnoPregradoSeleccionado.persona.numero_documento}}" readonly>
+                    </div>
+                    <div class="estado position_absolute top_0  right_0">
+                      <span
+                        class="chip fondo-ocda white-text light-blue darken-4">{{gradoacademico(alumnoPregradoSeleccionado)}}</span>
+                    </div>
+                  </div>
+                  <div class="card-content">
+                    <span
+                      class="card-title activator grey-text text-darken-4">{{alumnoPregradoSeleccionado.persona.nombre}}
+                      {{alumnoPregradoSeleccionado.persona.apellido_paterno}}
+                      {{alumnoPregradoSeleccionado.persona.apellido_materno}} <i
+                        class="material-icons right">more_vert</i></span>
+                    <p><a>{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}</a></p>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4 center-align teal accent-4"><b
+                        class="white-text">Datos</b><i class="material-icons right">close</i></span>
+                    <mat-divider> </mat-divider>
+                    <p></p>
+                    <div class="row">
+                      <mat-form-field class="col s7 m7 example-full-width  ">
+                        <input matInput placeholder="Código de Estudiante" value="{{alumnoPregradoSeleccionado.codigo}}"
+                          readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s5 m5 example-full-width">
+                        <input matInput placeholder="DNI"
+                          value="{{alumnoPregradoSeleccionado.persona.numero_documento}}" readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s7 m7 example-full-width">
+                        <input matInput placeholder="Nombres" value="{{alumnoPregradoSeleccionado.persona.nombre}}"
+                          readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s5 m5 example-full-width">
+                        <input matInput placeholder="Fecha de Nacimiento "
+                          value="{{alumnoPregradoSeleccionado.persona.fecha_nacimiento}}" readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m12 example-full-width">
+                        <input matInput placeholder="Apellidos "
+                          value="{{alumnoPregradoSeleccionado.persona.apellido_paterno}} {{alumnoPregradoSeleccionado.persona.apellido_materno}}"
+                          readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m12 example-full-width">
+                        <input matInput placeholder="Escuela Profesional "
+                          value="{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}" readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m12 example-full-width">
+                        <input matInput placeholder="Correo Institucional"
+                          value="{{alumnoPregradoSeleccionado.correo_institucional}}" readonly>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--FIN DE CARD DE DATOS DEL ALUMNO PPREGRADO-->
+              <div class="col s12 m12 right-align">
+                <button mat-button matStepperPrevious class="waves-effect waves-light btn"><i
+                    class="material-icons right">save</i>Registrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--FIN DE LISTA DE ALUMNOS CON CARDS-->
+      </form>
+    </mat-step>
+    <!--//////////////////////////////////////-->
+    <!--AGREGAR DATOS DEL ALUMNO PARA GRADUAR-->
+    <mat-step [stepControl]="formularioRegistroBachiller" [completed]=false>
+      <form [formGroup]="formularioRegistroBachiller">
+        <ng-template matStepLabel>Ingresar datos del Bachiller</ng-template>
+        <div class="card">
+          <div class="card-panel">
+            <!--
+        <mat-form-field>
+          <input matInput placeholder="Address" formControlName="secondCtrl" required>
+        </mat-form-field>-->
+            <!--INGRESAR DATOS DEL BACHILLER-->
+            <div [id]="idModalParaRegistroDeDenominaciones" class="">
+              <form [formGroup]="formularioRegistroBachiller"
+                (submit)="agregarDatosAlumno(formularioRegistroBachiller.value)">
+                <div class="modal-content">
+                  <div class="row">
+                    <div *ngIf="alumnoPregradoSeleccionado" class="col s12 m12">
+                      <blockquote>
+                        <h5 class="blue-text"><a style="margin-left: 0px;" class="breadcrumb grey-text" href="#!">Alumno
+                            /</a>
+                          {{alumnoPregradoSeleccionado.persona.nombre}}
+                          {{alumnoPregradoSeleccionado.persona.apellido_paterno}}
+                          {{alumnoPregradoSeleccionado.persona.apellido_materno}}</h5>
+                        <mat-divider> </mat-divider>
+                      </blockquote>
+                      <p></p>
+                    </div>
+
+                    <!--Imagen-->
+
+                    <div class="col s12 m4 margintop">
+                      <mat-card class="example-card ">
+                        <img mat-card-image [src]="imageUrl" alt="Photo of a Shiba Inu" class="" style="height: 300px">
+                        <mat-card-actions>
+                          <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)">
+                        </mat-card-actions>
+                      </mat-card>
+                    </div>
+
+                    <div class="col s12 m8">
+                      <div class="card-panel">
+                        <div class="row">
+                          <mat-form-field class="col s12 m12 margen">
+                            <mat-label>Universidad que otorga el Grado académico *</mat-label>
+                            <mat-select [compareWith]="compareObjeto" formControlName="codigo_universidad">
+                              <mat-option *ngFor="let empresa of listaEmpresas" [value]="empresa">
+                                {{empresa.codigo}} / {{empresa.nombre | uppercase }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+
+                          <mat-form-field class="col s12 m12 margen">
+                            <mat-label>Denominación de grado académico *</mat-label>
+                            <mat-select [compareWith]="compareObjeto" formControlName="denominacion_grado_titulo">
+                              <mat-option *ngFor="let denominacion of listaDenominacionesPorEspecialidad"
+                                [value]="denominacion">
+                                {{denominacion.nombre}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6">
+                            <mat-label>Créditos Aprobados *</mat-label>
+                            <input matInput placeholder="Créditos Aprobados *" formControlName="creditos_aprobados"
+                              size="3">
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <input matInput [matDatepicker]="picker" (click)="picker.open()"
+                              placeholder="Fecha de Matricula *" formControlName="fecha_ingreso">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <input matInput [matDatepicker]="pickerto" (click)="pickerto.open()"
+                              placeholder="Fecha de Egreso *" formControlName="fecha_egreso">
+                            <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerto></mat-datepicker>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <mat-label>Nombre de programa de Estudios *</mat-label>
+                            <mat-select formControlName="nombre_programa_estudio">
+                              <mat-option>Ninguna</mat-option>
+                              <ng-container
+                                *ngIf="listaNombreProgramaEstudios$ | async;let listaNombreProgramaEstudios;else efectoCarga">
+                                <mat-option *ngFor="let listaNombreprogramaEstudio of listaNombreProgramaEstudios"
+                                  [value]="listaNombreprogramaEstudio">
+                                  {{listaNombreprogramaEstudio.nombre}}</mat-option>
+                              </ng-container>
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <mat-label>Modalidad de Estudios *</mat-label>
+                            <mat-select formControlName="modalidad_de_estudio">
+                              <mat-option>Ninguna</mat-option>
+                              <ng-container
+                                *ngIf="listaModalidadEstudios$ | async;let listaModalidadEstudios;else efectoCarga">
+                                <mat-option *ngFor="let listaModalidadEstudio of listaModalidadEstudios"
+                                  [value]="listaModalidadEstudio">
+                                  {{listaModalidadEstudio.nombre}}</mat-option>
+                              </ng-container>
+                            </mat-select>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m6 margen">
+                            <mat-label>Modalidad de Obtención de grado *</mat-label>
+                            <mat-select formControlName="obtencion_grado">
+                              <mat-option>Ninguna</mat-option>
+                              <ng-container
+                                *ngIf="listaObtencionGrados$ | async;let listaObtencionGrados;else efectoCarga">
+                                <mat-option *ngFor="let listaObtencionGrado of listaObtencionGrados"
+                                  [value]="listaObtencionGrado">
+                                  {{listaObtencionGrado.nombre}}</mat-option>
+                              </ng-container>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col s12 m12">
+                      <div class="card-panel">
+                        <h5> Trabajo de investigación</h5>
+                        <div class="row">
+                          <div [formGroup]="formularioRegistroBachiller.get('trabajo_investigacion')">
+                            <mat-form-field class="col s12 m12">
+                              <mat-label>Nombre</mat-label>
+                              <textarea matInput placeholder="Nombre" formControlName="nombre"></textarea>
+                            </mat-form-field>
+
+                            <mat-form-field class="col s12 m12">
+                              <mat-label>URL</mat-label>
+                              <input matInput placeholder="URL" formControlName="url" type="url" size="150">
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <div class="row">
+                    <div class="col s6 m6 left-align">
+                      <button mat-button matStepperPrevious class="waves-effect waves-light btn"><i
+                          class="material-icons right">keyboard_return</i>ATRAS</button>
+                      <!--    
+                  <button mat-button matStepperNext>Next</button>
+                  -->
+                    </div>
+                    <div class="col s6 m6 right-align">
+                      <button mat-button matStepperNext (click)="idModalParaRegistroDeDenominaciones" type="submit"
+                        [disabled]="!formularioRegistroBachiller.valid" class="waves-effect waves-light btn"><i
+                          class="material-icons right">save</i>agregar</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!--FIN DE MODAL PARA INGRESAR DATOS DEL BACHILLER-->
+      </form>
+    </mat-step>
+    <!--FIN DE AGREGAR DATOS DEL ALUMNO PARA GRADUAR-->
+    <!--//////////////////////////////////////-->
+
+    <!--REGISTRO DE DOCUMENTOS DEL ALUMNO GRADUADO-->
+    <mat-step>
+      <ng-template matStepLabel>REGISTRO</ng-template>
+      <div class="card">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12 m12">
+              <div class="row">
+                <mat-form-field class="col s12 m6">
+                  <mat-label>Número de Oficio *</mat-label>
+                  <input matInput placeholder="Número de Oficio *">
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="col s12 m6">
+              <div class="card-panel">
+                <h6> Resolución</h6>
+                <div class="row">
+                  <mat-form-field class="col s12 m12">
+                    <mat-label>Número de Resolución *</mat-label>
+                    <input matInput placeholder="Número de Resolución *">
+                  </mat-form-field>
+
+                  <mat-form-field class="col s12 m12">
+                    <input matInput [matDatepicker]="pickertwo" (click)="pickertwo.open()"
+                      placeholder="Fecha de Emisión *">
+                    <mat-datepicker-toggle matSuffix [for]="pickertwo"></mat-datepicker-toggle>
+                    <mat-datepicker #pickertwo></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="col s12 m6">
+              <div class="card-panel">
+                <h6> Diploma</h6>
+                <div class="row">
+                  <mat-form-field class="col s12 m12">
+                    <mat-label>Número de Diploma *</mat-label>
+                    <input matInput placeholder="Número de Diploma *">
+                  </mat-form-field>
+
+                  <mat-form-field class="col s12 m12">
+                    <input matInput [matDatepicker]="pickerbi" (click)="pickerbi.open()"
+                      placeholder="Fecha de Emisión *">
+                    <mat-datepicker-toggle matSuffix [for]="pickerbi"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerbi></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="col s12 m12">
+              <div class="card-panel">
+                <h6> Autoridades</h6>
+                <div class="row">
+                  <mat-form-field class="col s12 m12">
+                    <mat-label>Número de Diploma *</mat-label>
+                    <input matInput placeholder="Número de Diploma *">
+                  </mat-form-field>
+                  <mat-form-field class="col s12 m12">
+                    <mat-label>Número de Diploma *</mat-label>
+                    <input matInput placeholder="Número de Diploma *">
+                  </mat-form-field>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+          You are now done.
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="stepper.reset()">Reset</button>
+          </div>
+        </div>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+  <!--FIN DE CODIGO PARA MOSTRAR LA LISTA DE ALUMNOS A GRADUAR-->
+  <mat-divider></mat-divider>
 </div>
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- ESTRUCTURA DE MODALES -->
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
 <!-- Modal Structure Buscar estudiantes-->
 <div [id]="idModalAgregarAlumnoPregrado" class="modal modal-fixed-footer">
@@ -262,7 +505,40 @@
 </div>
 <!-- Fin de Modal Buscar estudiante Externo o interno -->
 
-<!--MODAL PARA INGRESAR DATOS DEL BACHILLER-->
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- FIN ESTRUCTURA DE MODALES -->
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+<!--
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+      First
+    </ng-template>
+    Content 1
+    <button mat-button>Click me!</button>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+      Second
+    </ng-template>
+    Content 2
+  </mat-tab>
+
+  <mat-tab disabled>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">thumb_up</mat-icon>
+      Third
+    </ng-template>
+
+    Content 3
+  </mat-tab>
+</mat-tab-group>
+-->
+<!--MODAL PARA INGRESAR DATOS DEL BACHILLER
 <div [id]="idModalParaRegistroDeDenominaciones" class="modal">
   <form [formGroup]="formularioRegistroBachiller" (submit)="agregarDatosAlumno(formularioRegistroBachiller.value)">
     <div class="modal-content">
@@ -279,6 +555,17 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <div [formGroup]="formularioRegistroBachiller.get('trabajo_investigacion')">
+          Trabajo de investigacion
+          <mat-form-field class="col s12 m12">
+            <mat-label>Nombre</mat-label>
+            <textarea matInput placeholder="Nombre" formControlName="nombre"></textarea>
+          </mat-form-field>
+          <mat-form-field class="col s12 m12">
+            <mat-label>URL</mat-label>
+            <input matInput placeholder="URL" formControlName="url" type="url" size="150">
+          </mat-form-field>
+        </div>
       </div>
     </div>
     <div class="modal-footer right-align">
@@ -287,7 +574,32 @@
     </div>
   </form>
 </div>
-<!--FIN DE MODAL PARA INGRESAR DATOS DEL BACHILLER-->
+FIN DE MODAL PARA INGRESAR DATOS DEL BACHILLER-->
+
+<!--PROBAR CODIGO PARA TRANSICION DE PAGINA
+<div class="row">
+  <div class="col s12 m9 l10">
+    <div id="introduction" class="section scrollspy">
+      <p>Content </p>
+    </div>
+
+    <div id="structure" class="section scrollspy">
+      <p>Content </p>
+    </div>
+
+    <div id="initialization" class="section scrollspy">
+      <p>Content </p>
+    </div>
+  </div>
+  <div class="col hide-on-small-only m3 l2">
+    <ul class="section table-of-contents fixed">
+      <li><a href="#introduction" class="active">Introduction</a></li>
+      <li><a href="#structure" class="active">Structure</a></li>
+      <li><a href="#initialization" class="active">Intialization</a></li>
+    </ul>
+  </div>
+</div>-->
+<!--fin de porbar codiigo-->
 
 <ng-template #efectoCarga>
   <mat-spinner></mat-spinner>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { servicio } from '../../Models/servicio';
 import { ServicioService } from '../../services/servicio.service';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
@@ -13,9 +13,11 @@ import { flatMap, map, take, filter, toArray } from 'rxjs/operators';
 import { FileService } from 'src/app/global/services/file.service';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { servicioSolicitados } from '../../Models/servicioSolicitados';
-import { isUndefined } from 'util';
 import { alumnoRequisito } from './../../Models/alumnoRequisito';
 import { AlumnoRequisitoService } from '../../services/alumno-requisito.service';
+import { archivo } from '../../Models/archivo';
+import { ServicioSolicitadoService } from '../../services/servicio-solicitado.service';
+import { servicioSolicitadoQuery } from '../../query/servicioSolitadoQuery';
 
 @Component({
   selector: 'app-lista',
@@ -25,17 +27,21 @@ import { AlumnoRequisitoService } from '../../services/alumno-requisito.service'
 export class ListaServiciosComponent implements OnInit {
   idModalServicio: string = "modalServicio"
   modalListaRequisitoAlumno: string = "modalListaRequisitoAlumno"
+  modalSubirArchivo: string = "modalSubirArchivo";
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
   formControlListaServicio: FormControl;
+  showPopup: boolean = false;
   listaServiciosActivados: servicio[]
   listaAlumnoRequisitoPorALumnoYSemestre: alumnoRequisito[]
-  servicioSolicitadoActualPorAlumnoYSemestreActual: servicioSolicitados;
+  servicioSolicitadoActualPorAlumnoYSemestreActual$: Observable<servicioSolicitados>;
+  archivoSeleccionado: archivo;
   listaRequisitosPorServicio: any[]
   listaRequisitosLlenadosPorUsuario: requisito[]
   listaRequisitoRegistrodoAlumno: Array<number>
   listaFotosParaSubir: Array<FileUploadWithPreview>
+  artefactoParaSubirArchivo: FileUploadWithPreview
   numeroTotalDeRequisitoRequerido: number;
   contadorTotalRequisitoEnviadoRequerido: number;
   @BlockUI() blockUI: NgBlockUI;
@@ -45,18 +51,15 @@ export class ListaServiciosComponent implements OnInit {
     private filseService: FileService,
     private render: Renderer2,
     private alumnoService: AlumnoService,
-    private alumnoRequisitoService: AlumnoRequisitoService) { }
+    private alumnoRequisitoService: AlumnoRequisitoService,
+    private servicioSolicitado: ServicioSolicitadoService,
+    private servicioSolicitadoQuery: servicioSolicitadoQuery) { }
 
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
+
     this.listaFotosParaSubir = new Array<FileUploadWithPreview>();
     this.formControlListaServicio = new FormControl();
-
+    //this.artefactoParaSubirArchivo = new FileUploadWithPreview("subirArchivo");
     this.contadorTotalRequisitoEnviadoRequerido = 0;
     this.iniciarDatos();
 
@@ -70,19 +73,17 @@ export class ListaServiciosComponent implements OnInit {
    */
   iniciarDatos() {
     this.abrirBlock();
-    let json = { idAlumno: "1", semestreActual: "2019-I" };
-    this.servicioService.serviciosActivados().subscribe({
-      next: (listaServicios) => {
-        this.listaServiciosActivados = listaServicios;
-
-      },
-      complete: () => {
-        this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async listaServiciosRegistrados => {
-          this.servicioSolicitadoActualPorAlumnoYSemestreActual = listaServiciosRegistrados == undefined ? null : listaServiciosRegistrados;
-          await this.cerrarBlock();
+    let json = { idAlumno: "1", semestreActual: "2019-1" };
+    this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async servicioSolicitado => {
+      if (!servicioSolicitado) {
+        this.servicioService.serviciosActivados().subscribe(listaServiciosActivados => {
+          this.listaServiciosActivados = listaServiciosActivados;
         })
+        console.log("entro al if")
       }
+      await this.cerrarBlock();
     });
+    this.servicioSolicitadoActualPorAlumnoYSemestreActual$ = this.servicioSolicitadoQuery.selectFirst();
 
   }
 
@@ -99,33 +100,19 @@ export class ListaServiciosComponent implements OnInit {
     let json = {
       idAlumno: "1",
       listaDeServicioSolicitados: this.formControlListaServicio.value,
-      codigoMatricula: "2019-I"
+      codigoMatricula: "2019-1"
     }
     this.abrirBlock();
-    this.servicioService.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
-      this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioRegistrado;
+    this.servicioSolicitado.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
+
+      this.cerrarModal(this.idModalServicio)
       this.cerrarBlock();
     })
 
   }
   subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string, nombreArchivPermitido: string, requisito: requisito, stepper, matSteep, boton: ElementRef) {
     let instanciaFotos = this.listaFotosParaSubir.find(fileUploader => fileUploader.uploadId == id);
-    let validacionImagen: boolean = true;
-    instanciaFotos.cachedFileArray.forEach(element => {
-      if (tipoArchivoAdmitido == "image/*") {
-        if (!(/\.(jpg|png)$/i).test(element.name)) {
-          validacionImagen = false;
-          return
-        }
-      } else {
-        if (element.type != tipoArchivoAdmitido) {
-
-          validacionImagen = false;
-          return;
-        }
-      }
-
-    });
+    let validacionImagen: boolean = functionsGlobal.validarArchivoImagen(instanciaFotos.cachedFileArray, tipoArchivoAdmitido);
     if (validacionImagen) {
       Swal.fire({
         title: "Los archivos son correctos",
@@ -138,7 +125,7 @@ export class ListaServiciosComponent implements OnInit {
             formData.append("archivo", file)
             formData.append("idRequisito", requisito.id.toString());
             formData.append("idUsuario", "1");
-            formData.append("nombreCarpeta", "Comedor_internado/antony/" + "2019-I");
+            formData.append("nombreCarpeta", "Comedor_internado/antony/" + "2019-1");
             return formData
           }),
             flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
@@ -189,7 +176,7 @@ export class ListaServiciosComponent implements OnInit {
     let json = {
       listaServiciosSolicitados: this.formControlListaServicio.value,
       idAlumno: "1",
-      codigoMatricula: "2019-I"
+      codigoMatricula: "2019-1"
     }
     this.servicioService.requisitosPorArrayServicio(json).subscribe(listaRequisito => {
       //listaRequisito.sort(requisito => requisito.requerido ? -1 : 1);
@@ -207,15 +194,23 @@ export class ListaServiciosComponent implements OnInit {
   listaRequisitosPorAlumnoYSemestre(serviciosolicitado: servicioSolicitados) {
     let json = {
       codigoMatricula: serviciosolicitado.codigoMatricula,
-      idAlumno: "1"
+      idAlumno: serviciosolicitado.alumno.id
     }
     this.abrirBlock();
     this.alumnoRequisitoService.listaAlumnoRequisitoPorAlumnoYSemestre(json).subscribe(listaAlumnoRequisito => {
       this.listaAlumnoRequisitoPorALumnoYSemestre = listaAlumnoRequisito;
+      this.listaAlumnoRequisitoPorALumnoYSemestre.forEach(listaRequisitos => {
+        listaRequisitos.archivos = listaRequisitos.archivos.map(archivo => {
+          return { ...archivo, estadoActual: archivo.estados_archivo.filter(estado => estado.pivot.estado)[0] }
+        })
+      })
       this.abrilModal(this.modalListaRequisitoAlumno);
       this.cerrarBlock();
     });
 
+  }
+  modalResubirArchivo(archivo: archivo, kendo: any) {
+    console.log(kendo)
   }
   listaArchivosPorAlumnoRequisito(alumnoRequisitoParametro: alumnoRequisito) {
     this.abrirBlock();
@@ -228,15 +223,18 @@ export class ListaServiciosComponent implements OnInit {
     })
   }
   verificarExistenciaDeServicioSolicitado(idModalServicio: string) {
-    if (this.servicioSolicitadoActualPorAlumnoYSemestreActual) {
-      Swal.fire({
-        html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
-        type: "info"
-      })
-      return
+    this.servicioSolicitadoActualPorAlumnoYSemestreActual$.subscribe(servicioSolicitado => {
+      console.log(servicioSolicitado)
+      if (servicioSolicitado !== undefined) {
+        Swal.fire({
+          html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
+          type: "info"
+        })
+        return
 
-    }
-    this.abrilModal(idModalServicio)
+      }
+      this.abrilModal(idModalServicio)
+    })
   }
   abrirBlock() {
     this.blockUI.start();

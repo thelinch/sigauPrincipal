@@ -11,7 +11,7 @@ export class LoginComponent implements OnInit {
   params: object = {};
   width: number = 100;
   height: number = 100;
-
+  hide = true;
   email = new FormControl('', [Validators.required, Validators.email]);
   getErrorMessage() {
     return this.email.hasError('required') ? 'You must enter a value' :

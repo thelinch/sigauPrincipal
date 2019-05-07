@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { archivo } from '../Models/archivo';
 import { alumnoRequisito } from './../Models/alumnoRequisito';
+import { estadoArchivoRequisito } from '../Models/estadoArchivoRequisito';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,8 @@ export class AlumnoRequisitoService {
   }
   listaAlumnoRequisitoPorAlumnoYSemestre(json: any): Observable<alumnoRequisito[]> {
     return this.http.post<alumnoRequisito[]>(this.urlControlador + "listaPorAlumno", JSON.stringify(json), { headers: this.header });
+  }
+  historialDeEstadosPorArchivo(json: any): Observable<estadoArchivoRequisito[]> {
+    return this.http.post<estadoArchivoRequisito[]>(this.urlControlador + "historialDeEstadosPorArchivo", JSON.stringify(json), { headers: this.header });
   }
 }

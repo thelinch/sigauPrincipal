@@ -17,6 +17,9 @@ import { environment } from '../environments/environment';
 import { AlumnoService } from './global/services/alumno.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FileService } from './global/services/file.service';
+import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
+import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
+
 registerLocaleData(localePy, 'es');
 
 @NgModule({
@@ -34,7 +37,12 @@ registerLocaleData(localePy, 'es');
     ParticlesModule,
     MaterialModule,
 
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+
+    environment.production ?
+        [] :
+        [ AkitaNgDevtools.forRoot(), AkitaNgRouterStoreModule.forRoot() ],
+
   ],
   exports: [],
   providers: [NavegacionService, { provide: LOCALE_ID, useValue: "es" }, AlumnoService, FileService],
