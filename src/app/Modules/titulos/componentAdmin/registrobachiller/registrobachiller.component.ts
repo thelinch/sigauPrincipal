@@ -131,6 +131,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       firstCtrl: ['', Validators.required]
     });
     this.formularioRegistroBachiller = this.fb.group({
+      id: ["",],
       tipo_alumno_id: ["",],
       creditos_aprobados: ["", Validators.required],
       codigo_universidad: ["", Validators.required],
@@ -140,7 +141,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       obtencion_grado: ["", Validators.required],
       fecha_ingreso: ["", Validators.required],
       fecha_egreso: ["", Validators.required],
-      trabajo_investigacion: this.fb.group({ nombre: ["",], url: ["",] })
+      trabajo_investigacion: this.fb.group({ id: [""], nombre: ["",], url: ["",] })
     });
     //Fin de codigo Stepper
     this.listaAlumnoGraduadoTitulado = new Array();
@@ -164,34 +165,20 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.checkedSeleccionado = check;
   }
 
-  verificacionDeAlumnoBachiller(alumnoParametro: alumno) {
-    let alumnoGraduadotitulado = this.listaAlumnoGraduadoTitulado.find(alumnoGraduado => alumnoGraduado.alumno_general_id == alumnoParametro.id)
-    if (alumnoGraduadotitulado) {
-      this.editarFormularioBachiller(alumnoGraduadotitulado)
-      return
-    }
-    this.limpiarFormularioAlumnoGraduadoTitulado();
 
-  }
   compareObjeto(val1: any, val2) {
     return val1 && val2 ? val1.id === val2 : val1 === val2;
   }
   limpiarFormularioAlumnoGraduadoTitulado() {
     this.formularioRegistroBachiller.reset();
   }
-  editarFormularioBachiller(alumnoParametro: alumnoGraduadoTitulado) {
-    this.formularioRegistroBachiller.get("creditos_aprobados").setValue(alumnoParametro.creditos_aprobados);
-    this.formularioRegistroBachiller.get("codigo_universidad").setValue({ id: alumnoParametro.codigo_universidad.nombre });
-    this.formularioRegistroBachiller.get("fecha_ingreso").setValue(alumnoParametro.fecha_ingreso);
-    this.formularioRegistroBachiller.get("fecha_egreso").setValue(alumnoParametro.fecha_egreso);
-    this.formularioRegistroBachiller.get("denominacion_grado_titulo").setValue({ nombre: alumnoParametro.denominacion_grado_titulo.nombre });
-    //this.formularioRegistroBachiller.get("nombreProgramaestudio").setValue({ nombre: alumnoParametro.nombreProgramaestudio.nombre });
-    //this.formularioRegistroBachiller.get("obetencionGrado").setValue({ nombre: alumnoParametro.obtencionGrado.id });
-    //this.formularioRegistroBachiller.get("modalidaddeEstudio").setValue({ nombre: alumnoParametro.modalidadEstudio.nombre });
+  editarFormularioBachiller() {
+    if (this.alumnoGraduadoTituladoCreado) {
+      this.formularioRegistroBachiller.get("id").setValue(this.alumnoGraduadoTituladoCreado.id)
+      this.formularioRegistroBachiller.get("trabajo_investigacion").get("id").setValue(this.alumnoGraduadoTituladoCreado.trabajo_investigacion.id)
+      console.log(this.formularioRegistroBachiller.value)
+    }
 
-    this.formularioRegistroBachiller.get("trabajo_investigacion").get("nombre").setValue(alumnoParametro.trabajo_investigacion.nombre);
-    this.formularioRegistroBachiller.get("trabajo_investigacion").get("url").setValue(alumnoParametro.trabajo_investigacion.url);
-    console.log(this.formularioRegistroBachiller.value)
   }
 
   listarDenominacionGradoPorEspecialidad(alumnoParametro: alumno) {
@@ -207,12 +194,15 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   }
 
   agregarDatosAlumno(alumnoGraduadoTitulado: any) {
-    alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.id;
-    alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
-    alumnoGraduadoTitulado.tipo_alumno_id = 1
+
     if (this.alumnoGraduadoTituladoCreado && this.alumnoGraduadoTituladoCreado.id) {
-      console.log("editar")
+      //CUANDO SE EDITA EL ALUMNO
+      console.log(alumnoGraduadoTitulado)
     } else {
+      //CUANDO RECIEN SE VA A CREAR EL ALUMNO
+      alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.id;
+      alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
+      alumnoGraduadoTitulado.tipo_alumno_id = 1
       this.alumnoGraduadoService.guardarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
         this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
       });
@@ -228,7 +218,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     }*/
     //this.checkedSeleccionado.checked = true;
     //console.log(alumnoGraduadoTitulado)
-    
+
   }
   reguistroDeAlumnoGraduadoTitulado(formValue: any) {
     if (!this.alumnoGraduadoTituladoCreado) {
@@ -244,8 +234,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       idAlumno: this.alumnoGraduadoTituladoCreado.alumno_general_id,
       formValue: formValue
     }
-    
   }
+
   removerAlumno(alumno: alumno) {
     if (this.listaAlumnoSeleccionados.isSelected(alumno)) {
       this.listaAlumnoSeleccionados.deselect(alumno);
