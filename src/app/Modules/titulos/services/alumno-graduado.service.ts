@@ -13,7 +13,11 @@ export class AlumnoGraduadoService {
   });
   constructor(private http: HttpClient) { }
 
-  guardarAlumnoGraduado(json: any): Observable<alumnoGraduadoTitulado> {
-    return this.http.post<alumnoGraduadoTitulado>(this.urlControlador + "create", JSON.stringify(json), { headers: this.header });
+  guardarAlumnoGraduado(alumnoGraduadoTitulado:alumnoGraduadoTitulado): Observable<alumnoGraduadoTitulado> {
+    return this.http.post<alumnoGraduadoTitulado>(this.urlControlador + "create", JSON.stringify(alumnoGraduadoTitulado), { headers: this.header });
+  }
+
+  editarAlumnoGraduado(alumnoGraduadoTitulado: alumnoGraduadoTitulado): Observable<alumnoGraduadoTitulado> {
+    return this.http.post<alumnoGraduadoTitulado>(this.urlControlador + alumnoGraduadoTitulado.id + "/editar", JSON.stringify(alumnoGraduadoTitulado), { headers: this.header });
   }
 }

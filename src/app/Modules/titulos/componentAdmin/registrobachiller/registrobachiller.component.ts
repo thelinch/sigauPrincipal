@@ -197,6 +197,10 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
     if (this.alumnoGraduadoTituladoCreado && this.alumnoGraduadoTituladoCreado.id) {
       //CUANDO SE EDITA EL ALUMNO
+      alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
+      this.alumnoGraduadoService.editarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
+        this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
+      });
       console.log(alumnoGraduadoTitulado)
     } else {
       //CUANDO RECIEN SE VA A CREAR EL ALUMNO
