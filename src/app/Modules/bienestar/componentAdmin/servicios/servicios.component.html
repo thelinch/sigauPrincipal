@@ -1,12 +1,14 @@
-<block-ui>
-  <div class="row">
-    <div class="col s12 center-align">
-      <a class="btn-floating btn-large waves-effect waves-light blue button_create"
-        (click)="nuevoServicio();abrirModal(idModalRegistroServicio)"><i class="material-icons">add</i></a>
-    </div>
-    <div class="col s12">
-      <div class="row">
-        <div class="col s12 m4" *ngFor="let servicio of listaServicio$ | async">
+<div class="row">
+  <div class="col s12 center-align">
+    <a class="btn-floating btn-large waves-effect waves-light blue button_create"
+      (click)="nuevoServicio();abrirModal(idModalRegistroServicio)"><i class="material-icons">add</i></a>
+  </div>
+  <div class="col s12">
+    <div class="row">
+      <ng-container *ngTemplateOutlet="((listaServicio$ | async) && !(loading$ | async))?listaServicios:carga">
+      </ng-container>
+      <ng-template #listaServicios>
+        <div class=" col s12 m4" *ngFor="let servicio of listaServicio$ | async">
           <div class="card hoverable position_relative ">
             <div class="position_absolute icons top_0 left_0">
             </div>
@@ -16,7 +18,7 @@
                 <div matTooltip="{{servicio.activador? 'Servicio Activado':'Servicio Desactivado'}}"
                   aria-label="Button that displays a tooltip when focused or hovered over"
                   class="position_absolute top_0 left_0 cursor"
-                  (click)="setServicio(servicio);activarModalFormularioActualizacionFechaServicio();abrirModal(idModalRegistroRegistroFecha)">
+                  (click)="activarModalFormularioActualizacionFechaServicio(servicio);abrirModal(idModalRegistroRegistroFecha)">
                   <i class="material-icons {{servicio.activador?'green-text':'red-text'}}">fiber_manual_record</i>
                 </div>
                 <div class="position_absolute right_0 top_0 padding_2rem">
@@ -36,10 +38,10 @@
                   <span>
                     <i class="material-icons fas fa-male"></i>
                     {{servicio.vacantesHombre}}
-
                   </span>
                   <span>
-                    <strong>Total:</strong> {{servicio.total}}
+                    <strong>Total:</strong>
+                    {{servicio.total}}
                   </span>
 
                 </p>
@@ -51,14 +53,16 @@
                     <time>{{servicio.fechaFin | date}}</time>
                   </span>
 
+
                 </div>
+
               </div>
               <div class="card-action right-align">
-                <a (click)="setServicio(servicio);todososAlumnosPorIdServicio()" *ngIf="servicio.activador"
-                  class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Alumnos Registrados"><i
-                    class="material-icons white-text cursor">
+                <a (click)="this.setActiveServicio(servicio);abrirModal(idModalFormularioCreacionAmpliacion)"
+                  *ngIf="servicio.activador" class="btn-floating btn-small waves-effect fondo-ocda"
+                  matTooltip="Alumnos Registrados"><i class="material-icons white-text cursor">
                     account_circle </i></a>
-                <a (click)="setServicio(servicio);requisitosPorIdServicio()" matTooltip="Ver Requisitos"
+                <a (click)="requisitosPorIdServicio(servicio)" matTooltip="Ver Requisitos"
                   class="btn-floating btn-small waves-effect fondo-ocda"><i class="material-icons">
                     description</i></a>
                 <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Editar Servicio"
@@ -72,11 +76,12 @@
             </div>
           </div>
         </div>
-      </div>
+      </ng-template>
+
     </div>
   </div>
+</div>
 
-</block-ui>
 
 <!--Comienzo de Modal de Registro de Servicio-->
 <div [id]="idModalRegistroServicio" class="modal modal-fixed-footer overflow_x_hidde">
@@ -173,15 +178,19 @@
               <th>Restriccion</th>
             </tr>
           </thead>
-
           <tbody>
-            <tr *ngFor="let requisito of listaRequisitos">
-              <td>{{requisito.nombre}}</td>
-              <td>{{requisito.descripcion}}</td>
-              <td>{{requisito.prioridad? 'Prioritario':'Normal'}}</td>
-              <td>{{requisito.requerido? 'Requerido':'Opcional'}}</td>
-            </tr>
-
+            <ng-container
+              *ngTemplateOutlet="((servicioSeleccionado$  | async) && !(loadingService$ | async ))?templateListaRequisitos:carga">
+          
+            </ng-container>
+            <ng-template #templateListaRequisitos>
+              <tr *ngFor="let requisito of (servicioSeleccionado$ | async).requisitos">
+                <td>{{ requisito.nombre}}</td>
+                <td>{{requisito.descripcion}}</td>
+                <td>{{requisito.prioridad? 'Prioritario':'Normal'}}</td>
+                <td>{{requisito.requerido? 'Requerido':'Opcional'}}</td>
+              </tr>
+            </ng-template>
           </tbody>
         </table>
 
@@ -226,3 +235,40 @@
 
 </div>
 <!--Fin DE MODAL para visualizar MODAL de Alumnos-->
+<!--Modal para crear ampliacion-->
+<div [id]="idModalFormularioCreacionAmpliacion" class="modal modal-fixed-footer overflow_x_hidde">
+  <div class="row">
+    <div class="col s12">
+
+      <form [formGroup]="formularioCreacionAmpliacion"
+        (submit)="crearAmpliacionPorServicio(formularioCreacionAmpliacion.value)">
+        <div class="modal-content overflow_x_hidde">
+          <h5 class="center-align">Registro de Servicio</h5>
+          <div class="row">
+            <mat-form-field class="col s12">
+              <input matInput placeholder="Total varones" formControlName="varon">
+            </mat-form-field>
+            <mat-form-field class="col s12">
+              <input matInput placeholder="Total mujeres" formControlName="mujer">
+            </mat-form-field>
+            <mat-form-field class="col s12">
+              <input matInput placeholder="Total" formControlName="total">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a (click)="closeModal(idModalFormularioCreacionAmpliacion)"
+            class="waves-effect btn  waves-light red">Cancelar</a>
+          <button class="waves-effect btn waves-light fondo-ocda" type="submit"
+            [disabled]="!formularioCreacionAmpliacion.valid">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<!--Fin de modal para crear ampliacion-->
+<ng-template #carga>
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</ng-template>

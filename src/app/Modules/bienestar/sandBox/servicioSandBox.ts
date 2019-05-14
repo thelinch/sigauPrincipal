@@ -1,0 +1,76 @@
+import { requisito } from './../Models/Requisito';
+import { Injectable } from '@angular/core';
+import { ServicioService } from '../services/servicio.service';
+import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
+import { servicioStore } from '../store/servicio.store';
+import { ID, arrayAdd } from '@datorama/akita';
+import { servicio } from '../Models/servicio';
+import { requisitoStore } from '../store/Requisito.store';
+import { AmpliacionService } from '../services/ampliacion.service';
+import { Observable, Subject } from 'rxjs';
+@Injectable({ providedIn: "root" })
+export class servicioSandBox {
+    private isLoadingService: Subject<boolean> = new Subject();
+    constructor(private servicioService: ServicioService,
+        private notificacionService: NotificacionBusService,
+        private store: servicioStore,
+        private ampliacionService: AmpliacionService,
+        private storeRequisito: requisitoStore) {
+
+    }
+
+    guardarServicio(servicio: servicio) {
+        this.servicioService.guardarServicio(servicio).subscribe(servicioGuardado => {
+            this.store.add(servicioGuardado);
+        })
+    }
+    listaServicio() {
+        this.servicioService.listarServicio().subscribe(listaServicio => {
+            console.log(listaServicio)
+            this.store.set(listaServicio);
+        })
+    }
+    setActivate(idServicio: ID) {
+        this.store.setActive(idServicio);
+    }
+    eliminarServicio(idServicio: ID) {
+        this.servicioService.eliminarServicio(idServicio).subscribe(servicioRemovido => {
+            this.notificacionService.showSuccess("Se elimino correctamente esl servicio")
+            this.store.remove(idServicio);
+        })
+    }
+    editarServicio(servicio: servicio) {
+        this.servicioService.editarServicio(servicio).subscribe(servicioEditado => {
+            this.store.update(servicioEditado.id, servicioEditado);
+        })
+    }
+    activacionServicio(servicio: servicio) {
+        this.servicioService.activarServicio(servicio).subscribe(servicioActivado => {
+            this.store.update(servicioActivado.id, servicioActivado);
+        })
+    }
+    requisitosPorIdServicio(json: any, servicio: servicio) {
+        this.isLoadingService.next(true);
+        this.setActivate(servicio.id);
+        this.servicioService.listaDerequisitosPorIdServicio(json).subscribe(requisitos => {
+            this.store.update(servicio.id, servicio => {
+                return {
+                    ...servicio,
+                    requisitos: requisitos
+                }
+            })
+            this.isLoadingService.next(false)
+        })
+    }
+    getLoadingService(): Observable<boolean> {
+        return this.isLoadingService.asObservable();
+    }
+    crearAmpliacionServicioId(json: any, servicio: servicio) {
+        this.ampliacionService.crearAmpliacionPorIdServicio(json).subscribe(ampliacion => {
+            this.notificacionService.showSuccess("Se agrego correctamente la ampliacion");
+            this.store.update(servicio.id, servicio => {
+                return { ampliaciones: arrayAdd(servicio.ampliaciones, ampliacion) }
+            });
+        })
+    }
+} 

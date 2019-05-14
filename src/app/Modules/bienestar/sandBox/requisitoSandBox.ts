@@ -14,21 +14,20 @@ import { ServicioService } from '../services/servicio.service';
 @Injectable({ providedIn: "root" })
 export class requisitoSandBox {
 
-    selectVisible$ = this.requisitoQuery.selectVisibleTodos$;
+    // selectVisible$ = this.requisitoQuery.selectVisibleTodos$;
     listaServiciAndTipoRequisito$ = forkJoin(this.servicioService.listarServicio(), this.tipoRequisitoService.all());
     constructor(private store: requisitoStore,
         private requisitoService: RequisitoService,
-        private requisitoQuery: requisitoQuery,
         private fileService: FileService,
         private notificacionBusServicio: NotificacionBusService,
         private tipoRequisitoService: TipoRequisitoService,
         private servicioService: ServicioService) {
     }
-    crearRequisito(requisito: requisito, file: File[]): void {
+    crearRequisito(requisito: requisito, archivos: File[]): void {
         this.requisitoService.gurdarRequisito(requisito).subscribe(requisitoCreado => {
-            from(file ? file : []).pipe(take(file.length), map((file: File) => {
+            from(archivos ? archivos : []).pipe(take(archivos.length), map((archivo: File) => {
                 let formData = new FormData();
-                formData.append("archivo", file)
+                formData.append("archivo", archivo)
                 formData.append("idRequisito", requisitoCreado.id.toString());
                 formData.append("nombreCarpeta", "requisitos");
                 return formData
@@ -41,6 +40,10 @@ export class requisitoSandBox {
             })
         })
     }
+ setActive(idRequisito: ID) {
+        this.store.setActive(idRequisito);
+
+    }
 
     editarRequisito(requisito: requisito): void {
         this.requisitoService.editarRequisito(requisito).subscribe(requisitoEditado => {
@@ -48,9 +51,7 @@ export class requisitoSandBox {
             this.notificacionBusServicio.showInfo("Se Actualizo Correctamente");
         })
     }
-    selectEntity(id: ID): Observable<requisito> {
-        return this.requisitoQuery.selectEntity(id);
-    }
+
     listaRequisitos(): void {
         this.requisitoService.listarRequisitos().subscribe(listaRequisito => this.store.set(listaRequisito));
     }
