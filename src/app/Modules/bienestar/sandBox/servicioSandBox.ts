@@ -1,3 +1,4 @@
+import { VISIBILITY_FILTER } from './../filter/filterRequisito.model';
 import { requisito } from './../Models/Requisito';
 import { Injectable } from '@angular/core';
 import { ServicioService } from '../services/servicio.service';
@@ -72,5 +73,8 @@ export class servicioSandBox {
                 return { ampliaciones: arrayAdd(servicio.ampliaciones, ampliacion) }
             });
         })
+    }
+    actualizarFiltrado(filter: VISIBILITY_FILTER) {
+        this.store.update({ filter });
     }
 } 

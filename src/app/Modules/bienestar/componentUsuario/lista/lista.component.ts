@@ -180,7 +180,6 @@ export class ListaServiciosComponent implements OnInit {
     }
   }
   changeSelectListaServicios(event: any) {
-   /* this.abrirBlock();
     let json = {
       listaServiciosSolicitados: this.formControlListaServicio.value,
       idAlumno: "1",
@@ -194,10 +193,9 @@ export class ListaServiciosComponent implements OnInit {
         this.numeroTotalDeRequisitoRequerido = listaRequisitoRequerido.length;
       })
       this.listaFotosParaSubir = [];
-      this.cerrarBlock();
     }
 
-    )*/
+    )
   }
   listaRequisitosPorAlumnoYSemestre(serviciosolicitado: servicioSolicitados) {
     let json = {

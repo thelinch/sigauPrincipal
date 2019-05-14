@@ -12,6 +12,7 @@ import { alumno } from 'src/app/global/Models/Alumno';
 import { servicioQuery } from '../../query/servicioQuery';
 import { ID } from '@datorama/akita';
 import { servicioSandBox } from '../../sandBox/servicioSandBox';
+import { VISIBILITY_FILTER, ServicioFilter, filtradoInicial } from '../../filter/filterServicio.model';
 /**
  *
  *
@@ -41,12 +42,19 @@ export class ServiciosComponent implements OnInit {
   loading$: Observable<boolean>;
   loadingService$: Observable<boolean>
   formularioServicio: FormGroup;
+  formControlFiltrado: FormControl
+  listaFiltroServicio: Array<ServicioFilter>
   @BlockUI() blockUI: NgBlockUI;
   constructor(private fb: FormBuilder,
     private servicioQuery: servicioQuery,
     private sb: servicioSandBox) { }
 
   ngOnInit() {
+    this.listaFiltroServicio = filtradoInicial;
+    this.formControlFiltrado = new FormControl(VISIBILITY_FILTER.MOSTRAR_TODO)
+    /* this.formControlFiltrado.valueChanges.subscribe(valor => {
+       this.sb.actualizarFiltrado(valor);
+     })*/
     this.formularioServicio = this.fb.group({
       id: new FormControl(),
       nombre: new FormControl("", [Validators.required]),
@@ -67,14 +75,13 @@ export class ServiciosComponent implements OnInit {
     })
     this.loadingService$ = this.sb.getLoadingService();
     this.loading$ = this.servicioQuery.selectLoading();
-    this.loading$.subscribe(console.log)
     this.servicioSeleccionado$ = this.servicioQuery.selectActive();
     this.listarServicios();
 
   }
   listarServicios() {
     this.sb.listaServicio();
-    this.listaServicio$ = this.servicioQuery.selectAll();
+    this.listaServicio$ = this.servicioQuery.selectAll()
   }
 
   nuevoServicio() {
