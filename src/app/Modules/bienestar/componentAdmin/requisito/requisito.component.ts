@@ -121,7 +121,7 @@ export class RequisitoComponent implements OnInit {
     }
   }
   mostrarDatosFormularioRequisito(idRequisito: ID) {
-    this.sb.selectEntity(idRequisito).subscribe(requisitoSeleccionado => {
+      this.sb.selectEntity(idRequisito).subscribe(requisitoSeleccionado => {
       let tiposSeleccionado = requisitoSeleccionado.tipos.map(tipo => tipo.id);
       let serviciosSeleccionado = requisitoSeleccionado.servicios.map(servicio => servicio.id);
       this.estadoActualizarResgitrarFormularion = true;
