@@ -13,6 +13,9 @@ import { requisito } from '../../../Models/Requisito';
 import { ServicioFilter, filtradoInicial, VISIBILITY_FILTER } from '../../../filter/filterServicio.model';
 import { servicioQuery } from '../../../BD/query/servicioQuery';
 import { servicioSandBox } from '../../../sandBox/servicioSandBox';
+import { cicloAcademicoSandBox } from 'src/app/global/sandBox/cicloAcademicoSandBox';
+import { cicloAcademicoQuery } from 'src/app/global/BD/query/cicloAcademicoQuery';
+import { cicloAcademico } from 'src/app/global/Models/cicloAcademico';
 /**
  *
  *
@@ -35,9 +38,11 @@ export class ServiciosComponent implements OnInit {
   idModalRegistoRequisitoDeServicio = "modalRequisitoServicio"
   idModalVisualizacionAlumno = "modalAlumno"
   idModalFormularioCreacionAmpliacion = "modalFormularioCreacionAmpliacion";
+  idModalVisualizacionDeAmpliaciones="listaAmpliaciones"
   formularioActualizacionFechaServicio: FormGroup;
   servicioSeleccionado$: Observable<servicio>
   listaRequisitoServicio$: Observable<requisito[]>;
+  listaDecicloAcademico$: Observable<cicloAcademico[]>
   formularioCreacionAmpliacion: FormGroup;
   loading$: Observable<boolean>;
   loadingService$: Observable<boolean>
@@ -47,9 +52,12 @@ export class ServiciosComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
   constructor(private fb: FormBuilder,
     private servicioQuery: servicioQuery,
-    private sb: servicioSandBox) { }
+    private sb: servicioSandBox,
+    private sandBoxCicloAcademico: cicloAcademicoSandBox,
+    private cicloAcademicoQuery: cicloAcademicoQuery) { }
 
   ngOnInit() {
+    this.sandBoxCicloAcademico.all();
     this.listaFiltroServicio = filtradoInicial;
     this.formControlFiltrado = new FormControl(VISIBILITY_FILTER.MOSTRAR_TODO)
     /* this.formControlFiltrado.valueChanges.subscribe(valor => {
@@ -59,7 +67,7 @@ export class ServiciosComponent implements OnInit {
       id: new FormControl(),
       nombre: new FormControl("", [Validators.required]),
       icono: new FormControl(""),
-      codigoMatricula: new FormControl("", [Validators.required])
+      matricula: new FormControl("", [Validators.required])
     })
     this.formularioCreacionAmpliacion = this.fb.group({
       mujer: new FormControl(""),
@@ -73,6 +81,7 @@ export class ServiciosComponent implements OnInit {
     this.loadingService$ = this.sb.getLoadingService();
     this.loading$ = this.servicioQuery.selectLoading();
     this.servicioSeleccionado$ = this.servicioQuery.selectActive();
+    this.listaDecicloAcademico$ = this.cicloAcademicoQuery.selectAll();
     this.listarServicios();
 
   }
@@ -90,7 +99,7 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio.get("id").setValue(servicioSeleccionado.id);
     this.formularioServicio.get("nombre").setValue(servicioSeleccionado.nombre);
     this.formularioServicio.get("icono").setValue(servicioSeleccionado.icono);
-    this.formularioServicio.get("codigoMatricula").setValue(servicioSeleccionado.codigoMatricula)
+    //this.formularioServicio.get("matricula").setValue(servicioSeleccionado.codigoMatricula)
 
   }
   eliminarServicio(servicio: servicio) {
@@ -111,21 +120,19 @@ export class ServiciosComponent implements OnInit {
   guardarYEditarServicio(valorFomulario: any) {
     if (valorFomulario.id == null) {
       delete valorFomulario.id
+      console.log(valorFomulario)
       this.sb.guardarServicio(valorFomulario as servicio);
     } else {
       this.sb.editarServicio(valorFomulario);
     }
   }
-  todososAlumnosPorIdServicio() {
-    /*  let json = {
-        id: this.servicioSeleccionado.id,
-        codigoMatricula: this.servicioSeleccionado.codigoMatricula
-      }*/
-    /* this.servicioService.listarAlumnosPorIdServicio(json).subscribe(alumnos => {
-       this.listaAlumnos = alumnos
-       this.cerrarBlock();
-       this.abrirModal(this.idModalVisualizacionAlumno)
-     })*/
+  listarAmpliacionesPorServicio(servicio: servicio) {
+    let json = {
+      codigoMatricula: servicio.codigoMatricula,
+      id: servicio.id
+    }
+    this.sb.listarAmpliacionesPorServicio(json, servicio);
+    this.servicioSeleccionado$.subscribe(console.log)
   }
   requisitosPorIdServicio(servicio: servicio) {
     let json = {

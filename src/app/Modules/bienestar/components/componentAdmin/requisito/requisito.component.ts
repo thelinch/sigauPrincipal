@@ -17,6 +17,8 @@ import { servicio } from '../../../Models/servicio';
 import { tipoRequisito } from '../../../Models/tipoRequisito';
 import { requisitoQuery } from '../../../BD/query/requisitoQuery';
 import { requisitoSandBox } from '../../../sandBox/requisitoSandBox';
+import { servicioSandBox } from '../../../sandBox/servicioSandBox';
+import { servicioQuery } from '../../../BD/query/servicioQuery';
 
 /**
  *
@@ -36,9 +38,9 @@ export class RequisitoComponent implements OnInit {
 
   listaRequisito$: Observable<requisito[]>
   listaFiltroRequisito: Array<RequsitoFilter>;
-  listaServicio: servicio[]
+  listaServicio$: Observable<servicio[]>
   listaArchivosPorRequisito: archivo[];
-  listaTipoRequisito: tipoRequisito[]
+  listaTipoRequisito$: Observable<tipoRequisito[]>
   idModalRegistroRequisito: string = "modal1"
   idModalArchivos: string = "modalArchivos"
   formularioRequisito: FormGroup
@@ -53,10 +55,13 @@ export class RequisitoComponent implements OnInit {
     private filseService: FileService,
     private sb: requisitoSandBox,
     private notificacionBusService: NotificacionBusService,
-    private requisitoQuery: requisitoQuery) {
+    private requisitoQuery: requisitoQuery,
+    private sandBoxService: servicioSandBox,
+    private servicioQuery: servicioQuery) {
 
   }
   ngOnInit() {
+    this.sandBoxService.listaServicio();
     this.controlFiltrado = new FormControl(VISIBILITY_FILTER.MOSTRAR_TODO);
     this.notificacionBusService.showNotificacionSource.subscribe(notificacion => {
       Swal.fire({
@@ -97,14 +102,11 @@ export class RequisitoComponent implements OnInit {
 
 
   iniciarDatos() {
-    this.activarBlock()
     this.sb.listaRequisitos();
     this.listaRequisito$ = this.requisitoQuery.selectVisibleTodos$;
-    this.sb.listaServiciAndTipoRequisito$.subscribe(([listaServicio, listaTipoRequisito]) => {
-      this.listaServicio = listaServicio;
-      this.listaTipoRequisito = listaTipoRequisito;
-      this.cerrarBlock();
-    })
+    this.listaServicio$ = this.servicioQuery.selectAll();
+    this.listaTipoRequisito$ = this.sb.listaTipoRequisitos$;
+
   }
 
   //CRUD REQUISITO
@@ -124,7 +126,7 @@ export class RequisitoComponent implements OnInit {
   }
   mostrarDatosFormularioRequisito(idRequisito: ID) {
     this.requisitoQuery.selectEntity(idRequisito).subscribe(requisitoSeleccionado => {
-      
+
       this.sb.setActive(requisitoSeleccionado.id)
       let tiposSeleccionado = requisitoSeleccionado.tipos.map(tipo => tipo.id);
       let serviciosSeleccionado = requisitoSeleccionado.servicios.map(servicio => servicio.id);

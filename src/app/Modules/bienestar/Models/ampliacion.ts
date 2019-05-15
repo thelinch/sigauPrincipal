@@ -5,6 +5,7 @@ export interface ampliacion {
     varon: number
     estado: boolean
     codigoMatricula:string
+    fechaRegistro:Date
     created_at: Date
     updated_at: Date
 }

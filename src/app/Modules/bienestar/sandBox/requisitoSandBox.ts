@@ -11,17 +11,22 @@ import { FileService } from 'src/app/global/services/file.service';
 import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
 import { TipoRequisitoService } from '../services/tipo-requisito.service';
 import { ServicioService } from '../services/servicio.service';
+import { servicioStore } from '../BD/store/servicio.store';
+import { servicioSandBox } from './servicioSandBox';
+import { servicioQuery } from '../BD/query/servicioQuery';
 @Injectable({ providedIn: "root" })
 export class requisitoSandBox {
 
     // selectVisible$ = this.requisitoQuery.selectVisibleTodos$;
-    listaServiciAndTipoRequisito$ = forkJoin(this.servicioService.listarServicio(), this.tipoRequisitoService.all());
+
+    listaTipoRequisitos$ = this.tipoRequisitoService.all();
+    // listaServiciAndTipoRequisito$ = forkJoin(this.servicioQuery.selectAll(), this.tipoRequisitoService.all());
     constructor(private store: requisitoStore,
         private requisitoService: RequisitoService,
         private fileService: FileService,
         private notificacionBusServicio: NotificacionBusService,
         private tipoRequisitoService: TipoRequisitoService,
-        private servicioService: ServicioService) {
+    ) {
     }
     crearRequisito(requisito: requisito, archivos: File[]): void {
         this.requisitoService.gurdarRequisito(requisito).subscribe(requisitoCreado => {
@@ -40,7 +45,7 @@ export class requisitoSandBox {
             })
         })
     }
- setActive(idRequisito: ID) {
+    setActive(idRequisito: ID) {
         this.store.setActive(idRequisito);
 
     }

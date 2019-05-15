@@ -67,12 +67,24 @@ export class servicioSandBox {
         return this.isLoadingService.asObservable();
     }
     crearAmpliacionServicioId(json: any, servicio: servicio) {
-        this.ampliacionService.crearAmpliacionPorIdServicio(json).subscribe(ampliacion => {
+        this.ampliacionService.crearAmpliacionPorIdServicio(json).subscribe(servicioActualizado => {
             this.notificacionService.showSuccess("Se agrego correctamente la ampliacion");
-            this.store.update(servicio.id, servicio => {
-                return { ampliaciones: arrayAdd(servicio.ampliaciones, ampliacion) }
-            });
+            this.store.update(servicio.id, servicioActualizado);
         })
+    }
+    listarAmpliacionesPorServicio(json: any, servicio: servicio) {
+        this.isLoadingService.next(true);
+        this.setActivate(servicio.id)
+        this.ampliacionService.listarAmpliacionesPorServicio(json).subscribe(listaAmpliaciones => {
+            this.store.update(servicio.id, servicio => {
+                return {
+                    ...servicio,
+                    ampliaciones: listaAmpliaciones
+                }
+            })
+            this.isLoadingService.next(false);
+        })
+
     }
     actualizarFiltrado(filter: VISIBILITY_FILTER) {
         this.store.update({ filter });

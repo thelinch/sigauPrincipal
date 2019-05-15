@@ -15,7 +15,7 @@
           </a>
         </div>
 
-        
+
       </div>
     </div>
     <div class="col s12 m4" *ngFor="let requisito of listaRequisito$ | async;let i=index">
@@ -119,15 +119,17 @@
           </div>
         </div>
         <div class="row">
-          <mat-form-field class="col s12 m6">
-            <mat-select placeholder="Aplica a:" class="filter-select" multiple formControlName="tipos">
-              <mat-option (onSelectionChange)="changeTipo($event)" *ngFor="let tipo of  listaTipoRequisito"
-                [value]="tipo.id">
-                {{tipo.nombre}}
-                <i class="fas  {{tipo.icono}} "></i>
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <ng-container *ngIf="listaTipoRequisito$ | async;let listaTipoRequisito;else cargaDatos">
+            <mat-form-field class="col s12 m6">
+              <mat-select placeholder=" Aplica a:" class="filter-select" multiple formControlName="tipos">
+                <mat-option (onSelectionChange)="changeTipo($event)" *ngFor="let tipo of listaTipoRequisito"
+                  [value]="tipo.id">
+                  {{tipo.nombre}}
+                  <i class="fas  {{tipo.icono}} "></i>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
           <mat-form-field class="col s12 m6">
             <mat-select placeholder="prioridad" formControlName="prioridad">
               <mat-option value=true>Alta</mat-option>
@@ -136,14 +138,16 @@
           </mat-form-field>
         </div>
         <div class="row">
-          <mat-form-field class="col s12 m6">
-            <mat-select placeholder="Servicios" multiple formControlName="servicios">
-              <mat-option [value]="servicio.id" (onSelectionChange)="changeServicio($event)"
-                *ngFor="let servicio of listaServicio">{{servicio.nombre}}
-                <i class="fas  {{servicio.icono}} "></i>
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <ng-container *ngIf="listaServicio$ | async;let listaServicio;else cargaDatos">
+            <mat-form-field class="col s12 m6">
+              <mat-select placeholder="Servicios" multiple formControlName="servicios">
+                <mat-option [value]="servicio.id" (onSelectionChange)="changeServicio($event)"
+                  *ngFor="let servicio of listaServicio">{{servicio.nombre}}
+                  <i class="fas  {{servicio.icono}} "></i>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </ng-container>
         </div>
 
       </div>
@@ -169,7 +173,9 @@
     </div>
   </div>
 </block-ui>
-
+<ng-template #cargaDatos>
+  <mat-spinner></mat-spinner>
+</ng-template>
 <ng-template #templateArchivos let-archivos="archivos">
   <div class="row">
     <div class="col  s12 m3" *ngFor="let archivo of archivos">

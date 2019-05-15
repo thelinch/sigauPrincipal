@@ -64,10 +64,14 @@
 
               </div>
               <div class="card-action right-align">
+                <a (click)="listarAmpliacionesPorServicio(servicio);abrirModal(idModalVisualizacionDeAmpliaciones)"
+                  *ngIf="servicio.activador" class="btn-floating btn-small waves-effect fondo-ocda"
+                  matTooltip="lista de ampliaciones"><i class="material-icons white-text cursor">
+                    format_list_numbered </i></a>
                 <a (click)="this.setActiveServicio(servicio);abrirModal(idModalFormularioCreacionAmpliacion)"
                   *ngIf="servicio.activador" class="btn-floating btn-small waves-effect fondo-ocda"
-                  matTooltip="Alumnos Registrados"><i class="material-icons white-text cursor">
-                    account_circle </i></a>
+                  matTooltip="Agregar ampliaciones"><i class="material-icons white-text cursor">
+                    playlist_add </i></a>
                 <a (click)="requisitosPorIdServicio(servicio)" matTooltip="Ver Requisitos"
                   class="btn-floating btn-small waves-effect fondo-ocda"><i class="material-icons">
                     description</i></a>
@@ -106,9 +110,16 @@
             </mat-form-field>
           </div>
           <div class="row">
-            <mat-form-field class="col s12 m6">
-              <input matInput type="text" placeholder="Codigo Matricula" formControlName="codigoMatricula">
-            </mat-form-field>
+            <ng-container *ngIf="listaDecicloAcademico$ | async;let listaCicloAcademico;else cargaDatos">
+              <mat-form-field class="col s12 m6">
+                <mat-select placeholder=" Aplica a:" class="filter-select" formControlName="matricula">
+                  <mat-option *ngFor="let tipo of listaCicloAcademico" [value]="tipo">
+                    {{tipo.nombre}}
+                    <i *ngIf="tipo.actual" matTooltip="semestre actual" class="fas fa-star  yellow-text"></i>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-container>
           </div>
         </div>
         <div class="modal-footer">
@@ -264,6 +275,49 @@
 </div>
 
 <!--Fin de modal para crear ampliacion-->
+<!--Modal para lista de ampliaciones-->
+<div [id]="idModalVisualizacionDeAmpliaciones" class="modal   overflow_x_hidde">
+  <div class="row">
+    <div class="col s12">
+      <div class="modal-content overflow_x_hidde">
+        <h5 class="center-align">Requisitos Registrados</h5>
+        <table class="responsive-table highlight centered">
+          <thead>
+            <tr>
+              <th>Mujer</th>
+              <th>Varon</th>
+              <th>total</th>
+              <th>Fecha Registro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container
+              *ngTemplateOutlet="((servicioSeleccionado$  | async) && !(loadingService$ | async ))?templateListaAmpliaciones:carga">
+
+            </ng-container>
+            <ng-template #templateListaAmpliaciones>
+              <tr *ngFor="let ampliacion of (servicioSeleccionado$ | async).ampliaciones">
+                <td>{{ ampliacion.mujer}}</td>
+                <td>{{ampliacion.varon}}</td>
+                <td>{{ampliacion.total}}</td>
+                <td>{{ampliacion.fechaRegistro | date:'mediumDate'}}</td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <a (click)="closeModal(idModalVisualizacionDeAmpliaciones)" class="waves-effect btn  waves-light red">salir</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!--Fin de modal para liosta de ampliaciones-->
+<ng-template #cargaDatos>
+  <mat-spinner></mat-spinner>
+</ng-template>
 <ng-template #carga>
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </ng-template>
