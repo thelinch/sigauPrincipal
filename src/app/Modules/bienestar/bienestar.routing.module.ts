@@ -1,12 +1,12 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { AdminComponent } from './componentAdmin/admin/admin.component';
-import { ReportesComponent } from './componentAdmin/reportes/reportes.component';
-import { PrincipalComponent } from './componentUsuario/principal/principal.component';
-import { RequisitoComponent } from './componentAdmin/requisito/requisito.component';
-import { ListaComponent } from './componentAdmin/lista/lista.component';
-import { ListaServiciosComponent } from './componentUsuario/lista/lista.component';
-import { ServiciosComponent } from './componentAdmin/servicios/servicios.component';
+import { ListaServiciosComponent } from './components/componentUsuario/lista/lista.component';
+import { PrincipalComponent } from './components/componentUsuario/principal/principal.component';
+import { AdminComponent } from './components/componentAdmin/admin/admin.component';
+import { ListaComponent } from './components/componentAdmin/lista/lista.component';
+import { ReportesComponent } from './components/componentAdmin/reportes/reportes.component';
+import { RequisitoComponent } from './components/componentAdmin/requisito/requisito.component';
+import { ServiciosComponent } from './components/componentAdmin/servicios/servicios.component';
 
 
 

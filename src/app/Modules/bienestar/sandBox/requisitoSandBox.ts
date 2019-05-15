@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { requisitoStore } from '../store/Requisito.store';
+import { requisitoStore } from '../BD/store/Requisito.store';
 import { RequisitoService } from '../services/requisito.service';
-import { requisitoQuery } from '../query/requisitoQuery';
+import { requisitoQuery } from '../BD/query/requisitoQuery';
 import { requisito } from '../Models/Requisito';
 import { VISIBILITY_FILTER } from '../filter/filterRequisito.model';
 import { ID } from '@datorama/akita';

@@ -1,7 +1,7 @@
 import { EntityState, EntityStore, StoreConfig } from '@datorama/akita';
-import { requisito } from '../Models/Requisito';
+import { requisito } from '../../Models/Requisito';
 import { Inject, Injectable } from '@angular/core';
-import { VISIBILITY_FILTER } from '../filter/filterRequisito.model';
+import { VISIBILITY_FILTER } from '../../filter/filterRequisito.model';
 
 export interface requisitoState extends EntityState<requisito> {
     filter: VISIBILITY_FILTER

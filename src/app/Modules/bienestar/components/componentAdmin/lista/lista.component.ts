@@ -1,17 +1,17 @@
+import { archivo } from './../../../Models/archivo';
+import { AlumnoRequisitoService } from './../../../services/alumno-requisito.service';
 import { Component, OnInit } from '@angular/core';
-import { ServicioSolicitadoService } from '../../services/servicio-solicitado.service';
 import { Observable } from 'rxjs';
-import { servicioSolicitados } from '../../Models/servicioSolicitados';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
-import { AlumnoRequisitoService } from '../../services/alumno-requisito.service';
-import { alumnoRequisito } from '../../Models/alumnoRequisito';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { alumno } from 'src/app/global/Models/Alumno';
-import { archivo } from '../../Models/archivo';
-import { estadoArchivoRequisito } from '../../Models/estadoArchivoRequisito';
-import { servicioSolicitadoQuery } from '../../query/servicioSolitadoQuery';
 import { ID } from '@datorama/akita';
 import { flatMap, map } from 'rxjs/operators';
+import { estadoArchivoRequisito } from '../../../Models/estadoArchivoRequisito';
+import { alumnoRequisito } from '../../../Models/alumnoRequisito';
+import { ServicioSolicitadoService } from '../../../services/servicio-solicitado.service';
+import { servicioSolicitadoQuery } from '../../../BD/query/servicioSolitadoQuery';
+import { servicioSolicitados } from '../../../Models/servicioSolicitados';
 
 @Component({
   selector: 'app-lista',

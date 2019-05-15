@@ -1,23 +1,22 @@
-import { requisitoQuery } from './../../query/requisitoQuery';
-import { VISIBILITY_FILTER } from './../../filter/filterRequisito.model';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { requisito } from '../../Models/Requisito';
 import Swal from 'sweetalert2';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
-import { tipoRequisito } from '../../Models/tipoRequisito';
 import FileUploadWithPreview from 'file-upload-with-preview'
-import { servicio } from '../../Models/servicio';
 import * as $ from 'jquery';
 import { FileService } from 'src/app/global/services/file.service';
-import { archivo } from '../../Models/archivo';
 import { ID } from '@datorama/akita';
-import { RequsitoFilter, filtradoInicial } from '../../filter/filterRequisito.model';
-import { requisitoSandBox } from '../../sandBox/requisitoSandBox';
 import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { RequsitoFilter, filtradoInicial, VISIBILITY_FILTER } from '../../../filter/filterRequisito.model';
+import { requisito } from '../../../Models/Requisito';
+import { archivo } from '../../../Models/archivo';
+import { servicio } from '../../../Models/servicio';
+import { tipoRequisito } from '../../../Models/tipoRequisito';
+import { requisitoQuery } from '../../../BD/query/requisitoQuery';
+import { requisitoSandBox } from '../../../sandBox/requisitoSandBox';
 
 /**
  *

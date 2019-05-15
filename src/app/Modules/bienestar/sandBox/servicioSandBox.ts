@@ -3,10 +3,10 @@ import { requisito } from './../Models/Requisito';
 import { Injectable } from '@angular/core';
 import { ServicioService } from '../services/servicio.service';
 import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
-import { servicioStore } from '../store/servicio.store';
+import { servicioStore } from '../BD/store/servicio.store';
 import { ID, arrayAdd } from '@datorama/akita';
 import { servicio } from '../Models/servicio';
-import { requisitoStore } from '../store/Requisito.store';
+import { requisitoStore } from '../BD/store/Requisito.store';
 import { AmpliacionService } from '../services/ampliacion.service';
 import { Observable, Subject } from 'rxjs';
 @Injectable({ providedIn: "root" })

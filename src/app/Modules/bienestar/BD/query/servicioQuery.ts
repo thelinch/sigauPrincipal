@@ -1,11 +1,11 @@
 import { QueryEntity } from '@datorama/akita';
 import { servicioState, servicioStore } from '../store/servicio.store';
-import { requisito } from '../Models/Requisito';
+import { requisito } from '../../Models/Requisito';
 import { Injectable } from '@angular/core';
-import { servicio } from '../Models/servicio';
+import { servicio } from '../../Models/servicio';
 import { Observable, combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { VISIBILITY_FILTER } from '../filter/filterServicio.model';
+import { VISIBILITY_FILTER } from '../../filter/filterServicio.model';
 @Injectable({ providedIn: "root" })
 export class servicioQuery extends QueryEntity<servicioState, servicio>{
     // selectVisbleFilter$ = this.select(state => state.filter)

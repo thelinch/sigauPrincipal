@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EntityState, StoreConfig, EntityStore } from '@datorama/akita';
-import { tipoRequisito } from '../Models/tipoRequisito';
+import { tipoRequisito } from '../../Models/tipoRequisito';
 
 export interface tipoRequisitoState extends EntityState<tipoRequisito> {
 

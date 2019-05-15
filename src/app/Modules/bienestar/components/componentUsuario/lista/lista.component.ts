@@ -2,23 +2,21 @@ import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { Observable, from, of } from 'rxjs';
-import { servicio } from '../../Models/servicio';
-import { ServicioService } from '../../services/servicio.service';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
-import { requisito } from '../../Models/Requisito';
-import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import FileUploadWithPreview from 'file-upload-with-preview';
 import Swal from 'sweetalert2';
 import { flatMap, map, take, filter, toArray } from 'rxjs/operators';
 import { FileService } from 'src/app/global/services/file.service';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
-import { servicioSolicitados } from '../../Models/servicioSolicitados';
-import { alumnoRequisito } from './../../Models/alumnoRequisito';
-import { AlumnoRequisitoService } from '../../services/alumno-requisito.service';
-import { archivo } from '../../Models/archivo';
-import { ServicioSolicitadoService } from '../../services/servicio-solicitado.service';
-import { servicioSolicitadoQuery } from '../../query/servicioSolitadoQuery';
-
+import { servicio } from '../../../Models/servicio';
+import { alumnoRequisito } from '../../../Models/alumnoRequisito';
+import { servicioSolicitados } from '../../../Models/servicioSolicitados';
+import { archivo } from '../../../Models/archivo';
+import { requisito } from '../../../Models/Requisito';
+import { ServicioService } from '../../../services/servicio.service';
+import { AlumnoRequisitoService } from '../../../services/alumno-requisito.service';
+import { ServicioSolicitadoService } from '../../../services/servicio-solicitado.service';
+import { servicioSolicitadoQuery } from '../../../BD/query/servicioSolitadoQuery';
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',

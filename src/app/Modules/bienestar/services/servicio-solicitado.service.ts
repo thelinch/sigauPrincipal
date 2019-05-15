@@ -1,9 +1,9 @@
-import { servicioSolicitadoQuery } from './../query/servicioSolitadoQuery';
+import { servicioSolicitadoQuery } from '../BD/query/servicioSolitadoQuery';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { servicioSolicitados } from '../Models/servicioSolicitados';
-import { servicioSolicitadoStore } from '../store/ServicioSolicitado.store';
+import { servicioSolicitadoStore } from '../BD/store/ServicioSolicitado.store';
 import { tap } from 'rxjs/operators';
 
 @Injectable({

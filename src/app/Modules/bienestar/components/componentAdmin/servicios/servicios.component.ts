@@ -3,16 +3,16 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { servicio } from '../../Models/servicio';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
-import { requisito } from '../../Models/Requisito';
 import { alumno } from 'src/app/global/Models/Alumno';
-import { servicioQuery } from '../../query/servicioQuery';
 import { ID } from '@datorama/akita';
-import { servicioSandBox } from '../../sandBox/servicioSandBox';
-import { VISIBILITY_FILTER, ServicioFilter, filtradoInicial } from '../../filter/filterServicio.model';
+import { servicio } from '../../../Models/servicio';
+import { requisito } from '../../../Models/Requisito';
+import { ServicioFilter, filtradoInicial, VISIBILITY_FILTER } from '../../../filter/filterServicio.model';
+import { servicioQuery } from '../../../BD/query/servicioQuery';
+import { servicioSandBox } from '../../../sandBox/servicioSandBox';
 /**
  *
  *
@@ -89,9 +89,6 @@ export class ServiciosComponent implements OnInit {
     let servicioSeleccionado = this.servicioQuery.getEntity(idServicio);
     this.formularioServicio.get("id").setValue(servicioSeleccionado.id);
     this.formularioServicio.get("nombre").setValue(servicioSeleccionado.nombre);
-    this.formularioServicio.get("total").setValue(servicioSeleccionado.total);
-    this.formularioServicio.get("vacantesHombre").setValue(servicioSeleccionado.vacantesHombre);
-    this.formularioServicio.get("vacantesMujer").setValue(servicioSeleccionado.vacantesMujer);
     this.formularioServicio.get("icono").setValue(servicioSeleccionado.icono);
     this.formularioServicio.get("codigoMatricula").setValue(servicioSeleccionado.codigoMatricula)
 

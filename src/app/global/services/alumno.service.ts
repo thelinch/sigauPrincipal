@@ -1,4 +1,4 @@
-import { servicioSolicitadoQuery } from './../../Modules/bienestar/query/servicioSolitadoQuery';
+import { servicioSolicitadoQuery } from '../../Modules/bienestar/BD/query/servicioSolitadoQuery';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
@@ -6,7 +6,7 @@ import { alumno } from '../Models/Alumno';
 import { servicio } from 'src/app/Modules/bienestar/Models/servicio';
 import { servicioSolicitados } from 'src/app/Modules/bienestar/Models/servicioSolicitados';
 import { alumnoRequisito } from 'src/app/Modules/bienestar/Models/alumnoRequisito';
-import { servicioSolicitadoStore } from 'src/app/Modules/bienestar/store/ServicioSolicitado.store';
+import { servicioSolicitadoStore } from 'src/app/Modules/bienestar/BD/store/ServicioSolicitado.store';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
