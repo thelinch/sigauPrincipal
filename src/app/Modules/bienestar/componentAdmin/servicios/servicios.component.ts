@@ -4,8 +4,6 @@ import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { servicio } from '../../Models/servicio';
-import { Model, ModelFactory } from '@angular-extensions/model';
-import { ServicioService } from '../../services/servicio.service';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
 import Swal from 'sweetalert2';
 import * as moment from 'moment';
@@ -13,6 +11,8 @@ import { requisito } from '../../Models/Requisito';
 import { alumno } from 'src/app/global/Models/Alumno';
 import { servicioQuery } from '../../query/servicioQuery';
 import { ID } from '@datorama/akita';
+import { servicioSandBox } from '../../sandBox/servicioSandBox';
+import { VISIBILITY_FILTER, ServicioFilter, filtradoInicial } from '../../filter/filterServicio.model';
 /**
  *
  *
@@ -29,24 +29,32 @@ import { ID } from '@datorama/akita';
 export class ServiciosComponent implements OnInit {
 
   listaServicio$: Observable<servicio[]>
-  listaRequisitos: requisito[]
   listaAlumnos: alumno[]
-  private modelServicio: Model<servicio[]>
-  autoSuma: boolean = false;
   idModalRegistroServicio: string = "modalRegisto";
   idModalRegistroRegistroFecha: string = "modalActualizacionFecha"
   idModalRegistoRequisitoDeServicio = "modalRequisitoServicio"
   idModalVisualizacionAlumno = "modalAlumno"
+  idModalFormularioCreacionAmpliacion = "modalFormularioCreacionAmpliacion";
   formularioActualizacionFechaServicio: FormGroup;
+  servicioSeleccionado$: Observable<servicio>
+  listaRequisitoServicio$: Observable<requisito[]>;
+  formularioCreacionAmpliacion: FormGroup;
+  loading$: Observable<boolean>;
+  loadingService$: Observable<boolean>
   formularioServicio: FormGroup;
+  formControlFiltrado: FormControl
+  listaFiltroServicio: Array<ServicioFilter>
   @BlockUI() blockUI: NgBlockUI;
-  servicioSeleccionado: servicio;
   constructor(private fb: FormBuilder,
-    private servicioService: ServicioService,
-    private modelFactory: ModelFactory<servicio[]>,
-    private servicioQuery: servicioQuery) { }
+    private servicioQuery: servicioQuery,
+    private sb: servicioSandBox) { }
 
   ngOnInit() {
+    this.listaFiltroServicio = filtradoInicial;
+    this.formControlFiltrado = new FormControl(VISIBILITY_FILTER.MOSTRAR_TODO)
+    /* this.formControlFiltrado.valueChanges.subscribe(valor => {
+       this.sb.actualizarFiltrado(valor);
+     })*/
     this.formularioServicio = this.fb.group({
       id: new FormControl(),
       nombre: new FormControl("", [Validators.required]),
@@ -56,17 +64,24 @@ export class ServiciosComponent implements OnInit {
       vacantesMujer: new FormControl(""),
       codigoMatricula: new FormControl("", [Validators.required])
     })
+    this.formularioCreacionAmpliacion = this.fb.group({
+      mujer: new FormControl(""),
+      varon: new FormControl(""),
+      total: new FormControl("")
+    })
     this.formularioActualizacionFechaServicio = this.fb.group({
       fechaInicio: new FormControl("", Validators.required),
       fechaFin: new FormControl("", Validators.required)
     })
+    this.loadingService$ = this.sb.getLoadingService();
+    this.loading$ = this.servicioQuery.selectLoading();
+    this.servicioSeleccionado$ = this.servicioQuery.selectActive();
     this.listarServicios();
 
   }
   listarServicios() {
-    this.abrirBlock();
-    this.servicioService.listarServicio().subscribe(listaServicio => this.cerrarBlock());
-    this.listaServicio$ = this.servicioQuery.selectAll();
+    this.sb.listaServicio();
+    this.listaServicio$ = this.servicioQuery.selectAll()
   }
 
   nuevoServicio() {
@@ -74,15 +89,14 @@ export class ServiciosComponent implements OnInit {
   }
 
   mostrarDatosFormularioServicio(idServicio: ID) {
-    this.servicioQuery.selectEntity(idServicio).subscribe(servicioSeleccionado => {
-      this.formularioServicio.get("id").setValue(servicioSeleccionado.id);
-      this.formularioServicio.get("nombre").setValue(servicioSeleccionado.nombre);
-      this.formularioServicio.get("total").setValue(servicioSeleccionado.total);
-      this.formularioServicio.get("vacantesHombre").setValue(servicioSeleccionado.vacantesHombre);
-      this.formularioServicio.get("vacantesMujer").setValue(servicioSeleccionado.vacantesMujer);
-      this.formularioServicio.get("icono").setValue(servicioSeleccionado.icono);
-      this.formularioServicio.get("codigoMatricula").setValue(servicioSeleccionado.codigoMatricula)
-    })
+    let servicioSeleccionado = this.servicioQuery.getEntity(idServicio);
+    this.formularioServicio.get("id").setValue(servicioSeleccionado.id);
+    this.formularioServicio.get("nombre").setValue(servicioSeleccionado.nombre);
+    this.formularioServicio.get("total").setValue(servicioSeleccionado.total);
+    this.formularioServicio.get("vacantesHombre").setValue(servicioSeleccionado.vacantesHombre);
+    this.formularioServicio.get("vacantesMujer").setValue(servicioSeleccionado.vacantesMujer);
+    this.formularioServicio.get("icono").setValue(servicioSeleccionado.icono);
+    this.formularioServicio.get("codigoMatricula").setValue(servicioSeleccionado.codigoMatricula)
 
   }
   eliminarServicio(servicio: servicio) {
@@ -96,77 +110,67 @@ export class ServiciosComponent implements OnInit {
 
     }).then(respuesta => {
       if (respuesta.value) {
-        this.abrirBlock()
-        this.servicioService.eliminarServicio(servicio.id).subscribe(servicioEliminado => {
-          functionsGlobal.getToast("Se elimino correctamanete el servicio " + servicioEliminado.nombre)
-          this.cerrarBlock();
-        })
+        this.sb.eliminarServicio(servicio.id);
       }
     })
   }
   guardarYEditarServicio(valorFomulario: any) {
-    this.abrirBlock();
-
     if (valorFomulario.id == null) {
       delete valorFomulario.id
-      this.servicioService.guardarServicio(valorFomulario as servicio).subscribe(nuevoServicio => {
-        this.closeModal(this.idModalRegistroServicio);
-        functionsGlobal.getToast("Se Registro Correctamente el servicio " + nuevoServicio.nombre)
-        this.cerrarBlock();
-      })
+      this.sb.guardarServicio(valorFomulario as servicio);
     } else {
-
-      // this.servicioSeleccionado.icono=valorFomulario.icono;
-      this.servicioService.editarServicio(valorFomulario).subscribe(servicioActualizado => {
-        functionsGlobal.getToast("Se Edito Correctamente " + servicioActualizado.nombre)
-        this.closeModal(this.idModalRegistroServicio);
-        this.cerrarBlock();
-      });
+      this.sb.editarServicio(valorFomulario);
     }
   }
   todososAlumnosPorIdServicio() {
-    this.abrirBlock();
-    let json = {
-      id: this.servicioSeleccionado.id,
-      codigoMatricula: this.servicioSeleccionado.codigoMatricula
-    }
-    this.servicioService.todososAlumnosPorIdServicio(json).subscribe(alumnos => {
-      this.listaAlumnos = alumnos
-      this.cerrarBlock();
-      this.abrirModal(this.idModalVisualizacionAlumno)
-    })
+    /*  let json = {
+        id: this.servicioSeleccionado.id,
+        codigoMatricula: this.servicioSeleccionado.codigoMatricula
+      }*/
+    /* this.servicioService.listarAlumnosPorIdServicio(json).subscribe(alumnos => {
+       this.listaAlumnos = alumnos
+       this.cerrarBlock();
+       this.abrirModal(this.idModalVisualizacionAlumno)
+     })*/
   }
-  requisitosPorIdServicio() {
-    this.abrirBlock();
+  requisitosPorIdServicio(servicio: servicio) {
     let json = {
-      id: this.servicioSeleccionado.id,
+      id: servicio.id
 
     }
-    this.servicioService.requisitoIdServicio(json).subscribe(requisitos => {
-      this.listaRequisitos = requisitos
-      this.abrirModal(this.idModalRegistoRequisitoDeServicio);
-      this.cerrarBlock();
-    });
+    this.sb.requisitosPorIdServicio(json, servicio);
+    this.abrirModal(this.idModalRegistoRequisitoDeServicio)
 
+  }
+  setActiveServicio(servicio: servicio) {
+    this.sb.setActivate(servicio.id);
   }
   activarServicio(formValue: any) {
-    this.abrirBlock();
-    let jsonFecha: any = {
-      id: this.servicioSeleccionado.id,
-      fechaInicio: formValue.fechaInicio,
-      fechaFin: formValue.fechaFin
-    }
-    this.servicioService.activacionServicio(jsonFecha).subscribe(serviciosActualizado => {
+    let servicioSelecionado = this.servicioQuery.getEntity(this.servicioQuery.getActiveId());
+    let fechaInicio = moment(formValue.fechaInicio)
+    let fechaFin = moment(formValue.fechaFin)
 
-      functionsGlobal.getToast("Se Edito Correctamente el Servicio")
-      this.cerrarModal(this.idModalRegistroRegistroFecha);
-      this.cerrarBlock();
-    })
+    let jsonFecha: any = {
+      id: servicioSelecionado.id,
+      fechaInicio: fechaInicio.format(),
+      fechaFin: fechaFin.format()
+    }
+    this.sb.activacionServicio(jsonFecha);
+
   }
-  activarModalFormularioActualizacionFechaServicio() {
-    if (this.servicioSeleccionado.fechaFin && this.servicioSeleccionado.fechaInicio) {
-      this.formularioActualizacionFechaServicio.get("fechaInicio").patchValue(this.servicioSeleccionado.fechaInicio)
-      this.formularioActualizacionFechaServicio.get("fechaFin").patchValue(this.servicioSeleccionado.fechaFin)
+  crearAmpliacionPorServicio(formValue: any) {
+    let servicioSeleccionado: servicio = this.servicioQuery.getEntity(this.servicioQuery.getActiveId())
+    formValue.servicio_id = servicioSeleccionado.id;
+    formValue.codigoMatricula = servicioSeleccionado.codigoMatricula;
+    this.sb.crearAmpliacionServicioId(formValue, servicioSeleccionado);
+  }
+  activarModalFormularioActualizacionFechaServicio(servicio: servicio) {
+    this.setActiveServicio(servicio);
+    let servicioSelecionado = this.servicioQuery.getEntity(this.servicioQuery.getActiveId());
+
+    if (servicioSelecionado.fechaFin && servicioSelecionado.fechaInicio) {
+      this.formularioActualizacionFechaServicio.get("fechaInicio").patchValue(servicioSelecionado.fechaInicio)
+      this.formularioActualizacionFechaServicio.get("fechaFin").patchValue(servicioSelecionado.fechaFin)
     } else {
       this.limpiarFormularioActualizacionFechaServicio();
     }
@@ -204,8 +208,5 @@ export class ServiciosComponent implements OnInit {
     this.blockUI.stop();
   }
 
-  setServicio(servicio: servicio) {
-    this.servicioSeleccionado = servicio;
-  }
   //FIN DE FUNCIONES COMUNES
 }

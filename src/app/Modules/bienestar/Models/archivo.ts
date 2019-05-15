@@ -1,4 +1,5 @@
 import { estadoArchivo } from './estadoArchivo';
+import { ampliacion } from './ampliacion';
 
 export interface archivo {
   id: number
@@ -8,5 +9,7 @@ export interface archivo {
   estados_archivo: estadoArchivo[]
   estadoActual: estadoArchivo
   estado: boolean
+  ampliaciones: ampliacion[]
+  ampliacionActivada: ampliacion
   extension: string
 }

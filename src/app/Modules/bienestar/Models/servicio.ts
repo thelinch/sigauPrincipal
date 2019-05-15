@@ -1,13 +1,16 @@
 import { requisito } from './Requisito';
 import { alumno } from 'src/app/global/Models/Alumno';
 import { ID } from '@datorama/akita';
-export interface servicio {
+import { ampliacion } from './ampliacion';
+export class servicio {
   id: ID
   nombre: string
   estado: number
   total: number
   icono: string
-  requisitos: requisito[]
+  requisitos?: requisito[]
+  ampliaciones?: ampliacion[]
+  ampliacion_actual: ampliacion
   codigoMatricula: string
   vacantesHombre: number
   vacantesMujer: number
@@ -18,4 +21,6 @@ export interface servicio {
   fechaFin: Date
   created_at: Date
   updated_at: Date
+
+
 }

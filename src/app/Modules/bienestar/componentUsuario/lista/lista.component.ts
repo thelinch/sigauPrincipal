@@ -76,7 +76,7 @@ export class ListaServiciosComponent implements OnInit {
     let json = { idAlumno: "1", semestreActual: "2019-1" };
     this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async servicioSolicitado => {
       if (!servicioSolicitado) {
-        this.servicioService.serviciosActivados().subscribe(listaServiciosActivados => {
+        this.servicioService.listarServiciosActivados().subscribe(listaServiciosActivados => {
           this.listaServiciosActivados = listaServiciosActivados;
         })
         console.log("entro al if")
@@ -112,49 +112,57 @@ export class ListaServiciosComponent implements OnInit {
   }
   subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string, nombreArchivPermitido: string, requisito: requisito, stepper, matSteep, boton: ElementRef) {
     let instanciaFotos = this.listaFotosParaSubir.find(fileUploader => fileUploader.uploadId == id);
-    let validacionImagen: boolean = functionsGlobal.validarArchivoImagen(instanciaFotos.cachedFileArray, tipoArchivoAdmitido);
-    if (validacionImagen) {
-      Swal.fire({
-        title: "Los archivos son correctos",
-        type: "question"
-      }).then(respuesta => {
-        if (respuesta.value) {
-          this.abrirBlock();
-          from(instanciaFotos.cachedFileArray).pipe(take(instanciaFotos.cachedFileArray.length), map((file: File) => {
-            let formData = new FormData();
-            formData.append("archivo", file)
-            formData.append("idRequisito", requisito.id.toString());
-            formData.append("idUsuario", "1");
-            formData.append("nombreCarpeta", "Comedor_internado/antony/" + "2019-1");
-            return formData
-          }),
-            flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
-              next: (respuesta) => { console.log(respuesta) },
-              complete: () => {
-                functionsGlobal.getToast("Se subieron los archivos correctamente");
-                stepper.next();
-                matSteep.editable = false;
-                matSteep.interacted = true;
-                instanciaFotos.clearImagePreviewPanel();
-                this.render.addClass(boton, "disabled")
-                if (requisito.requerido) {
-                  this.contadorTotalRequisitoEnviadoRequerido++;
+    if (instanciaFotos.cachedFileArray.length > 0) {
+      let validacionImagen: boolean = functionsGlobal.validarArchivoImagen(instanciaFotos.cachedFileArray, tipoArchivoAdmitido);
+      if (validacionImagen) {
+        Swal.fire({
+          title: "Los archivos son correctos",
+          type: "question"
+        }).then(respuesta => {
+          if (respuesta.value) {
+            this.abrirBlock();
+            from(instanciaFotos.cachedFileArray).pipe(take(instanciaFotos.cachedFileArray.length), map((file: File) => {
+              let formData = new FormData();
+              formData.append("archivo", file)
+              formData.append("idRequisito", requisito.id.toString());
+              formData.append("idUsuario", "1");
+              formData.append("nombreCarpeta", "Comedor_internado/antony/" + "2019-1");
+              return formData
+            }),
+              flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
+                next: (respuesta) => { console.log(respuesta) },
+                complete: () => {
+                  functionsGlobal.getToast("Se subieron los archivos correctamente");
+                  stepper.next();
+                  matSteep.editable = false;
+                  matSteep.interacted = true;
+                  instanciaFotos.clearImagePreviewPanel();
+                  this.render.addClass(boton, "disabled")
+                  if (requisito.requerido) {
+                    this.contadorTotalRequisitoEnviadoRequerido++;
+                  }
+                  if (this.contadorTotalRequisitoEnviadoRequerido == this.numeroTotalDeRequisitoRequerido) {
+                    stepper.completed = true;
+                  }
+                  this.cerrarBlock();
                 }
-                if (this.contadorTotalRequisitoEnviadoRequerido == this.numeroTotalDeRequisitoRequerido) {
-                  stepper.completed = true;
-                }
-                this.cerrarBlock();
-              }
-            })
-        }
-      })
+              })
+          }
+        })
+      } else {
+        Swal.fire({
+          title: "Error",
+          type: "error",
+          html: "Por favor solo esta permitido archivos de tipo " + nombreArchivPermitido
+        })
+      }
     } else {
       Swal.fire({
-        title: "Error",
-        type: "error",
-        html: "Por favor solo esta permitido archivos de tipo " + nombreArchivPermitido
+        html: "Carga al menos una imagen",
+        type: "error"
       })
     }
+
   }
   onUploadSuccess(e: any) {
     console.log(e)
@@ -172,13 +180,12 @@ export class ListaServiciosComponent implements OnInit {
     }
   }
   changeSelectListaServicios(event: any) {
-    this.abrirBlock();
     let json = {
       listaServiciosSolicitados: this.formControlListaServicio.value,
       idAlumno: "1",
       codigoMatricula: "2019-1"
     }
-    this.servicioService.requisitosPorArrayServicio(json).subscribe(listaRequisito => {
+    this.servicioService.listarRequisitosPorListaDeServicio(json).subscribe(listaRequisito => {
       //listaRequisito.sort(requisito => requisito.requerido ? -1 : 1);
       this.listaRequisitosPorServicio = listaRequisito
 
@@ -186,7 +193,6 @@ export class ListaServiciosComponent implements OnInit {
         this.numeroTotalDeRequisitoRequerido = listaRequisitoRequerido.length;
       })
       this.listaFotosParaSubir = [];
-      this.cerrarBlock();
     }
 
     )

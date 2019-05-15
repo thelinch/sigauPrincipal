@@ -1,3 +1,4 @@
+import { requisitoQuery } from './../../query/requisitoQuery';
 import { VISIBILITY_FILTER } from './../../filter/filterRequisito.model';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
@@ -16,6 +17,7 @@ import { RequsitoFilter, filtradoInicial } from '../../filter/filterRequisito.mo
 import { requisitoSandBox } from '../../sandBox/requisitoSandBox';
 import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 /**
  *
@@ -51,7 +53,8 @@ export class RequisitoComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private filseService: FileService,
     private sb: requisitoSandBox,
-    private notificacionBusService: NotificacionBusService) {
+    private notificacionBusService: NotificacionBusService,
+    private requisitoQuery: requisitoQuery) {
 
   }
   ngOnInit() {
@@ -97,7 +100,7 @@ export class RequisitoComponent implements OnInit {
   iniciarDatos() {
     this.activarBlock()
     this.sb.listaRequisitos();
-    this.listaRequisito$ = this.sb.selectVisible$;
+    this.listaRequisito$ = this.requisitoQuery.selectVisibleTodos$;
     this.sb.listaServiciAndTipoRequisito$.subscribe(([listaServicio, listaTipoRequisito]) => {
       this.listaServicio = listaServicio;
       this.listaTipoRequisito = listaTipoRequisito;
@@ -121,7 +124,9 @@ export class RequisitoComponent implements OnInit {
     }
   }
   mostrarDatosFormularioRequisito(idRequisito: ID) {
-      this.sb.selectEntity(idRequisito).subscribe(requisitoSeleccionado => {
+    this.requisitoQuery.selectEntity(idRequisito).subscribe(requisitoSeleccionado => {
+      
+      this.sb.setActive(requisitoSeleccionado.id)
       let tiposSeleccionado = requisitoSeleccionado.tipos.map(tipo => tipo.id);
       let serviciosSeleccionado = requisitoSeleccionado.servicios.map(servicio => servicio.id);
       this.estadoActualizarResgitrarFormularion = true;
@@ -159,24 +164,25 @@ export class RequisitoComponent implements OnInit {
   }
   //Metodos para cambiar el estado de los selects multiple
   changeTipo(event: any) {
-    if (event.isUserInput && this.requisitoSeleccionado) {
+    let requisitoActivo: requisito = this.requisitoQuery.getEntity(this.requisitoQuery.getActiveId());
+    if (event.isUserInput && requisitoActivo) {
+
       let json = {
-        id: this.requisitoSeleccionado.id,
+        id: requisitoActivo.id,
         idTipo: event.source.value,
         estado: event.source.selected
       }
-      this.activarBlock()
       this.sb.editarOpcionTipo(json);
     }
   }
   changeServicio(event: any) {
-    if (this.requisitoSeleccionado && event.isUserInput) {
+    let requisitoActivo: requisito = this.requisitoQuery.getEntity(this.requisitoQuery.getActiveId());
+    if (event.isUserInput && requisitoActivo) {
       let json = {
-        id: this.requisitoSeleccionado.id,
+        id: requisitoActivo.id,
         idServicio: event.source.value,
         estado: event.source.selected
       }
-      this.activarBlock()
       this.sb.editarOpcionServicio(json);
     }
   }
