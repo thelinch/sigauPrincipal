@@ -58,10 +58,7 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio = this.fb.group({
       id: new FormControl(),
       nombre: new FormControl("", [Validators.required]),
-      total: new FormControl("", Validators.required),
       icono: new FormControl(""),
-      vacantesHombre: new FormControl(""),
-      vacantesMujer: new FormControl(""),
       codigoMatricula: new FormControl("", [Validators.required])
     })
     this.formularioCreacionAmpliacion = this.fb.group({
