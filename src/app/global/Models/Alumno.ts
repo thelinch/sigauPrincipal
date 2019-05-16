@@ -17,6 +17,4 @@ export interface alumno {
   updated_at: Date
   tipo_alumno: tipoAlumno
   escuela_profesional: EscuelaProfesional;
-
-
 }

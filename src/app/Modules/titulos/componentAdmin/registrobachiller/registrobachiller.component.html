@@ -141,7 +141,11 @@
                           readonly>
                       </mat-form-field>
                       <mat-form-field class="col s12 m12 example-full-width">
-                        <input matInput placeholder="Escuela Profesional "
+                        <input matInput placeholder="Facultad"
+                          value="{{alumnoPregradoSeleccionado.escuela_profesional.facultad_oficina.nombre}}" readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m12 example-full-width">
+                        <input matInput placeholder="Escuela Profesional"
                           value="{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}" readonly>
                       </mat-form-field>
                       <mat-form-field class="col s12 m12 example-full-width">
@@ -415,14 +419,32 @@
                 <div class="card-panel">
                   <h6> Autoridades</h6>
                   <div class="row">
-                    <mat-form-field class="col s12 m12">
-                      <mat-label>Número de Diploma *</mat-label>
-                      <input matInput placeholder="Número de Diploma *">
+
+                    <mat-form-field class="col s12 m12 margen">
+                      <mat-label>Decano de la Facultad</mat-label>
+                      <mat-select formControlName="director_decano">
+                        <mat-option>Ninguna</mat-option>
+                        <ng-container
+                          *ngIf="listaDecanosFaultades$ | async;let listaDecanosFaultades;else efectoCarga">
+                          <mat-option *ngFor="let listaDecanosFaultad of listaDecanosFaultades"
+                            [value]="listaDecanosFaultad">
+                            {{listaDecanosFaultad.docente.persona.nombre_completo}}</mat-option>
+                        </ng-container>
+                      </mat-select>
                     </mat-form-field>
-                    <mat-form-field class="col s12 m12">
-                      <mat-label>Número de Diploma *</mat-label>
-                      <input matInput placeholder="Número de Diploma *">
-                    </mat-form-field>
+                    <!--
+                    <mat-form-field class="col s12 m12 margen">
+                      <mat-label>Modalidad de Estudios *</mat-label>
+                      <mat-select formControlName="modalidad_de_estudio">
+                        <mat-option>Ninguna</mat-option>
+                        <ng-container
+                          *ngIf="listaModalidadEstudios$ | async;let listaModalidadEstudios;else efectoCarga">
+                          <mat-option *ngFor="let listaModalidadEstudio of listaModalidadEstudios"
+                            [value]="listaModalidadEstudio">
+                            {{listaModalidadEstudio.nombre}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>-->
 
                   </div>
                 </div>

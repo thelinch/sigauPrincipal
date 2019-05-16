@@ -1,3 +1,5 @@
+import { Facultad } from './Facultad';
+
 export interface EscuelaProfesional {
   id: number;
   nombre : string;
@@ -5,7 +7,7 @@ export interface EscuelaProfesional {
   creditos : number;
   plan_estudios_url: string;
   estado: boolean;
-  created_at: Date
-  updated_at: Date
- 
+  created_at: Date;
+  updated_at: Date;
+  facultad_oficina: Facultad;
 }

@@ -1,4 +1,5 @@
 import { alumnoGraduadoTitulado } from './alumno_graduado_titulado';
+import { DecanoFacultad } from 'src/app/global/Models/DecanoFacultad';
 
 
 export interface registro_graduado_titulado {
@@ -11,13 +12,13 @@ export interface registro_graduado_titulado {
     registro_libro: string
     registro_folio: string
     numero_registro: string
-    director_decano_id: number
+    director_decano: DecanoFacultad
     estado : boolean
     created_at : Date
     updated_at : Date 
-    alumno_graduado_id: alumnoGraduadoTitulado
+    alumno_graduado: alumnoGraduadoTitulado
     tipo_diplona: number
     rector_id : number
-    tipo_autoridad_id: number
-    trabajador_areas_id: number
+    tipo_autoridad: number
+    trabajador_areas: number
 }

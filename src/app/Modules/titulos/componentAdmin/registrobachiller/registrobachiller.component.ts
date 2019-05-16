@@ -15,6 +15,7 @@ import { modalidadEstudio } from '../../Models/modalidad_estudio';
 import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
 import { obtenciongradostitulo } from '../../Models/obtencion_grados_titulo';
 import { empresa } from '../../Models/empresa';
+import { DecanoFacultad } from 'src/app/global/Models/DecanoFacultad';
 
 import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
 import { DenominacionesService } from '../../services/denominaciones.service';
@@ -23,8 +24,12 @@ import { ModalidadestudiosService } from '../../services/modalidadestudios.servi
 import { ObtenciongradosService } from '../../services/obtenciongrados.service';
 import { EmpresasService } from '../../services/empresas.service';
 import { AlumnoGraduadoService } from '../../services/alumno-graduado.service';
+import { DecanofacultadService } from 'src/app/global/services/decanofacultad.service';
+
 import Swal from 'sweetalert2';
 import { registro_graduado_titulado } from '../../Models/registro_graduado_titulado';
+
+
 
 
 
@@ -36,22 +41,23 @@ import { registro_graduado_titulado } from '../../Models/registro_graduado_titul
 export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   idModalAgregarAlumnoPregrado: string = "modalAgregarAlumnoPregrado"
   idModalParaRegistroDeDenominaciones: string = "modalRegistroDenominaciones"
+
   listaEscuelaprofesionales$: Observable<EscuelaProfesional[]>
   listaNombreProgramaEstudios$: Observable<nombreProgramaestudio[]>
   listaModalidadEstudios$: Observable<modalidadEstudio[]>
   listaObtencionGrados$: Observable<obtenciongradostitulo[]>
+  listaDecanosFaultades$: Observable<DecanoFacultad[]>
   listaEmpresas: Array<empresa>
   listaAlumnosSeleccionados: Array<alumno>
   listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
+
   displayedColumns: string[] = ['select', 'DNI', 'Nombre', "Apellidos", "Escuela profesional"];
   dataSource = new MatTableDataSource<alumno>();
   listaDenominacionesPorEspecialidad: denominacionGradoTitulo[]
   listaAlumnoSeleccionados = new SelectionModel<alumno>(true);
   alumnoBachillerSeleccionado: alumno
   alumnoGraduadoTituladoCreado: alumnoGraduadoTitulado
-
   registroAlumnoGraduadoTitulado: registro_graduado_titulado
-
   alumnoPregradoSeleccionado: alumno
   checkedSeleccionado: any
   imageUrl: string = "../../../../../assets/UsuarioDefecto/noimage.png";
@@ -124,6 +130,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     private obtencionGrado: ObtenciongradosService,
     private fb: FormBuilder,
     private empresaservice: EmpresasService,
+    private decanofacultadService: DecanofacultadService,
     private alumnoGraduadoService: AlumnoGraduadoService) { }
 
 
@@ -174,6 +181,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       registro_libro: ["", Validators.required],
       registro_folio: ["", Validators.required],
       numero_registro: ["", Validators.required],
+      director_decano: ["", Validators.required],
+      tipo_autoridad: [""],
     });
 
     this.listaAlumnoGraduadoTitulado = new Array();
@@ -273,11 +282,13 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       registroalumnoGraduadoTitulado.numero_resolucion = registroalumnoGraduadoTitulado.numero_resolucion;
       registroalumnoGraduadoTitulado.fecha_resolucion = registroalumnoGraduadoTitulado.fecha_resolucion;
       registroalumnoGraduadoTitulado.numero_diploma = registroalumnoGraduadoTitulado.numero_diploma;
+      registroalumnoGraduadoTitulado.tipo_diplona = 1;
       registroalumnoGraduadoTitulado.fecha_emison_diploma = registroalumnoGraduadoTitulado.fecha_emison_diploma;
       registroalumnoGraduadoTitulado.registro_libro = registroalumnoGraduadoTitulado.registro_libro;
       registroalumnoGraduadoTitulado.registro_folio = registroalumnoGraduadoTitulado.registro_folio;
       registroalumnoGraduadoTitulado.numero_registro = registroalumnoGraduadoTitulado.numero_registro;
-
+      registroalumnoGraduadoTitulado.director_decano = registroalumnoGraduadoTitulado.director_decano;
+      registroalumnoGraduadoTitulado.tipo_autoridad = 1;
       /*
       this.alumnoGraduadoService.guardarAlumnoGraduado(registroalumnoGraduadoTitulado).subscribe(registroAlumnoGraduadoTitulado => {
         this.registroAlumnoGraduadoTitulado = registroAlumnoGraduadoTitulado;
@@ -341,14 +352,12 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
         this.listaModalidadEstudios$ = this.modalidadEstudio.listaModalidadEstudio();
         this.listaObtencionGrados$ = this.obtencionGrado.listaObtencionGrado();
+        this.listaDecanosFaultades$ = this.decanofacultadService.DecanoFacultad();
+
       }
     })
   }
 
-
-  count() {
-
-  }
 
   listarUniversidades() {
     let json = { empresa_id: 2 }
