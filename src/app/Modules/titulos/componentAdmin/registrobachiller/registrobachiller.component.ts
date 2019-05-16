@@ -16,6 +16,8 @@ import { alumnoGraduadoTitulado } from '../../Models/alumno_graduado_titulado';
 import { obtenciongradostitulo } from '../../Models/obtencion_grados_titulo';
 import { empresa } from '../../Models/empresa';
 import { DecanoFacultad } from 'src/app/global/Models/DecanoFacultad';
+import { Rector } from 'src/app/global/Models/Rector';
+import { TranajadorArea } from 'src/app/global/Models/TrabajadorArea';
 
 import { EscuelaprofesionalService } from 'src/app/global/services/escuelaprofesional.service';
 import { DenominacionesService } from '../../services/denominaciones.service';
@@ -25,9 +27,13 @@ import { ObtenciongradosService } from '../../services/obtenciongrados.service';
 import { EmpresasService } from '../../services/empresas.service';
 import { AlumnoGraduadoService } from '../../services/alumno-graduado.service';
 import { DecanofacultadService } from 'src/app/global/services/decanofacultad.service';
+import { RectorService } from 'src/app/global/services/rector.service';
+import { TrabajadorareaService } from 'src/app/global/services/trabajadorarea.service';
 
 import Swal from 'sweetalert2';
 import { registro_graduado_titulado } from '../../Models/registro_graduado_titulado';
+import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
+import { RegistroAlumnoGraduadoService } from '../../services/registro-alumno-graduado.service';
 
 
 
@@ -47,6 +53,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   listaModalidadEstudios$: Observable<modalidadEstudio[]>
   listaObtencionGrados$: Observable<obtenciongradostitulo[]>
   listaDecanosFaultades$: Observable<DecanoFacultad[]>
+  listaTrabajadorAreas$: Observable<TranajadorArea[]>
+  listaRectores$: Observable<Rector[]>
   listaEmpresas: Array<empresa>
   listaAlumnosSeleccionados: Array<alumno>
   listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
@@ -62,6 +70,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   checkedSeleccionado: any
   imageUrl: string = "../../../../../assets/UsuarioDefecto/noimage.png";
   fileToUpload: File = null;
+
+  ListAlumnoGraduadoTituladoGuardado:Array<registro_graduado_titulado>;  
 
 
 
@@ -131,7 +141,11 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     private fb: FormBuilder,
     private empresaservice: EmpresasService,
     private decanofacultadService: DecanofacultadService,
-    private alumnoGraduadoService: AlumnoGraduadoService) { }
+    private rectorService: RectorService,
+    private trabajadorareaService: TrabajadorareaService,
+    private notificacionService: NotificacionBusService,
+    private alumnoGraduadoService: AlumnoGraduadoService,
+    private registroAlumnoGraduadoService: RegistroAlumnoGraduadoService) { }
 
 
   /*CODIGO PARA INICIAR LOS METODOS*/
@@ -143,7 +157,12 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     };
     //FIN DE FILTAR
 
-
+    this.notificacionService.getNotificacion().subscribe(notificacion => {
+      Swal.fire({
+        html: notificacion.detalle,
+        type: notificacion.severidad,
+      })
+    })
     functionsGlobal.iniciarScrollSpy();
     this.dataSource.paginator = this.paginator;
     this.listaAlumnosSeleccionados = new Array();
@@ -177,15 +196,21 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       numero_resolucion: ["", Validators.required],
       fecha_resolucion: ["", Validators.required],
       numero_diploma: ["", Validators.required],
-      fecha_emison_diploma: ["", Validators.required],
+      tipo_diplona: ["",],
+      fecha_emision_diploma: ["", Validators.required],
       registro_libro: ["", Validators.required],
       registro_folio: ["", Validators.required],
       numero_registro: ["", Validators.required],
       director_decano: ["", Validators.required],
       tipo_autoridad: [""],
+      rector: ["", Validators.required],
+      trabajador_areas: ["", Validators.required],
     });
 
     this.listaAlumnoGraduadoTitulado = new Array();
+
+    this.ListAlumnoGraduadoTituladoGuardado = new Array();
+
 
   }
   /*FIN DE CODIGO PARA INICIAR LOS METODOS*/
@@ -246,6 +271,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
       this.alumnoGraduadoService.editarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
         this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
+        this.notificacionService.showSuccess("Se editó correctamente");
       });
       console.log(alumnoGraduadoTitulado)
     } else {
@@ -255,6 +281,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       alumnoGraduadoTitulado.tipo_alumno_id = 1
       this.alumnoGraduadoService.guardarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
         this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
+        this.notificacionService.showSuccess("Se guardó correctamente");
       });
 
     }
@@ -289,10 +316,13 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       registroalumnoGraduadoTitulado.numero_registro = registroalumnoGraduadoTitulado.numero_registro;
       registroalumnoGraduadoTitulado.director_decano = registroalumnoGraduadoTitulado.director_decano;
       registroalumnoGraduadoTitulado.tipo_autoridad = 1;
-      /*
-      this.alumnoGraduadoService.guardarAlumnoGraduado(registroalumnoGraduadoTitulado).subscribe(registroAlumnoGraduadoTitulado => {
+      registroalumnoGraduadoTitulado.rector = registroalumnoGraduadoTitulado.rector;
+      registroalumnoGraduadoTitulado.trabajador_areas = registroalumnoGraduadoTitulado.trabajador_areas;
+
+      this.registroAlumnoGraduadoService.guardarRegistroAlumnoGraduado(registroalumnoGraduadoTitulado).subscribe(registroAlumnoGraduadoTitulado => {
         this.registroAlumnoGraduadoTitulado = registroAlumnoGraduadoTitulado;
-      });*/
+        this.ListAlumnoGraduadoTituladoGuardado.push(registroAlumnoGraduadoTitulado);
+      });
 
       this.checkedSeleccionado.checked = true;
       console.log(registroalumnoGraduadoTitulado)
@@ -353,7 +383,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         this.listaModalidadEstudios$ = this.modalidadEstudio.listaModalidadEstudio();
         this.listaObtencionGrados$ = this.obtencionGrado.listaObtencionGrado();
         this.listaDecanosFaultades$ = this.decanofacultadService.DecanoFacultad();
-
+        this.listaRectores$ = this.rectorService.Rector();
+        this.listaTrabajadorAreas$ = this.trabajadorareaService.TrabajadorArea();
       }
     })
   }

@@ -384,7 +384,7 @@
 
                     <mat-form-field class="col s12 m12">
                       <input matInput [matDatepicker]="pickerbi" (click)="pickerbi.open()"
-                        placeholder="Fecha de Emisión *" formControlName="fecha_emison_diploma">
+                        placeholder="Fecha de Emisión *" formControlName="fecha_emision_diploma">
                       <mat-datepicker-toggle matSuffix [for]="pickerbi"></mat-datepicker-toggle>
                       <mat-datepicker #pickerbi></mat-datepicker>
                     </mat-form-field>
@@ -424,27 +424,35 @@
                       <mat-label>Decano de la Facultad</mat-label>
                       <mat-select formControlName="director_decano">
                         <mat-option>Ninguna</mat-option>
-                        <ng-container
-                          *ngIf="listaDecanosFaultades$ | async;let listaDecanosFaultades;else efectoCarga">
+                        <ng-container *ngIf="listaDecanosFaultades$ | async;let listaDecanosFaultades;else efectoCarga">
                           <mat-option *ngFor="let listaDecanosFaultad of listaDecanosFaultades"
                             [value]="listaDecanosFaultad">
                             {{listaDecanosFaultad.docente.persona.nombre_completo}}</mat-option>
                         </ng-container>
                       </mat-select>
                     </mat-form-field>
-                    <!--
+
                     <mat-form-field class="col s12 m12 margen">
-                      <mat-label>Modalidad de Estudios *</mat-label>
-                      <mat-select formControlName="modalidad_de_estudio">
+                      <mat-label>Rector de la Universidad</mat-label>
+                      <mat-select formControlName="rector">
                         <mat-option>Ninguna</mat-option>
-                        <ng-container
-                          *ngIf="listaModalidadEstudios$ | async;let listaModalidadEstudios;else efectoCarga">
-                          <mat-option *ngFor="let listaModalidadEstudio of listaModalidadEstudios"
-                            [value]="listaModalidadEstudio">
-                            {{listaModalidadEstudio.nombre}}</mat-option>
+                        <ng-container *ngIf="listaRectores$ | async;let listaRectores;else efectoCarga">
+                          <mat-option *ngFor="let listaRector of listaRectores" [value]="listaRector">
+                            {{listaRector.docente.persona.nombre_completo}}</mat-option>
                         </ng-container>
                       </mat-select>
-                    </mat-form-field>-->
+                    </mat-form-field>
+
+                    <mat-form-field class="col s12 m12 margen">
+                      <mat-label>Secretario General</mat-label>
+                      <mat-select formControlName="trabajador_areas">
+                        <mat-option>Ninguna</mat-option>
+                        <ng-container *ngIf="listaTrabajadorAreas$ | async;let listaTrabajadorAreas;else efectoCarga">
+                          <mat-option *ngFor="let listaTrabajadorArea of listaTrabajadorAreas" [value]="listaTrabajadorArea">
+                            {{listaTrabajadorArea.administrativo.persona.nombre_completo}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
 
                   </div>
                 </div>

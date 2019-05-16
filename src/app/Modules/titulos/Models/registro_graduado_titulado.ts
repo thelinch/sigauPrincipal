@@ -1,5 +1,6 @@
 import { alumnoGraduadoTitulado } from './alumno_graduado_titulado';
 import { DecanoFacultad } from 'src/app/global/Models/DecanoFacultad';
+import { Rector } from 'src/app/global/Models/Rector';
 
 
 export interface registro_graduado_titulado {
@@ -18,7 +19,7 @@ export interface registro_graduado_titulado {
     updated_at : Date 
     alumno_graduado: alumnoGraduadoTitulado
     tipo_diplona: number
-    rector_id : number
+    rector : Rector
     tipo_autoridad: number
     trabajador_areas: number
 }
