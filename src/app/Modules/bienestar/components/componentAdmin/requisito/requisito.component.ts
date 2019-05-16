@@ -242,9 +242,7 @@ export class RequisitoComponent implements OnInit {
   closeModal(id: string) {
     functionsGlobal.closeModal(id)
   }
-  buscarRequisito(requisitos: requisito[], requisito: requisito): number {
-    return requisitos.findIndex(requisitoB => requisitoB.id == requisito.id)
-  }
+ 
   setRequisito(requisito: requisito) {
     this.requisitoSeleccionado = requisito;
   }

@@ -38,7 +38,7 @@ export class ServiciosComponent implements OnInit {
   idModalRegistoRequisitoDeServicio = "modalRequisitoServicio"
   idModalVisualizacionAlumno = "modalAlumno"
   idModalFormularioCreacionAmpliacion = "modalFormularioCreacionAmpliacion";
-  idModalVisualizacionDeAmpliaciones="listaAmpliaciones"
+  idModalVisualizacionDeAmpliaciones = "listaAmpliaciones"
   formularioActualizacionFechaServicio: FormGroup;
   servicioSeleccionado$: Observable<servicio>
   listaRequisitoServicio$: Observable<requisito[]>;
@@ -91,15 +91,31 @@ export class ServiciosComponent implements OnInit {
   }
 
   nuevoServicio() {
+    this.sb.setActivate(null);
     this.formularioServicio.reset();
   }
-
+  compareObjeto(obj1: any, obj2: any): boolean {
+    return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
+  }
   mostrarDatosFormularioServicio(idServicio: ID) {
     let servicioSeleccionado = this.servicioQuery.getEntity(idServicio);
+    this.sb.setActivate(idServicio)
     this.formularioServicio.get("id").setValue(servicioSeleccionado.id);
     this.formularioServicio.get("nombre").setValue(servicioSeleccionado.nombre);
     this.formularioServicio.get("icono").setValue(servicioSeleccionado.icono);
-    //this.formularioServicio.get("matricula").setValue(servicioSeleccionado.codigoMatricula)
+    this.formularioServicio.get("matricula").patchValue({ id: servicioSeleccionado.ciclo_academico_actual.ciclo_academico.id })
+
+  }
+  changeCicloAcademico(event: any) {
+    let servicioSeleccionado: servicio = this.servicioQuery.getActive();
+    if (event.isUserInput && servicioSeleccionado) {
+      let json = {
+        id: servicioSeleccionado.id,
+        idCicloAcademico: event.source.value.id,
+        estado: event.source.selected
+      }
+      console.log(json)
+    }
 
   }
   eliminarServicio(servicio: servicio) {
@@ -132,7 +148,6 @@ export class ServiciosComponent implements OnInit {
       id: servicio.id
     }
     this.sb.listarAmpliacionesPorServicio(json, servicio);
-    this.servicioSeleccionado$.subscribe(console.log)
   }
   requisitosPorIdServicio(servicio: servicio) {
     let json = {
@@ -185,7 +200,9 @@ export class ServiciosComponent implements OnInit {
   enabledFormularioServicio() {
     this.formularioServicio.enable();
   }
-
+  nuevaAmpliacion() {
+    this.formularioCreacionAmpliacion.reset();
+  }
 
   closeModal(id: string) {
     functionsGlobal.closeModal(id);

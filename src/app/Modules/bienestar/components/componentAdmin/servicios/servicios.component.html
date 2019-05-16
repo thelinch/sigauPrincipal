@@ -68,7 +68,7 @@
                   *ngIf="servicio.activador" class="btn-floating btn-small waves-effect fondo-ocda"
                   matTooltip="lista de ampliaciones"><i class="material-icons white-text cursor">
                     format_list_numbered </i></a>
-                <a (click)="this.setActiveServicio(servicio);abrirModal(idModalFormularioCreacionAmpliacion)"
+                <a (click)="this.setActiveServicio(servicio);nuevaAmpliacion();abrirModal(idModalFormularioCreacionAmpliacion)"
                   *ngIf="servicio.activador" class="btn-floating btn-small waves-effect fondo-ocda"
                   matTooltip="Agregar ampliaciones"><i class="material-icons white-text cursor">
                     playlist_add </i></a>
@@ -94,7 +94,7 @@
 
 
 <!--Comienzo de Modal de Registro de Servicio-->
-<div [id]="idModalRegistroServicio" class="modal modal-fixed-footer overflow_x_hidde">
+<div [id]="idModalRegistroServicio" class="modal  overflow_x_hidde">
   <div class="row">
     <div class="col s12">
       <form [formGroup]="formularioServicio" (submit)="guardarYEditarServicio(formularioServicio.value)">
@@ -110,11 +110,15 @@
             </mat-form-field>
           </div>
           <div class="row">
+
             <ng-container *ngIf="listaDecicloAcademico$ | async;let listaCicloAcademico;else cargaDatos">
               <mat-form-field class="col s12 m6">
-                <mat-select placeholder=" Aplica a:" class="filter-select" formControlName="matricula">
-                  <mat-option *ngFor="let tipo of listaCicloAcademico" [value]="tipo">
+                <mat-select placeholder=" Aplica a:" class="filter-select" formControlName="matricula"
+                  [compareWith]="compareObjeto">
+                  <mat-option *ngFor="let tipo of listaCicloAcademico"
+                    (onSelectionChange)="changeCicloAcademico($event)" [value]="tipo">
                     {{tipo.nombre}}
+
                     <i *ngIf="tipo.actual" matTooltip="semestre actual" class="fas fa-star  yellow-text"></i>
                   </mat-option>
                 </mat-select>
@@ -174,7 +178,9 @@
   <div class="row">
     <div class="col s12">
       <div class="modal-content overflow_x_hidde">
-        <h5 class="center-align">Requisitos Registrados</h5>
+        <h5 class="center-align">Requisitos Registrados /<strong
+            *ngIf="(servicioSeleccionado$ | async) as servicioSeleccionado"
+            class="blue-text">{{servicioSeleccionado.nombre}}</strong></h5>
         <table class="responsive-table highlight centered">
           <thead>
             <tr>
@@ -242,14 +248,16 @@
 </div>
 <!--Fin DE MODAL para visualizar MODAL de Alumnos-->
 <!--Modal para crear ampliacion-->
-<div [id]="idModalFormularioCreacionAmpliacion" class="modal modal-fixed-footer overflow_x_hidde">
+<div [id]="idModalFormularioCreacionAmpliacion" class="modal  overflow_x_hidde">
   <div class="row">
     <div class="col s12">
 
       <form [formGroup]="formularioCreacionAmpliacion"
         (submit)="crearAmpliacionPorServicio(formularioCreacionAmpliacion.value)">
         <div class="modal-content overflow_x_hidde">
-          <h5 class="center-align">Registro de Servicio</h5>
+          <h5 class="center-align">Registro de Ampliacion /<strong
+              *ngIf="(servicioSeleccionado$ | async) as servicioSeleccionado"
+              class="blue-text">{{servicioSeleccionado.nombre}}</strong></h5>
           <div class="row">
             <mat-form-field class="col s12">
               <input matInput placeholder="Total varones" formControlName="varon">
@@ -280,7 +288,9 @@
   <div class="row">
     <div class="col s12">
       <div class="modal-content overflow_x_hidde">
-        <h5 class="center-align">Requisitos Registrados</h5>
+        <h5 class="center-align">Ampliaciones Registrados /
+          <strong *ngIf="(servicioSeleccionado$ | async) as servicioSeleccionado"
+            class="blue-text">{{servicioSeleccionado.nombre}}</strong></h5>
         <table class="responsive-table highlight centered">
           <thead>
             <tr>
