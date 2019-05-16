@@ -103,23 +103,21 @@
           <div class="row">
             <input type="hidden" formControlName="id">
             <mat-form-field class="col s12 m6">
-              <input matInput placeholder="servicio" formControlName="nombre">
+              <input matInput placeholder="servicio *" formControlName="nombre">
             </mat-form-field>
             <mat-form-field class="col s12 m6">
-              <input matInput type="text" placeholder="Icono" formControlName="icono">
+              <input matInput type="text" placeholder="Icono *" formControlName="icono">
             </mat-form-field>
           </div>
           <div class="row">
 
             <ng-container *ngIf="listaDecicloAcademico$ | async;let listaCicloAcademico;else cargaDatos">
               <mat-form-field class="col s12 m6">
-                <mat-select placeholder=" Aplica a:" class="filter-select" formControlName="matricula"
-                  [compareWith]="compareObjeto">
-                  <mat-option *ngFor="let tipo of listaCicloAcademico"
-                    (onSelectionChange)="changeCicloAcademico($event)" [value]="tipo">
-                    {{tipo.nombre}}
-
-                    <i *ngIf="tipo.actual" matTooltip="semestre actual" class="fas fa-star  yellow-text"></i>
+                <mat-select placeholder="ciclo academico *" formControlName="matricula" [compareWith]="compareObjeto">
+                  <mat-option *ngFor="let cicloAcademico of listaCicloAcademico"
+                    (onSelectionChange)="cambiarCicloAcademico($event)" [value]="cicloAcademico">
+                    {{cicloAcademico.nombre}}
+                    <i *ngIf="cicloAcademico.actual" matTooltip="semestre actual" class="fas fa-star  yellow-text"></i>
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -181,7 +179,7 @@
         <h5 class="center-align">Requisitos Registrados /<strong
             *ngIf="(servicioSeleccionado$ | async) as servicioSeleccionado"
             class="blue-text">{{servicioSeleccionado.nombre}}</strong></h5>
-        <table class="responsive-table highlight centered">
+        <table class="responsive-table highlight centered striped">
           <thead>
             <tr>
               <th>Nombre</th>
@@ -291,7 +289,7 @@
         <h5 class="center-align">Ampliaciones Registrados /
           <strong *ngIf="(servicioSeleccionado$ | async) as servicioSeleccionado"
             class="blue-text">{{servicioSeleccionado.nombre}}</strong></h5>
-        <table class="responsive-table highlight centered">
+        <table class="responsive-table highlight centered striped">
           <thead>
             <tr>
               <th>Mujer</th>

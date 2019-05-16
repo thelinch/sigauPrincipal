@@ -22,6 +22,8 @@ export class servicioSandBox {
 
     guardarServicio(servicio: servicio) {
         this.servicioService.guardarServicio(servicio).subscribe(servicioGuardado => {
+            this.notificacionService.showSuccess("Se creo exitosamente el servicio");
+
             this.store.add(servicioGuardado);
         })
     }
@@ -42,6 +44,7 @@ export class servicioSandBox {
     }
     editarServicio(servicio: servicio) {
         this.servicioService.editarServicio(servicio).subscribe(servicioEditado => {
+            this.notificacionService.showSuccess("se edito correctamente el servicio")
             this.store.update(servicioEditado.id, servicioEditado);
         })
     }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { Notificacion } from '../Models/Notificacion';
+import { SweetAlertType } from 'sweetalert2';
 @Injectable({ providedIn: "root" })
 export class NotificacionBusService {
     showNotificacionSource: Subject<Notificacion> = new Subject();
@@ -14,13 +15,13 @@ export class NotificacionBusService {
         this.show("success", resumen, mensaje);
     }
     showInfo(mensaje: string, resumen?: string) {
-        this.show("Info", resumen, mensaje);
+        this.show("info", resumen, mensaje);
     }
     showWarn(mensaje: string, resumen?: string) {
-        this.show("Warn", resumen, mensaje);
+        this.show("warning", resumen, mensaje);
     }
 
-    private show(severidad: string, resumen: string, mensaje: string) {
+    private show(severidad: SweetAlertType, resumen: string, mensaje: string) {
         const notificacion: Notificacion = {
             severidad: severidad,
             resumen: resumen,

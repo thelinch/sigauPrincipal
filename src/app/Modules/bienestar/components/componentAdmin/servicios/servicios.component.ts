@@ -16,6 +16,7 @@ import { servicioSandBox } from '../../../sandBox/servicioSandBox';
 import { cicloAcademicoSandBox } from 'src/app/global/sandBox/cicloAcademicoSandBox';
 import { cicloAcademicoQuery } from 'src/app/global/BD/query/cicloAcademicoQuery';
 import { cicloAcademico } from 'src/app/global/Models/cicloAcademico';
+import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
 /**
  *
  *
@@ -54,11 +55,18 @@ export class ServiciosComponent implements OnInit {
     private servicioQuery: servicioQuery,
     private sb: servicioSandBox,
     private sandBoxCicloAcademico: cicloAcademicoSandBox,
-    private cicloAcademicoQuery: cicloAcademicoQuery) { }
+    private cicloAcademicoQuery: cicloAcademicoQuery,
+    private notificacionService: NotificacionBusService) { }
 
   ngOnInit() {
     this.sandBoxCicloAcademico.all();
     this.listaFiltroServicio = filtradoInicial;
+    this.notificacionService.getNotificacion().subscribe(notificacion => {
+      Swal.fire({
+        html: notificacion.detalle,
+        type: notificacion.severidad
+      })
+    })
     this.formControlFiltrado = new FormControl(VISIBILITY_FILTER.MOSTRAR_TODO)
     /* this.formControlFiltrado.valueChanges.subscribe(valor => {
        this.sb.actualizarFiltrado(valor);
@@ -106,13 +114,13 @@ export class ServiciosComponent implements OnInit {
     this.formularioServicio.get("matricula").patchValue({ id: servicioSeleccionado.ciclo_academico_actual.ciclo_academico.id })
 
   }
-  changeCicloAcademico(event: any) {
-    let servicioSeleccionado: servicio = this.servicioQuery.getActive();
-    if (event.isUserInput && servicioSeleccionado) {
+  cambiarCicloAcademico(event: any) {
+    if (event.isUserInput) {
+      let servicioSeleccionado: servicio = this.servicioQuery.getEntity(this.servicioQuery.getActiveId());
       let json = {
-        id: servicioSeleccionado.id,
+        idServicioSelecionado: servicioSeleccionado.id,
         idCicloAcademico: event.source.value.id,
-        estado: event.source.selected
+        nombreCicloAcademicoSeleccionado: event.source.value.nombre
       }
       console.log(json)
     }
