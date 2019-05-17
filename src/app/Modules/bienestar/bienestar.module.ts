@@ -20,6 +20,7 @@ import { ListaComponent } from './components/componentAdmin/lista/lista.componen
 import { ListaServiciosComponent } from './components/componentUsuario/lista/lista.component';
 import { ServiciosComponent } from './components/componentAdmin/servicios/servicios.component';
 import { RequisitoComponent } from './components/componentAdmin/requisito/requisito.component';
+import { JpImagePreloadModule } from '@jaspero/ng-image-preload';
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
@@ -35,6 +36,7 @@ import { RequisitoComponent } from './components/componentAdmin/requisito/requis
     FormsModule,
     BlockUIModule.forRoot(),
     HttpClientModule,
+    JpImagePreloadModule.forRoot(),
     NgxPopperModule,
     DropzoneModule,
     PopupModule,

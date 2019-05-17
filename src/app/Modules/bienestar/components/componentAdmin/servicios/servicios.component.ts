@@ -17,6 +17,7 @@ import { cicloAcademicoSandBox } from 'src/app/global/sandBox/cicloAcademicoSand
 import { cicloAcademicoQuery } from 'src/app/global/BD/query/cicloAcademicoQuery';
 import { cicloAcademico } from 'src/app/global/Models/cicloAcademico';
 import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
+import { JpPreloadService } from '@jaspero/ng-image-preload';
 /**
  *
  *
@@ -56,7 +57,10 @@ export class ServiciosComponent implements OnInit {
     private sb: servicioSandBox,
     private sandBoxCicloAcademico: cicloAcademicoSandBox,
     private cicloAcademicoQuery: cicloAcademicoQuery,
-    private notificacionService: NotificacionBusService) { }
+    private notificacionService: NotificacionBusService,
+    private jpPreloadService: JpPreloadService) {
+    this.jpPreloadService.initialize();
+  }
 
   ngOnInit() {
     this.sandBoxCicloAcademico.all();
@@ -115,15 +119,29 @@ export class ServiciosComponent implements OnInit {
 
   }
   cambiarCicloAcademico(event: any) {
-    if (event.isUserInput) {
-      let servicioSeleccionado: servicio = this.servicioQuery.getEntity(this.servicioQuery.getActiveId());
-      let json = {
-        idServicioSelecionado: servicioSeleccionado.id,
-        idCicloAcademico: event.source.value.id,
-        nombreCicloAcademicoSeleccionado: event.source.value.nombre
-      }
-      console.log(json)
-    }
+    console.log(event)
+    /* let servicioSeleccionado: servicio = this.servicioQuery.getEntity(this.servicioQuery.getActiveId());
+     console.log(event.source.value.nombre)
+     if (event.isUserInput && servicioSeleccionado && event.source.value.nombre) {
+       Swal.fire({
+         type: "info",
+         showConfirmButton: true,
+         cancelButtonText: "cancelar",
+         showCancelButton: true,
+         confirmButtonText: "Ok"
+       }).then(respuesta => {
+         if (respuesta.value) {
+           let json = {
+             idServicioSelecionado: servicioSeleccionado.id,
+             idCicloAcademico: event.source.value.id,
+             nombreCicloAcademicoSeleccionado: event.source.value.nombre
+           }
+           this.sb.modificarCicloAcademico(json);
+         }
+       })
+     }*/
+
+
 
   }
   eliminarServicio(servicio: servicio) {

@@ -66,7 +66,7 @@ export class RequisitoComponent implements OnInit {
     this.notificacionBusService.showNotificacionSource.subscribe(notificacion => {
       Swal.fire({
         html: notificacion.detalle,
-
+        type: notificacion.severidad
       })
     })
     this.controlFiltrado.valueChanges.subscribe(opcion => {
@@ -242,7 +242,7 @@ export class RequisitoComponent implements OnInit {
   closeModal(id: string) {
     functionsGlobal.closeModal(id)
   }
- 
+
   setRequisito(requisito: requisito) {
     this.requisitoSeleccionado = requisito;
   }

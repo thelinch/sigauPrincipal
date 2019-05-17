@@ -9,6 +9,7 @@ import { servicio } from '../Models/servicio';
 import { requisitoStore } from '../BD/store/Requisito.store';
 import { AmpliacionService } from '../services/ampliacion.service';
 import { Observable, Subject } from 'rxjs';
+import { CicloAcademicoService } from 'src/app/global/services/ciclo-academico.service';
 @Injectable({ providedIn: "root" })
 export class servicioSandBox {
     private isLoadingService: Subject<boolean> = new Subject();
@@ -16,7 +17,8 @@ export class servicioSandBox {
         private notificacionService: NotificacionBusService,
         private store: servicioStore,
         private ampliacionService: AmpliacionService,
-        private storeRequisito: requisitoStore) {
+        private storeRequisito: requisitoStore,
+        private cicloAcademicoService: CicloAcademicoService) {
 
     }
 
@@ -50,7 +52,9 @@ export class servicioSandBox {
     }
     activacionServicio(servicio: servicio) {
         this.servicioService.activarServicio(servicio).subscribe(servicioActivado => {
-            this.store.update(servicioActivado.id, servicioActivado);
+            this.store.update(servicioActivado.id, servicio => {
+                return { ...servicioActivado, activador: true }
+            });
         })
     }
     requisitosPorIdServicio(json: any, servicio: servicio) {
@@ -88,6 +92,12 @@ export class servicioSandBox {
             this.isLoadingService.next(false);
         })
 
+    }
+    modificarCicloAcademico(json: any) {
+        this.cicloAcademicoService.modificarCicloAcademicoPorServicio(json).subscribe(servicioModificado => {
+            this.store.update(servicioModificado.id, servicioModificado);
+            this.notificacionService.showSuccess("se modifico el ciclo academico correctamente")
+        })
     }
     actualizarFiltrado(filter: VISIBILITY_FILTER) {
         this.store.update({ filter });
