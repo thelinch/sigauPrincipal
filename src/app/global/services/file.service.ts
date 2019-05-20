@@ -1,3 +1,4 @@
+import { archivoBase } from './../../Modules/bienestar/Models/archivoBase';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -18,6 +19,9 @@ export class FileService {
   }
   gurdarArchivoRequisito(formData: any): Observable<any> {
     return this.http.post(this.urlControlador + "fileUpload/Requisito", formData, { headers: this.headers })
+  }
+  eliminarArchivoRequisito(json: any): Observable<archivoBase> {
+    return this.http.post<archivoBase>(this.urlControlador + "fileUpload/elimarArchivoRequisito", JSON.stringify(json), { headers: this.headers });
   }
   downloadFile(archivoParametro: string) {
     let json = { archivo: archivoParametro }

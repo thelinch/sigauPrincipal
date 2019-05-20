@@ -1,24 +1,21 @@
 import { Injectable } from '@angular/core';
 import { requisitoStore } from '../BD/store/Requisito.store';
 import { RequisitoService } from '../services/requisito.service';
-import { requisitoQuery } from '../BD/query/requisitoQuery';
 import { requisito } from '../Models/Requisito';
 import { VISIBILITY_FILTER } from '../filter/filterRequisito.model';
-import { ID } from '@datorama/akita';
-import { tap, take, map, flatMap } from 'rxjs/operators';
-import { from, Observable, combineLatest, forkJoin } from 'rxjs';
+import { ID, arrayRemove } from '@datorama/akita';
+import { take, map, flatMap } from 'rxjs/operators';
+import { from, Subject, Observable } from 'rxjs';
 import { FileService } from 'src/app/global/services/file.service';
 import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
 import { TipoRequisitoService } from '../services/tipo-requisito.service';
-import { ServicioService } from '../services/servicio.service';
-import { servicioStore } from '../BD/store/servicio.store';
-import { servicioSandBox } from './servicioSandBox';
-import { servicioQuery } from '../BD/query/servicioQuery';
+import { variables } from 'src/app/global/variablesGlobales';
+import { archivoBase } from '../Models/archivoBase';
 @Injectable({ providedIn: "root" })
 export class requisitoSandBox {
 
     // selectVisible$ = this.requisitoQuery.selectVisibleTodos$;
-
+    private isLoadingRequisito: Subject<boolean> = new Subject();
     listaTipoRequisitos$ = this.tipoRequisitoService.all();
     // listaServiciAndTipoRequisito$ = forkJoin(this.servicioQuery.selectAll(), this.tipoRequisitoService.all());
     constructor(private store: requisitoStore,
@@ -26,7 +23,13 @@ export class requisitoSandBox {
         private fileService: FileService,
         private notificacionBusServicio: NotificacionBusService,
         private tipoRequisitoService: TipoRequisitoService,
+
     ) {
+    }
+    listaRequisitos(): void {
+        this.requisitoService.listarRequisitos().subscribe(listaRequisito => {
+            this.store.set(listaRequisito)
+        });
     }
     crearRequisito(requisito: requisito, archivos: File[]): void {
         this.requisitoService.gurdarRequisito(requisito).subscribe(requisitoCreado => {
@@ -34,7 +37,7 @@ export class requisitoSandBox {
                 let formData = new FormData();
                 formData.append("archivo", archivo)
                 formData.append("idRequisito", requisitoCreado.id.toString());
-                formData.append("nombreCarpeta", "requisitos");
+                formData.append("nombreCarpeta", variables.carpetaOBUArchivoRequisitos)
                 return formData
             }), flatMap(formData => this.fileService.gurdarArchivoRequisito(formData))).subscribe({
                 next: (respuesta) => { console.log(respuesta) },
@@ -47,19 +50,33 @@ export class requisitoSandBox {
     }
     setActive(idRequisito: ID) {
         this.store.setActive(idRequisito);
-
     }
 
-    editarRequisito(requisito: requisito): void {
+    editarRequisito(requisito: requisito, archivos: File[]): void {
         this.requisitoService.editarRequisito(requisito).subscribe(requisitoEditado => {
-            this.store.update(requisitoEditado.id, requisitoEditado);
-            this.notificacionBusServicio.showInfo("Se Actualizo Correctamente");
+            from(archivos ? archivos : []).pipe(take(archivos.length), map((archivo: File) => {
+                let formData = new FormData();
+                formData.append("archivo", archivo)
+                formData.append("idRequisito", requisitoEditado.id.toString());
+                formData.append("nombreCarpeta", variables.carpetaOBUArchivoRequisitos)
+                return formData
+            }), flatMap(formData => this.fileService.gurdarArchivoRequisito(formData))).subscribe({
+                complete: () => {
+                    this.store.update(requisitoEditado.id, requisitoEditado);
+                    this.notificacionBusServicio.showSuccess("Se Registro correctamente el requisito " + requisitoEditado.nombre);
+                }
+            })
+        })
+    }
+    eliminarArchivo(json: any) {
+        this.fileService.eliminarArchivoRequisito(json).subscribe(archivoEliminado => {
+            this.store.update(json.id, servicio => ({
+                archivos: arrayRemove(servicio.archivos, archivoEliminado.id)
+            }));
+            this.notificacionBusServicio.showSuccess("Se elimino correctamente el archivo")
         })
     }
 
-    listaRequisitos(): void {
-        this.requisitoService.listarRequisitos().subscribe(listaRequisito => this.store.set(listaRequisito));
-    }
     borrarRequisito(id: ID): void {
         this.requisitoService.borrarRequisito(id).subscribe(requisitoBorrado => {
             this.notificacionBusServicio.showInfo("Se Elimino Correctamente el requisito " + requisitoBorrado.nombre)
@@ -79,7 +96,27 @@ export class requisitoSandBox {
             this.store.update(requisitoActualizado.id, requisitoActualizado)
         })
     }
+    cambioActualizacion(json: any) {
+        this.requisitoService.cambiarActualizaconRequisito(json).subscribe(requisitoActualizado => {
+            this.store.update(requisitoActualizado.id, requisito => {
+                return { ...requisito, actualizacion: requisitoActualizado.actualizacion }
+            })
+            this.notificacionBusServicio.showInfo("Se Actualizo correctamente el requisito " + requisitoActualizado.nombre)
+        })
+    }
     actualizarFiltrado(filter: VISIBILITY_FILTER) {
         this.store.update({ filter })
+    }
+    listarArchivosPorRequisito(json: any) {
+        this.isLoadingRequisito.next(true)
+        this.requisitoService.listarArchivosPorRequisitoId(json).subscribe(archivos => {
+            this.store.update(json.id, requisito => {
+                return { ...requisito, archivos: archivos }
+            })
+            this.isLoadingRequisito.next(false)
+        })
+    }
+    getLoadingRequisito(): Observable<boolean> {
+        return this.isLoadingRequisito.asObservable();
     }
 }

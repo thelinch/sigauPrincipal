@@ -37,15 +37,18 @@ import { servicioQuery } from '../../../BD/query/servicioQuery';
 export class RequisitoComponent implements OnInit {
 
   listaRequisito$: Observable<requisito[]>
+  requisitoSeleccionado$: Observable<requisito>
+  loadingListaRequisitos$: Observable<boolean>
   listaFiltroRequisito: Array<RequsitoFilter>;
   listaServicio$: Observable<servicio[]>
   listaArchivosPorRequisito: archivo[];
   listaTipoRequisito$: Observable<tipoRequisito[]>
   idModalRegistroRequisito: string = "modal1"
   idModalArchivos: string = "modalArchivos"
+
   formularioRequisito: FormGroup
-  requisitoSeleccionado: requisito
   @BlockUI() blockUI: NgBlockUI;
+  loadingRequisito$: Observable<boolean>
   fileUpload: FileUploadWithPreview;
   @ViewChild("selectTipoArchivo")
   private selectTipoArchivo;
@@ -66,9 +69,13 @@ export class RequisitoComponent implements OnInit {
     this.notificacionBusService.showNotificacionSource.subscribe(notificacion => {
       Swal.fire({
         html: notificacion.detalle,
-        type: notificacion.severidad
+        type: notificacion.severidad,
+        toast: true,
+        timer: 3000,
+        position: "top-end"
       })
     })
+    this.loadingRequisito$ = this.sb.getLoadingRequisito();
     this.controlFiltrado.valueChanges.subscribe(opcion => {
       this.sb.actualizarFiltrado(opcion);
     });
@@ -84,7 +91,7 @@ export class RequisitoComponent implements OnInit {
     })
     this.listaFiltroRequisito = filtradoInicial;
     this.fileUpload = new FileUploadWithPreview("fileRequisito")
-
+    this.requisitoSeleccionado$ = this.requisitoQuery.selectActive();
 
     this.iniciarDatos();
     // this.requisitoService.getAllPersona()
@@ -106,7 +113,7 @@ export class RequisitoComponent implements OnInit {
     this.listaRequisito$ = this.requisitoQuery.selectVisibleTodos$;
     this.listaServicio$ = this.servicioQuery.selectAll();
     this.listaTipoRequisito$ = this.sb.listaTipoRequisitos$;
-
+    this.loadingListaRequisitos$ = this.requisitoQuery.selectLoading();
   }
 
   //CRUD REQUISITO
@@ -121,29 +128,30 @@ export class RequisitoComponent implements OnInit {
       formsValue.prioridad = formsValue.prioridad == "true" ? true : false;
       formsValue.requerido = formsValue.requerido == "true" ? true : false;
       formsValue.nombreArchivo = this.selectTipoArchivo.selected._element.nativeElement.innerText.trim()
-      this.sb.editarRequisito(formsValue)
+      this.sb.editarRequisito(formsValue, this.fileUpload.cachedFileArray)
     }
   }
-  mostrarDatosFormularioRequisito(idRequisito: ID) {
-    this.requisitoQuery.selectEntity(idRequisito).subscribe(requisitoSeleccionado => {
+  mostrarDatosFormularioRequisito() {
+    this.requisitoSeleccionado$.subscribe(requisitoSeleccionado => {
+      if (requisitoSeleccionado) {
+        let tiposSeleccionado = requisitoSeleccionado.tipos.map(tipo => tipo.id);
+        let serviciosSeleccionado = requisitoSeleccionado.servicios.map(servicio => servicio.id);
+        this.estadoActualizarResgitrarFormularion = true;
+        this.formularioRequisito.get("id").setValue(requisitoSeleccionado.id);
+        this.formularioRequisito.get("nombre").setValue(requisitoSeleccionado.nombre);
+        this.formularioRequisito.get("descripcion").setValue(requisitoSeleccionado.descripcion)
+        this.formularioRequisito.get("tipoArchivo").setValue(requisitoSeleccionado.tipoArchivo)
+        this.formularioRequisito.get("tipos").setValue(tiposSeleccionado);
+        this.formularioRequisito.get("servicios").setValue(serviciosSeleccionado);
+        this.formularioRequisito.get("prioridad").patchValue(requisitoSeleccionado.prioridad ? "true" : "false");
+        this.formularioRequisito.get("requerido").patchValue(requisitoSeleccionado.requerido ? "true" : "false")
+        this.formularioRequisito.get("servicios").clearValidators();
+        this.formularioRequisito.get("tipos").clearValidators();
+        this.formularioRequisito.updateValueAndValidity();
+        this.fileUpload.cachedFileArray = [];
+        this.fileUpload.clearImagePreviewPanel();
+      }
 
-      this.sb.setActive(requisitoSeleccionado.id)
-      let tiposSeleccionado = requisitoSeleccionado.tipos.map(tipo => tipo.id);
-      let serviciosSeleccionado = requisitoSeleccionado.servicios.map(servicio => servicio.id);
-      this.estadoActualizarResgitrarFormularion = true;
-      this.formularioRequisito.get("id").setValue(requisitoSeleccionado.id);
-      this.formularioRequisito.get("nombre").setValue(requisitoSeleccionado.nombre);
-      this.formularioRequisito.get("descripcion").setValue(requisitoSeleccionado.descripcion)
-      this.formularioRequisito.get("tipoArchivo").setValue(requisitoSeleccionado.tipoArchivo)
-      this.formularioRequisito.get("tipos").setValue(tiposSeleccionado);
-      this.formularioRequisito.get("servicios").setValue(serviciosSeleccionado);
-      this.formularioRequisito.get("prioridad").patchValue(requisitoSeleccionado.prioridad ? "true" : "false");
-      this.formularioRequisito.get("requerido").patchValue(requisitoSeleccionado.requerido ? "true" : "false")
-      this.formularioRequisito.get("servicios").clearValidators();
-      this.formularioRequisito.get("tipos").clearValidators();
-      this.formularioRequisito.updateValueAndValidity();
-      this.fileUpload.cachedFileArray = [];
-      this.fileUpload.clearImagePreviewPanel();
     })
 
   }
@@ -162,6 +170,25 @@ export class RequisitoComponent implements OnInit {
       }
     })
 
+  }
+  eliminarArchivo(idArchivo: number) {
+    Swal.fire({
+      type: "question",
+      text: "Desea Elimnar el archivo",
+      confirmButtonText: "OK",
+      cancelButtonText: "Cancelar",
+      showCancelButton: true,
+      showConfirmButton: true,
+    }).then(respuesta => {
+      if (respuesta.value) {
+        let requisitoSeleccionado = this.requisitoQuery.getActive();
+        let json = {
+          idArchivo: idArchivo,
+          id: requisitoSeleccionado.id
+        }
+        this.sb.eliminarArchivo(json);
+      }
+    })
   }
   //Metodos para cambiar el estado de los selects multiple
   changeTipo(event: any) {
@@ -198,8 +225,24 @@ export class RequisitoComponent implements OnInit {
       this.abrirModal(this.idModalArchivos)
     })*/
   }
-
-
+  cambiarActualizacion(isChecked: boolean, idRequisito: ID) {
+    let json = {
+      checked: isChecked,
+      idRequisito: idRequisito
+    }
+    this.sb.cambioActualizacion(json);
+  }
+  listarArchivosPorRequisito() {
+    let requisitoSeleccionado = this.requisitoQuery.getActive();
+    let json = {
+      id: requisitoSeleccionado.id
+    }
+    this.sb.listarArchivosPorRequisito(json);
+    this.abrirModal(this.idModalArchivos)
+  }
+  seleccionarRequisito(idRequisito: ID) {
+    this.sb.setActive(idRequisito)
+  }
 
   disabledFormularioRequisito() {
     this.formularioRequisito.disable();
@@ -207,8 +250,8 @@ export class RequisitoComponent implements OnInit {
   enabledFormularioRequisito() {
     this.formularioRequisito.enable();
   }
-  visualizarRequisito(idRequisito: ID) {
-    this.mostrarDatosFormularioRequisito(idRequisito);
+  visualizarRequisito() {
+    this.mostrarDatosFormularioRequisito();
     this.disabledFormularioRequisito();
     this.abrirModal(this.idModalRegistroRequisito);
   }
@@ -243,15 +286,13 @@ export class RequisitoComponent implements OnInit {
     functionsGlobal.closeModal(id)
   }
 
-  setRequisito(requisito: requisito) {
-    this.requisitoSeleccionado = requisito;
-  }
+
   nuevoRequisito() {
     this.fileUpload.cachedFileArray = [];
     this.estadoActualizarResgitrarFormularion = false;
     this.fileUpload.clearImagePreviewPanel();
-    this.requisitoSeleccionado = null;
     this.enabledFormularioRequisito();
+    this.sb.setActive(null);
     this.formularioRequisito.reset();
   }
   //FIN DE FUNCIONES BASICAS

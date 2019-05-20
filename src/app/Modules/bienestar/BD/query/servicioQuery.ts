@@ -12,6 +12,7 @@ export class servicioQuery extends QueryEntity<servicioState, servicio>{
     //  selectVisibleServicios$ = combineLatest(this.selectVisbleFilter$, this.selectAll, this.getVisibleServicio)
     constructor(protected servicioStore: servicioStore) {
         super(servicioStore);
+        this.createUIQuery();
     }
     /* private getVisibleServicio(filter, servicios: servicio[]) {
          switch (filter) {

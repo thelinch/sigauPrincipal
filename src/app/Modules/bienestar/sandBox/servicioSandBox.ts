@@ -25,13 +25,11 @@ export class servicioSandBox {
     guardarServicio(servicio: servicio) {
         this.servicioService.guardarServicio(servicio).subscribe(servicioGuardado => {
             this.notificacionService.showSuccess("Se creo exitosamente el servicio");
-
             this.store.add(servicioGuardado);
         })
     }
     listaServicio() {
         this.servicioService.listarServicio().subscribe(listaServicio => {
-            console.log(listaServicio)
             this.store.set(listaServicio);
         })
     }
@@ -55,6 +53,7 @@ export class servicioSandBox {
             this.store.update(servicioActivado.id, servicio => {
                 return { ...servicioActivado, activador: true }
             });
+            this.notificacionService.showSuccess("Se activo correctamente el servicio");
         })
     }
     requisitosPorIdServicio(json: any, servicio: servicio) {
@@ -98,6 +97,9 @@ export class servicioSandBox {
             this.store.update(servicioModificado.id, servicioModificado);
             this.notificacionService.showSuccess("se modifico el ciclo academico correctamente")
         })
+    }
+    updateEntityViewMode(id, viewMode: any) {
+        this.store.ui.upsert(id, { viewMode });
     }
     actualizarFiltrado(filter: VISIBILITY_FILTER) {
         this.store.update({ filter });

@@ -5,6 +5,7 @@ import { Observable, Observer, of } from 'rxjs';
 import { archivo } from '../Models/archivo';
 import { VISIBILITY_FILTER } from '../filter/filterRequisito.model';
 import { ID } from '@datorama/akita';
+import { archivoBase } from '../Models/archivoBase';
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +40,11 @@ export class RequisitoService {
   editarOpcionServicio(json: any) {
     return this.http.post<requisito>(this.urlControlador + "/updateServicio", JSON.stringify(json), { headers: this.header })
   }
-  getArchivosPorRequisitoId(idRequisitio: number): Observable<archivo[]> {
-    let json = { id: idRequisitio }
-    return this.http.post<archivo[]>(this.urlControlador + "/archivos", JSON.stringify(json));
+  cambiarActualizaconRequisito(json: any): Observable<requisito> {
+    return this.http.post<requisito>(this.urlControlador + "/updateActualizacion", JSON.stringify(json), { headers: this.header });
   }
- 
+  listarArchivosPorRequisitoId(json: any): Observable<archivoBase[]> {
+    return this.http.post<archivoBase[]>(this.urlControlador + "/archivos", JSON.stringify(json));
+  }
+
 }
