@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { registro_graduado_titulado } from '../Models/registro_graduado_titulado';
+import { alumno_registroAlumnoGraduadoTitulado } from '../Models/alumno_registroAlumnoGraduadoTitulado';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class RegistroAlumnoGraduadoService {
   });
   constructor(private http: HttpClient) { }
 
-  guardarRegistroAlumnoGraduado(registroAlumnoGraduadoTitulado:registro_graduado_titulado): Observable<registro_graduado_titulado> {
-    return this.http.post<registro_graduado_titulado>(this.urlControlador + "create", JSON.stringify(registroAlumnoGraduadoTitulado), { headers: this.header });
+  guardarRegistroAlumnoGraduado(registroAlumnoGraduadoTitulado:registro_graduado_titulado): Observable<alumno_registroAlumnoGraduadoTitulado> {
+    return this.http.post<alumno_registroAlumnoGraduadoTitulado>(this.urlControlador + "create", JSON.stringify(registroAlumnoGraduadoTitulado), { headers: this.header });
   }
 
   /*
