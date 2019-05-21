@@ -26,3 +26,8 @@ export class servicio {
 
 
 }
+export type servicioUI = {
+  isOpen: boolean;
+  isLoading: boolean
+  viewMode: { mode: string }
+}
