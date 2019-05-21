@@ -166,6 +166,146 @@
         </div>
         <!--FIN DE LISTA DE ALUMNOS CON CARDS-->
       </form>
+
+      <!--TABLA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
+      <!--
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Especialidad</th>
+            <th>Facultad</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
+            <td> {{alumnoExcel.alumno.persona.nombre_completo}}</td>
+            <td> {{alumnoExcel.alumno.escuela_profesional.nombre}}</td>
+            <td> {{alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre}}</td>
+          </tr>
+        </tbody>
+      </table>
+      -->
+      <div style="overflow-x:auto;" class="centered striped highlight responsive-table">
+        <table class="table1">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>CODUNIV</th>
+              <th>RAZ_SOC</th>
+              <th>MATRI_FEC</th>
+              <th>FAC_NOM</th>
+              <th>CARR_PROG</th>
+              <th>ESC_POS</th>
+              <th>EGRES_FEC</th>
+              <th>APEPAT</th>
+              <th>APEMAT</th>
+              <th>NOMBRE</th>
+              <th>SEXO</th>
+              <th>DOCU_TIP</th>
+              <th>DOCU_NUM</th>
+              <th>PROC_BACH</th>
+              <th>BACHILLER</th>
+              <th>GRAD_TITU</th>
+              <th>DEN_GRAD</th>
+              <th>SEG_ESP</th>
+              <th>TRAB_INV</th>
+              <th>NUM_CRED</th>
+              <th>REG_METADATO</th>
+              <th>PROG_ESTU</th>
+              <th>PROC_TITULO_PED</th>
+              <th>MOD_OBT</th>
+              <th>MOD_EST</th>
+              <th>ABRE_GYT</th>
+              <th>PROC_REV_PAIS</th>
+              <th>PROC_REV_UNIV</th>
+              <th>PROC_REV_GRADO</th>
+              <th>RESO_NUM</th>
+              <th>RESO_FEC</th>
+              <th>DIPL_FEC_ORG</th>
+              <th>DIPL_FEC_DUP</th>
+              <th>DIPL_NUM</th>
+              <th>DIPL_TIP_EMI</th>
+              <th>REG_LIBRO</th>
+              <th>REG_FOLIO</th>
+              <th>REG_REGISTRO</th>
+              <th>CARGO1</th>
+              <th>AUTORIDAD1</th>
+              <th>CARGO2</th>
+              <th>AUTORIDAD2</th>
+              <th>CARGO3</th>
+              <th>AUTORIDAD3</th>
+              <th>PROC_PAIS_EXT</th>
+              <th>PROC_UNIV_EXT</th>
+              <th>PROC_GRADO_EXT</th>
+              <th>REG_OFICIO</th>
+              <th>FEC_MAT_PROG</th>
+              <th>FEC_INICIO_PROG</th>
+              <th>FEC_FIN_PROG</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
+              <td> </td>
+              <td></td>
+              <td> </td>
+              <td> </td>
+              <td> {{alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre}}</td>
+              <td> {{alumnoExcel.alumno.escuela_profesional.nombre}}</td>
+              <td></td>
+              <td> </td>
+              <td> {{alumnoExcel.alumno.persona.apellido_paterno}}</td>
+              <td> {{alumnoExcel.alumno.persona.apellido_materno}}</td>
+              <td> {{alumnoExcel.alumno.persona.nombre}}</td>
+              <td> {{alumnoExcel.alumno.persona.sexo}}</td>
+              <td></td>
+              <td> {{alumnoExcel.alumno.persona.numero_documento}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!--FIN DE TABALA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
+
+
     </mat-step>
     <!--//////////////////////////////////////-->
     <!--AGREGAR DATOS DEL ALUMNO PARA GRADUAR-->
@@ -477,25 +617,6 @@
   </mat-horizontal-stepper>
   <!--FIN DE CODIGO PARA MOSTRAR LA LISTA DE ALUMNOS A GRADUAR-->
   <mat-divider></mat-divider>
-  <!--TABLA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
-  <table>
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Especialidad</th>
-        <th>Facultad</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
-        <td> {{alumnoExcel.alumno.persona.nombre_completo}}</td>
-        <td> {{alumnoExcel.alumno.escuela_profesional.nombre}}</td>
-        <td> {{alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre}}</td>
-      </tr>
-    </tbody>
-  </table>
-  <!--FIN DE TABALA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
 </div>
 
 <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
