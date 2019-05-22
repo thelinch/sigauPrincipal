@@ -14,7 +14,16 @@ import { RegistrodoctoradoComponent } from './componentAdmin/registrodoctorado/r
 import { BlockUIModule } from 'ng-block-ui';
 import { DenominacionesService } from './services/denominaciones.service';
 import { EmpresasService } from './services/empresas.service';
+import {
+  
+  MatIconModule,
+  MatInputModule,
+  MatNativeDateModule,
+  MatTableModule
+} from '@angular/material';
+import {ExporterService} from './services/exporter.service';
 
+import { from } from 'rxjs';
 
 @NgModule({
   declarations: [PrincipalComponent, BusquedaComponent, TitulosComponent, RegistrosComponent, RegistrobachillerComponent, RegistrotituladoComponent, RegistromaestriaComponent, RegistrodoctoradoComponent],
@@ -22,8 +31,14 @@ import { EmpresasService } from './services/empresas.service';
     TitulosRoutingModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule, BlockUIModule.forRoot(),],
+    ReactiveFormsModule, BlockUIModule.forRoot(),
+  
+    MatIconModule,
+    MatInputModule,
+    MatNativeDateModule,
+    MatTableModule
+  ],
   exports: [],
-  providers: [DenominacionesService,EmpresasService],
+  providers: [DenominacionesService, EmpresasService, ExporterService],
 })
 export class TitulosModule { }

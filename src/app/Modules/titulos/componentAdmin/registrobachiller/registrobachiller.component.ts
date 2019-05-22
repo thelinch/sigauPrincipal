@@ -4,7 +4,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { alumno } from 'src/app/global/Models/Alumno';
 import { BlockUI, NgBlockUI } from 'ng-block-ui';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
@@ -29,6 +29,9 @@ import { AlumnoGraduadoService } from '../../services/alumno-graduado.service';
 import { DecanofacultadService } from 'src/app/global/services/decanofacultad.service';
 import { RectorService } from 'src/app/global/services/rector.service';
 import { TrabajadorareaService } from 'src/app/global/services/trabajadorarea.service';
+
+import { ExporterService } from '../../services/exporter.service';
+
 
 import Swal from 'sweetalert2';
 import { registro_graduado_titulado } from '../../Models/registro_graduado_titulado';
@@ -88,6 +91,29 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   }
 
 
+  data: any = [
+    {
+      name: 'John Lilki',
+      registration: 'September 14, 2013',
+      email: 'jhlilk22@yahoo.com',
+      isPremium: true,
+    },
+    {
+      name: 'Jamie Harington',
+      registration: 'January 11, 2014',
+      email: 'jamieharingonton@yahoo.com',
+      isPremium: true
+    },
+    {
+      name: 'Jill Lewis',
+      registration: 'May 11, 2014',
+      email: 'jilsewris22@yahoo.com',
+      isPremium: true
+    }
+  ];
+
+
+
   //codigo del stepper (pasar una transicion de pantalla)
   isLinear = false;
   firstFormGroup: FormGroup;
@@ -145,7 +171,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     private trabajadorareaService: TrabajadorareaService,
     private notificacionService: NotificacionBusService,
     private alumnoGraduadoService: AlumnoGraduadoService,
-    private registroAlumnoGraduadoService: RegistroAlumnoGraduadoService) { }
+    private registroAlumnoGraduadoService: RegistroAlumnoGraduadoService,
+    private excelService: ExporterService) { }
 
 
   /*CODIGO PARA INICIAR LOS METODOS*/
@@ -218,6 +245,11 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
   }
   /*FIN DE CODIGO PARA INICIAR LOS METODOS*/
+
+  //EXPORTAR EXCEL//
+  exportAsXLSX(): void {
+    this.excelService.exportTOExcel(this.data, 'my_export');
+  }
 
   ngAfterViewInit(): void {
   }
@@ -327,8 +359,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         console.log(registroAlumnoGraduadoTitulado)
         // this.registroAlumnoGraduadoTitulado = registroAlumnoGraduadoTitulado;
         this.listaAlumnoExcel.push(registroAlumnoGraduadoTitulado)
-        this.alumnoGraduadoTituladoCreado=null;
-        this.registroAlumnoGraduadoTitulado=null
+        this.alumnoGraduadoTituladoCreado = null;
+        this.registroAlumnoGraduadoTitulado = null
         console.log(this.listaAlumnoExcel)
         this.notificacionService.showSuccess("Se Graduo correctamente el alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
         this.formularioGuardarBachiller.reset();
