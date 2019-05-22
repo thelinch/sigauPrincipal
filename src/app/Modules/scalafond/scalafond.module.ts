@@ -8,10 +8,11 @@ import { MaterialModule } from 'src/app/global/global.module';
 import { RegistrodocenteComponent } from './componentAdmin/registrodocente/registrodocente.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatDividerModule} from '@angular/material/divider';
+import { RegistraradministrativoComponent } from './componentAdmin/registraradministrativo/registraradministrativo.component';
 
 
 @NgModule({
-  declarations: [ScalafondComponent,PrincipalComponent,RegistroareaComponent, RegistrodocenteComponent],
+  declarations: [ScalafondComponent,PrincipalComponent,RegistroareaComponent, RegistrodocenteComponent, RegistraradministrativoComponent],
   imports: [CommonModule,ScalafondRoutingModule,MaterialModule,FormsModule,ReactiveFormsModule,MatDividerModule],
   exports: [],
   providers: [],

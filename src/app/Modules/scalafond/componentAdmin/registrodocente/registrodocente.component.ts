@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 
 export interface Lista {
   value: string;
@@ -16,6 +17,9 @@ export class RegistrodocenteComponent implements OnInit {
   isLinear = false;
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
+  fourthFormGroup: FormGroup;
+  idModalEstudiosSuperiores: string = "ModalEstudiosSuperiores";
 
   sexos: Lista[] = [
     {value: 'male', viewValue: 'Masculino'},
@@ -68,11 +72,28 @@ export class RegistrodocenteComponent implements OnInit {
   ];
 
   RegimenContratos: Lista[] = [
-    {value: 'cas', viewValue: 'Tiempo Parcial'},
-    {value: 'Auxiliar', viewValue: 'Dedicacion Exclusiva'},
-    // {value: '', viewValue: 'tiempo completo'},
+    {value: 'cas', viewValue: 'CAS'},
+    {value: 'auxiliar', viewValue: 'AUXILIAR'},
+    {value: 'principal', viewValue: 'PRINCIPAL'},
+  ];
+  
+  NivelEstudios: Lista[] = [
+    {value: 'primaria', viewValue: 'Primaria'},
+    {value: 'secundaria', viewValue: 'Secundaria'},
+    {value: 'superior', viewValue: 'Superior'},
   ];
 
+  Instituciones: Lista[] = [
+    {value: 'unas', viewValue: 'Uni. Nacinal Agraria de la Selva'},
+    {value: 'gad', viewValue: 'I.E Gomez Areas Davila'},
+    {value: 'rp', viewValue: 'I.E Ricardo Palma'},
+  ];
+
+  EspecialidadMencion: Lista[] = [
+    {value: 'fdsgf', viewValue: 'CAS'},
+    {value: 'auxiliar', viewValue: 'AUXILIAR'},
+    {value: 'principal', viewValue: 'PRINCIPAL'},
+  ];
 
 
 
@@ -86,6 +107,18 @@ export class RegistrodocenteComponent implements OnInit {
     this.secondFormGroup = this._formBuilder.group({
       secondCtrl: ['', Validators.required]
     });
+    this.thirdFormGroup = this._formBuilder.group({
+      thirdCtrl:['', Validators.required]
+    })
+    this.fourthFormGroup= this._formBuilder.group({
+      fourthCtrl: ['',Validators.required]
+    })
+
+  }
+
+  abrirModal(id: string){
+    functionsGlobal.openModal(id);
   }
 
 }
+
