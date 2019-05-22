@@ -8,260 +8,93 @@
 </div>
 <mat-divider></mat-divider>
 
-<!-- Modal Buscar estudiante Externo o interno -->
-<div class="row">
-  <div class="card">
-    <div class="card-content">
-      <div class="col s10 m11 right-align margenBsucar">
-        <p><b>Seleccionar estudiantes</b> </p>
-      </div>
-      <a class="waves-effect waves-light btn-floating btn-large modal-trigger light-blue darken-4 tooltipped"
-        data-position="bottom" data-tooltip="Seleccionar" href="#modal1"><i class="material-icons">add</i></a>
-    </div>
-  </div>
+<div style="overflow-x:auto;">
+  <table>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Points</th>
+      <th>Pointsddddddd</th>
+      <th>Pointsddddddddd</th>
+      <th>Pointsdddddddddd</th>
+      <th>Pointsddddddddddd</th>
+    </tr>
+    <tr>
+      <td>Jill</td>
+      <td>Smith</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+      <td>50</td>
+    </tr>
+    <tr>
+      <td>Eve</td>
+      <td>Jackson</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+      <td>94</td>
+    </tr>
+    <tr>
+      <td>Adam</td>
+      <td>Johnson</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+      <td>67</td>
+    </tr>
+  </table>
 </div>
-
-
-<!-- Modal Structure Buscar estudiantes-->
-<div id="modal1" class="modal modal-fixed-footer">
-  <div class="modal-content">
-
-    <!-- Codigo para Filtrar-->
-    <div class="row">
-      <mat-form-field class=" col s12 m4 margen">
-        <mat-select placeholder="Tipo de Estudiante" [(ngModel)]="selecion">
-          <mat-option value="interno">
-            Interno
-          </mat-option>
-          <mat-option value="externo">
-            Externo
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field class=" col s12 m4 margen">
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter for Name">
-      </mat-form-field>
-
-      <div class="col s8 m3 margen right-align">
-        <p>Agregar Estudiante</p>
-      </div>
-
-      <div class="col s4 m1 margen">
-        <a class="waves-effect waves-light btn-floating btn-large modal-trigger light-blue darken-4 tooltipped"
-          data-position="bottom" data-tooltip="Agregar"><i class="material-icons">add</i></a>
-      </div>
-
-    </div>
-
-    <!--Codigo para hacer mostrar los estudiantes internos y externos-->
-    <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 table-responsive">
-
-        <!-- Checkbox Column -->
-        <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()">
-            </mat-checkbox>
-          </th>
-          <td mat-cell *matCellDef="let row">
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)">
-            </mat-checkbox>
-          </td>
-        </ng-container>
-
-        <!-- Position Column -->
-        <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef> No. </th>
-          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-        </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-
-        <!-- Weight Column -->
-        <ng-container matColumnDef="weight">
-          <th mat-header-cell *matHeaderCellDef> Weight </th>
-          <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-        </ng-container>
-
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="symbol">
-          <th mat-header-cell *matHeaderCellDef> Symbol </th>
-          <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
-        </tr>
-      </table>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    </div>
-    <!-- Fin de Codigo para hacer mostrar los estudiantes internos y externos-->
-
-  </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-close waves-effect waves-red btn-flat">Disagree</a>
-    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-  </div>
-</div>
-<!-- Fin de Modal Buscar estudiante Externo o interno -->
-<!-- Modal Structure Buscar estudiantes-->
-
-<!--Mostrar estudiantes en Cards-->
-<div class="row">
-  <div class="col s12 m5">
-    <div class="card horizontal hoverable">
-      <div class="card-image">
-        <img class="materialboxed" data-caption="Franklin Mijahuanca López"
-          src="../../../../../assets/UsuarioDefecto/user-defect.jpg" alt="" srcset="">
-        <div
-          class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
-          47253956
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content">
-          <div class="estado position_absolute top_0  right_0">
-            <span class="chip fondo-ocda white-text light-blue darken-4">Pregrado</span>
-          </div>
-          <mat-form-field class="example-full-width  ">
-            <input matInput placeholder="Nombres " value="Franklin" readonly>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input matInput placeholder="Apellidos " value="Mijahuanca López" readonly>
-          </mat-form-field>
-        </div>
-        <div class="card-action  right-align">
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Registrar"><i class="material-icons">school</i></a>
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Editar"><i class="material-icons">border_color</i></a>
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Eliminar"><i class="material-icons">delete</i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col s12 m5 offset-m1">
-    <div class="card horizontal hoverable">
-      <div class="card-image">
-        <img class="materialboxed" data-caption="Franklin Mijahuanca López"
-          src="../../../../../assets/UsuarioDefecto/user-defect.jpg" alt="" srcset="">
-        <div
-          class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
-          47253956
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content">
-          <div class="estado position_absolute top_0  right_0">
-            <span class="chip fondo-ocda white-text light-blue darken-4">Pregrado</span>
-          </div>
-          <mat-form-field class="example-full-width  ">
-            <input matInput placeholder="Nombres " value="Franklin" readonly>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input matInput placeholder="Apellidos " value="Mijahuanca López" readonly>
-          </mat-form-field>
-        </div>
-        <div class="card-action  right-align">
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Registrar"><i class="material-icons">school</i></a>
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Editar"><i class="material-icons">border_color</i></a>
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Eliminar"><i class="material-icons">delete</i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col s12 m5">
-    <div class="card horizontal hoverable">
-      <div class="card-image">
-        <img class="materialboxed" data-caption="Franklin Mijahuanca López"
-          src="../../../../../assets/UsuarioDefecto/user-defect.jpg" alt="" srcset="">
-        <div
-          class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
-          47253956
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content">
-          <div class="estado position_absolute top_0  right_0">
-            <span class="chip fondo-ocda white-text light-blue darken-4">Bachiller</span>
-          </div>
-          <mat-form-field class="example-full-width  ">
-            <input matInput placeholder="Nombres " value="Franklin" readonly>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input matInput placeholder="Apellidos " value="Mijahuanca López" readonly>
-          </mat-form-field>
-        </div>
-        <div class="card-action  right-align">
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Registrar"><i class="material-icons">school</i></a>
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Editar"><i class="material-icons">border_color</i></a>
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Eliminar"><i class="material-icons">delete</i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col s12 m5 offset-m1">
-    <div class="card horizontal hoverable">
-      <div class="card-image">
-        <img class="materialboxed" data-caption="Franklin Mijahuanca López"
-          src="../../../../../assets/UsuarioDefecto/user-defect.jpg" alt="" srcset="">
-        <div
-          class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
-          47253956
-        </div>
-      </div>
-      <div class="card-stacked">
-        <div class="card-content">
-          <div class="estado position_absolute top_0  right_0">
-            <span class="chip fondo-ocda white-text light-blue darken-4">Titulado</span>
-          </div>
-          <mat-form-field class="example-full-width  ">
-            <input matInput placeholder="Nombres " value="Franklin" readonly>
-          </mat-form-field>
-          <mat-form-field class="example-full-width">
-            <input matInput placeholder="Apellidos " value="Mijahuanca López" readonly>
-          </mat-form-field>
-        </div>
-        <div class="card-action  right-align">
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Registrar"><i class="material-icons">school</i></a>
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Editar"><i class="material-icons">border_color</i></a>
-          <a class="btn-floating btn-small waves-effect light-blue darken-4 tooltipped" data-position="bottom"
-            data-tooltip="Eliminar"><i class="material-icons">delete</i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <mat-paginator class="col s12 m12 " [length]="96" [pageSize]="4" [pageSizeOptions]="[4, 8, 32, 96]">
-  </mat-paginator>
-</div>
-<!--Fin Mostrar estudiantes en Cards-->
-
-<div class="row">
-  <div class="col s12 m12 right-align">
-    <button class="btn waves-effect waves-light light-blue darken-4 " type="submit" name="action">Registrar
-      <i class="material-icons right">save</i>
-    </button>
-  </div>
-</div>
-
-<mat-divider></mat-divider>

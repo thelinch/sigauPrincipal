@@ -58,6 +58,7 @@ export class functionsGlobal {
     M.FormSelect.init($('select'));
   }
 
+  
   static iniciarScrollSpy() {
     M.ScrollSpy.init($('.scrollspy'), { scrollOffset: 100 });
   }
