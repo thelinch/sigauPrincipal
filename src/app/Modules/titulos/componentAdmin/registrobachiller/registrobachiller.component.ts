@@ -209,7 +209,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
       id: ["",],
       tipo_alumno_id: ["",],
       creditos_aprobados: ["", Validators.required],
-      codigo_universidad: ["", Validators.required],
+      empresa_id: ["", Validators.required],
       denominacion_grado_titulo: ["", Validators.required],
       nombre_programa_estudio: ["", Validators.required],
       modalidad_de_estudio: ["", Validators.required],

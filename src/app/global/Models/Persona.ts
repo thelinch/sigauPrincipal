@@ -1,3 +1,5 @@
+import { tipo_documento } from './tipo_documento';
+
 export interface persona {
     id: number;
     nombre: string;
@@ -11,4 +13,5 @@ export interface persona {
     numero_documento: string;
     direccion: string;
     estado: boolean;
+    tipo_documento: tipo_documento;
 }

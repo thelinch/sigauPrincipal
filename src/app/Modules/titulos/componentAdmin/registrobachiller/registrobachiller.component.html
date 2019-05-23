@@ -206,7 +206,6 @@
               <th>DOCU_TIP</th>
               <th>DOCU_NUM</th>
               <th>PROC_BACH</th>
-              <th>BACHILLER</th>
               <th>GRAD_TITU</th>
               <th>DEN_GRAD</th>
               <th>SEG_ESP</th>
@@ -248,56 +247,56 @@
           <tbody>
             <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
               <td> </td>
-              <td></td>
               <td> </td>
               <td> </td>
+              <td> {{alumnoExcel.alumno_graduado.fecha_ingreso}}</td>
               <td> {{alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre}}</td>
               <td> {{alumnoExcel.alumno.escuela_profesional.nombre}}</td>
               <td></td>
-              <td> </td>
+              <td> {{alumnoExcel.alumno_graduado.fecha_egreso}}</td>
               <td> {{alumnoExcel.alumno.persona.apellido_paterno}}</td>
               <td> {{alumnoExcel.alumno.persona.apellido_materno}}</td>
               <td> {{alumnoExcel.alumno.persona.nombre}}</td>
               <td> {{alumnoExcel.alumno.persona.sexo}}</td>
-              <td></td>
+              <td> {{alumnoExcel.alumno.persona.tipo_documento.nombre}}</td>
               <td> {{alumnoExcel.alumno.persona.numero_documento}}</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
+              <td> </td>
+              <td> </td>
+              <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.nombre}}</td>
+              <td> </td>
+              <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.nombre}}</td>
+              <td> {{alumnoExcel.alumno_graduado.creditos_aprobados}}</td>
+              <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.url}}</td>
+              <td> {{alumnoExcel.alumno_graduado.nombre_programa_estudio.nombre}}</td>
+              <td> </td>
+              <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.nombre}}</td>
+              <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.sigla}}</td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> {{alumnoExcel.registro_alumno_graduado.numero_resolucion}}</td>
+              <td> {{alumnoExcel.registro_alumno_graduado.fecha_resolucion}}</td>
+              <td> {{alumnoExcel.registro_alumno_graduado.fecha_emision_diploma}}</td>
+              <td> </td>
+              <td> {{alumnoExcel.registro_alumno_graduado.numero_diploma}}</td>
+              <td> {{alumnoExcel.registro_alumno_graduado.tipo_diploma.sigla}}</td>
+              <td> {{alumnoExcel.registro_alumno_graduado.registro_libro}}</td>
+              <td> {{alumnoExcel.registro_alumno_graduado.registro_folio}}</td>
+              <td> {{alumnoExcel.registro_alumno_graduado.numero_registro}}</td>
+              <td> RECTOR</td>
+              <td> {{alumnoExcel.registro_alumno_graduado.rector.docente.persona.nombre_completo}}</td>
+              <td> SECRETARIO GENERAL</td>
+              <td> {{alumnoExcel.registro_alumno_graduado.trabajador_areas.administrativo.persona.nombre_completo}}</td>
+              <td> DECANO</td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> {{alumnoExcel.registro_alumno_graduado.numero_oficio}}</td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
             </tr>
           </tbody>
         </table>
@@ -353,7 +352,7 @@
                       <div class="row">
                         <mat-form-field class="col s12 m12 margen">
                           <mat-label>Universidad que otorga el Grado académico *</mat-label>
-                          <mat-select [compareWith]="compareObjeto" formControlName="codigo_universidad">
+                          <mat-select [compareWith]="compareObjeto" formControlName="empresa_id">
                             <mat-option *ngFor="let empresa of listaEmpresas" [value]="empresa">
                               {{empresa.codigo}} / {{empresa.nombre | uppercase }}
                             </mat-option>
