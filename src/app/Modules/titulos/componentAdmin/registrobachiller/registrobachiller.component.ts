@@ -79,6 +79,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   displayedColumnsAlumno_Excel =
     ['nombre_completo', 'Especialidad', 'Facultad'];
 
+
+  
   handleFileInput(file: FileList) {
     this.fileToUpload = file.item(0);
 
@@ -115,7 +117,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
 
   //codigo del stepper (pasar una transicion de pantalla)
-  isLinear = false;
+  panelOpenState = false;
+  isLinear = true;
   firstFormGroup: FormGroup;
   formularioRegistroBachiller: FormGroup;
   formularioGuardarBachiller: FormGroup;
@@ -201,7 +204,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     //this.listarUniversidades()
     //codigo para Stepper
     this.firstFormGroup = this.fb.group({
-      firstCtrl: ['', Validators.required]
+      firstCtrl: ['1', Validators.required]
     });
 
     //FORMULARIO PARA INGRESAR DATOS EL ALUMNO A GRADUAR

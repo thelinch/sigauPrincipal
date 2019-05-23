@@ -157,140 +157,295 @@
                 </div>
               </div>
               <!--FIN DE CARD DE DATOS DEL ALUMNO PPREGRADO-->
+              <!--
               <div class="col s12 m12 right-align">
                 <button mat-button matStepperPrevious class="waves-effect waves-light btn"><i
                     class="material-icons right">save</i>Registrar</button>
               </div>
+              -->
             </div>
           </div>
         </div>
         <!--FIN DE LISTA DE ALUMNOS CON CARDS-->
       </form>
-
+      <h4> </h4>
+      <h4> </h4>
       <!--TABLA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
-      <div style="overflow-x:auto;" class="striped highlight">
-        <table class="table1">
-          <thead>
-            <tr>
-              <th> ID </th>
-              <th> CODUNIV </th>
-              <th> RAZ_SOC </th>
-              <th> MATRI_FEC </th>
-              <th> FAC_NOM </th>
-              <th> CARR_PROG </th>
-              <th> ESC_POS </th>
-              <th> EGRES_FEC </th>
-              <th> APEPAT </th>
-              <th> APEMAT </th>
-              <th> NOMBRE </th>
-              <th> SEXO </th>
-              <th >DOCU_TIP </th>
-              <th >DOCU_NUM </th>
-              <th> PROC_BACH </th>
-              <th> GRAD_TITU </th>
-              <th> DEN_GRAD </th>
-              <th> SEG_ESP </th>
-              <th> TRAB_INV </th>
-              <th> NUM_CRED </th>
-              <th> REG_METADATO </th>
-              <th> PROG_ESTU </th>
-              <th> PROC_TITULO_PED </th>
-              <th> MOD_OBT </th>
-              <th> MOD_EST </th>
-              <th> ABRE_GYT </th>
-              <th> PROC_REV_PAIS </th>
-              <th> PROC_REV_UNIV </th>
-              <th> PROC_REV_GRADO </th>
-              <th> RESO_NUM </th>
-              <th> RESO_FEC </th>
-              <th> DIPL_FEC_ORG </th>
-              <th> DIPL_FEC_DUP </th>
-              <th> DIPL_NUM </th>
-              <th> DIPL_TIP_EMI </th>
-              <th> REG_LIBRO </th>
-              <th> REG_FOLIO </th>
-              <th> REG_REGISTRO </th>
-              <th> CARGO1 </th>
-              <th> AUTORIDAD1 </th>
-              <th> CARGO2 </th>
-              <th> AUTORIDAD2 </th>
-              <th> CARGO3 </th>
-              <th> AUTORIDAD3 </th>
-              <th> ROC_PAIS_EXT </th>
-              <th> PROC_UNIV_EXT </th>
-              <th> PROC_GRADO_EXT </th>
-              <th> REG_OFICIO </th>
-              <th> FEC_MAT_PROG </th>
-              <th> FEC_INICIO_PROG </th>
-              <th> FEC_FIN_PROG </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
-              <td> </td>
-              <td> {{alumnoExcel.alumno_graduado.empresa.codigo}}</td>
-              <td> {{alumnoExcel.alumno_graduado.empresa.nombre}}</td>
-              <td> {{alumnoExcel.alumno_graduado.fecha_ingreso}}</td>
-              <td> {{alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre}}</td>
-              <td> {{alumnoExcel.alumno.escuela_profesional.nombre}}</td>
-              <td></td>
-              <td> {{alumnoExcel.alumno_graduado.fecha_egreso}}</td>
-              <td> {{alumnoExcel.alumno.persona.apellido_paterno}}</td>
-              <td> {{alumnoExcel.alumno.persona.apellido_materno}}</td>
-              <td> {{alumnoExcel.alumno.persona.nombre}}</td>
-              <td> {{alumnoExcel.alumno.persona.sexo}}</td>
-              <td> {{alumnoExcel.alumno.persona.tipo_documento.nombre}}</td>
-              <td> {{alumnoExcel.alumno.persona.numero_documento}}</td>
-              <td> </td>
-              <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.nombre}}</td>
-              <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.nombre}}</td>
-              <td> </td>
-              <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.nombre}}</td>
-              <td> {{alumnoExcel.alumno_graduado.creditos_aprobados}}</td>
-              <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.url}}</td>
-              <td> {{alumnoExcel.alumno_graduado.nombre_programa_estudio.nombre}}</td>
-              <td> </td>
-              <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.nombre}}</td>
-              <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.sigla}}</td>
-              <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.siglas}}</td>
-              <td> </td>
-              <td> </td>
-              <td> </td>
-              <td> {{alumnoExcel.registro_alumno_graduado.numero_resolucion}}</td>
-              <td> {{alumnoExcel.registro_alumno_graduado.fecha_resolucion}}</td>
-              <td> {{alumnoExcel.registro_alumno_graduado.fecha_emision_diploma}}</td>
-              <td> </td>
-              <td> {{alumnoExcel.registro_alumno_graduado.numero_diploma}}</td>
-              <td> {{alumnoExcel.registro_alumno_graduado.tipo_diploma.sigla}}</td>
-              <td> {{alumnoExcel.registro_alumno_graduado.registro_libro}}</td>
-              <td> {{alumnoExcel.registro_alumno_graduado.registro_folio}}</td>
-              <td> {{alumnoExcel.registro_alumno_graduado.numero_registro}}</td>
-              <td> RECTOR</td>
-              <td> {{alumnoExcel.registro_alumno_graduado.rector.docente.persona.nombre_completo}}</td>
-              <td> SECRETARIO GENERAL</td>
-              <td> {{alumnoExcel.registro_alumno_graduado.trabajador_areas.administrativo.persona.nombre_completo}}</td>
-              <td> DECANO</td>
-              <td> </td>
-              <td> </td>
-              <td> </td>
-              <td> </td>
-              <td> {{alumnoExcel.registro_alumno_graduado.numero_oficio}}</td>
-              <td> </td>
-              <td> </td>
-              <td> </td>
-            </tr>
-          </tbody>
-        </table>
-        <h3>Export a XLSX</h3>
-        <div class="container">
-          <h3>Raised Buttons</h3>
-          <button mat-raised-button color="primary" (click)="exportAsXLSX()">Export</button>
-          &nbsp;
-          <button mat-raised-button color="accent">Accent</button>
+      <div class="row">
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Exportar Data a Excel
+              </mat-panel-title>
+              <mat-panel-description>
+                Datos de los Alumnos Egresados Bachilleres
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <!--CODIGO DE TABLA PARA MOSTRAR DATOS A EXPORTAR A EXCEL-->
+            <div class="row">
+              <div style="overflow-x:auto;" class="striped highlight">
+                <table class="centered responsive-table highlight table1">
+                  <thead class="colorTR">
+                    <tr>
+                      <th> ID </th>
+                      <th> CODUNIV </th>
+                      <th> RAZ_SOC </th>
+                      <th> MATRI_FEC </th>
+                      <th> FAC_NOM </th>
+                      <th> CARR_PROG </th>
+                      <th> ESC_POS </th>
+                      <th> EGRES_FEC </th>
+                      <th> APEPAT </th>
+                      <th> APEMAT </th>
+                      <th> NOMBRE </th>
+                      <th> SEXO </th>
+                      <th>DOCU_TIP </th>
+                      <th>DOCU_NUM </th>
+                      <th> PROC_BACH </th>
+                      <th> GRAD_TITU </th>
+                      <th> DEN_GRAD </th>
+                      <th> SEG_ESP </th>
+                      <th> TRAB_INV </th>
+                      <th> NUM_CRED </th>
+                      <th> REG_METADATO </th>
+                      <th> PROG_ESTU </th>
+                      <th> PROC_TITULO_PED </th>
+                      <th> MOD_OBT </th>
+                      <th> MOD_EST </th>
+                      <th> ABRE_GYT </th>
+                      <th> PROC_REV_PAIS </th>
+                      <th> PROC_REV_UNIV </th>
+                      <th> PROC_REV_GRADO </th>
+                      <th> RESO_NUM </th>
+                      <th> RESO_FEC </th>
+                      <th> DIPL_FEC_ORG </th>
+                      <th> DIPL_FEC_DUP </th>
+                      <th> DIPL_NUM </th>
+                      <th> DIPL_TIP_EMI </th>
+                      <th> REG_LIBRO </th>
+                      <th> REG_FOLIO </th>
+                      <th> REG_REGISTRO </th>
+                      <th> CARGO1 </th>
+                      <th> AUTORIDAD1 </th>
+                      <th> CARGO2 </th>
+                      <th> AUTORIDAD2 </th>
+                      <th> CARGO3 </th>
+                      <th> AUTORIDAD3 </th>
+                      <th> ROC_PAIS_EXT </th>
+                      <th> PROC_UNIV_EXT </th>
+                      <th> PROC_GRADO_EXT </th>
+                      <th> REG_OFICIO </th>
+                      <th> FEC_MAT_PROG </th>
+                      <th> FEC_INICIO_PROG </th>
+                      <th> FEC_FIN_PROG </th>
+                    </tr>
+                  </thead>
+                  <tbody class="fonttable">
+                    <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.empresa.codigo}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.empresa.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.fecha_ingreso}}</td>
+                      <td> {{alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.escuela_profesional.nombre}}</td>
+                      <td></td>
+                      <td> {{alumnoExcel.alumno_graduado.fecha_egreso}}</td>
+                      <td> {{alumnoExcel.alumno.persona.apellido_paterno}}</td>
+                      <td> {{alumnoExcel.alumno.persona.apellido_materno}}</td>
+                      <td> {{alumnoExcel.alumno.persona.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.persona.sexo}}</td>
+                      <td> {{alumnoExcel.alumno.persona.tipo_documento.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.persona.numero_documento}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.nombre}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.creditos_aprobados}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.url}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.nombre_programa_estudio.nombre}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.sigla}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.siglas}}</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_resolucion}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.fecha_resolucion}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.fecha_emision_diploma}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_diploma}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.tipo_diploma.sigla}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.registro_libro}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.registro_folio}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_registro}}</td>
+                      <td> RECTOR</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.rector.docente.persona.nombre_completo}}</td>
+                      <td> SECRETARIO GENERAL</td>
+                      <td>
+                        {{alumnoExcel.registro_alumno_graduado.trabajador_areas.administrativo.persona.nombre_completo}}
+                      </td>
+                      <td> DECANO</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_oficio}}</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-        </div>
+            <mat-action-row>
+              <div class="col s12 m12 right-align">
+                <button mat-raised-button color="primary" (click)="exportAsXLSX()" [disabled]="!listaAlumnoExcel.length"
+                  class="waves-effect waves-light btn">Export <i class="far fa-file-excel"></i></button>
+              </div>
+            </mat-action-row>
+            <!-- FIN CODIGO DE TABLA PARA MOSTRAR DATOS A EXPORTAR A EXCEL-->
+          </mat-expansion-panel>
+        </mat-accordion>
       </div>
 
+      <!--
+      <div class="card">
+        <div class="card-panel">
+          <div class="row">
+            <div class="col s12 m12">
+              <div style="overflow-x:auto;" class="striped highlight">
+                <table class="centered responsive-table highlight table1">
+                  <thead class="colorTR">
+                    <tr>
+                      <th> ID </th>
+                      <th> CODUNIV </th>
+                      <th> RAZ_SOC </th>
+                      <th> MATRI_FEC </th>
+                      <th> FAC_NOM </th>
+                      <th> CARR_PROG </th>
+                      <th> ESC_POS </th>
+                      <th> EGRES_FEC </th>
+                      <th> APEPAT </th>
+                      <th> APEMAT </th>
+                      <th> NOMBRE </th>
+                      <th> SEXO </th>
+                      <th>DOCU_TIP </th>
+                      <th>DOCU_NUM </th>
+                      <th> PROC_BACH </th>
+                      <th> GRAD_TITU </th>
+                      <th> DEN_GRAD </th>
+                      <th> SEG_ESP </th>
+                      <th> TRAB_INV </th>
+                      <th> NUM_CRED </th>
+                      <th> REG_METADATO </th>
+                      <th> PROG_ESTU </th>
+                      <th> PROC_TITULO_PED </th>
+                      <th> MOD_OBT </th>
+                      <th> MOD_EST </th>
+                      <th> ABRE_GYT </th>
+                      <th> PROC_REV_PAIS </th>
+                      <th> PROC_REV_UNIV </th>
+                      <th> PROC_REV_GRADO </th>
+                      <th> RESO_NUM </th>
+                      <th> RESO_FEC </th>
+                      <th> DIPL_FEC_ORG </th>
+                      <th> DIPL_FEC_DUP </th>
+                      <th> DIPL_NUM </th>
+                      <th> DIPL_TIP_EMI </th>
+                      <th> REG_LIBRO </th>
+                      <th> REG_FOLIO </th>
+                      <th> REG_REGISTRO </th>
+                      <th> CARGO1 </th>
+                      <th> AUTORIDAD1 </th>
+                      <th> CARGO2 </th>
+                      <th> AUTORIDAD2 </th>
+                      <th> CARGO3 </th>
+                      <th> AUTORIDAD3 </th>
+                      <th> ROC_PAIS_EXT </th>
+                      <th> PROC_UNIV_EXT </th>
+                      <th> PROC_GRADO_EXT </th>
+                      <th> REG_OFICIO </th>
+                      <th> FEC_MAT_PROG </th>
+                      <th> FEC_INICIO_PROG </th>
+                      <th> FEC_FIN_PROG </th>
+                    </tr>
+                  </thead>
+                  <tbody class="fonttable">
+                    <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.empresa.codigo}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.empresa.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.fecha_ingreso}}</td>
+                      <td> {{alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.escuela_profesional.nombre}}</td>
+                      <td></td>
+                      <td> {{alumnoExcel.alumno_graduado.fecha_egreso}}</td>
+                      <td> {{alumnoExcel.alumno.persona.apellido_paterno}}</td>
+                      <td> {{alumnoExcel.alumno.persona.apellido_materno}}</td>
+                      <td> {{alumnoExcel.alumno.persona.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.persona.sexo}}</td>
+                      <td> {{alumnoExcel.alumno.persona.tipo_documento.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.persona.numero_documento}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.nombre}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.creditos_aprobados}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.url}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.nombre_programa_estudio.nombre}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.sigla}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.siglas}}</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_resolucion}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.fecha_resolucion}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.fecha_emision_diploma}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_diploma}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.tipo_diploma.sigla}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.registro_libro}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.registro_folio}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_registro}}</td>
+                      <td> RECTOR</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.rector.docente.persona.nombre_completo}}</td>
+                      <td> SECRETARIO GENERAL</td>
+                      <td>
+                        {{alumnoExcel.registro_alumno_graduado.trabajador_areas.administrativo.persona.nombre_completo}}
+                      </td>
+                      <td> DECANO</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_oficio}}</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <mat-divider> </mat-divider>
+          <div class="row">
+            <div class="col s12 m12 right-align">
+              <button mat-raised-button color="primary" (click)="exportAsXLSX()"
+                class="waves-effect waves-light btn">Export <i class="far fa-file-excel"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      -->
       <!--FIN DE TABALA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
 
 
@@ -353,8 +508,8 @@
 
                         <mat-form-field class="col s12 m6">
                           <mat-label>Créditos Aprobados *</mat-label>
-                          <input matInput placeholder="Créditos Aprobados *" formControlName="creditos_aprobados"
-                            size="3">
+                          <input matInput #input maxlength="3" placeholder="Créditos Aprobados *"
+                            formControlName="creditos_aprobados">
                         </mat-form-field>
 
                         <mat-form-field class="col s12 m6 margen">
