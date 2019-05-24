@@ -15,6 +15,29 @@
   background: #eeeeee !important;
 }
 
-.border_radius_card{
-    border-radius: 20px;
+.border_radius_card {
+  border-radius: 20px;
+}
+
+/////////@at-root
+.orderLeft {
+  width: 100%;
+  float: left;
+  text-align: center;
+  padding: 2px;
+}
+
+.txtUpOps {
+  color: #aaa;
+  font-size: 0.9em;
+}
+
+.txtDownOps {
+  color: #00bfa5;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+.unas-logo {
+  width: 5%;
 }
