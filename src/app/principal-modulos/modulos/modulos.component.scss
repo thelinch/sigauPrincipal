@@ -1,12 +1,20 @@
 .login-screen1 {
-    background-image: url(http://elnoti.com/wp-content/uploads/2017/12/tonyironmancomputadortecnologiadinerocalcularencanta.gif);
+  background-image: url(http://elnoti.com/wp-content/uploads/2017/12/tonyironmancomputadortecnologiadinerocalcularencanta.gif);
 }
 .login-screen2 {
-    background-image: url(https://data.whicdn.com/images/186786279/original.gif);
+  background-image: url(https://data.whicdn.com/images/186786279/original.gif);
 }
 .login-screen3 {
-    background-image: url(https://steamusercontent-a.akamaihd.net/ugc/102855335759100198/5AFDD864E32F71B75FC6A55E24B58FE30A5C2B6D/);
+  background-image: url(https://steamusercontent-a.akamaihd.net/ugc/102855335759100198/5AFDD864E32F71B75FC6A55E24B58FE30A5C2B6D/);
 }
 .login-screen4 {
-    background-image: url(https://pa1.narvii.com/6518/be80fca32214e8fb3485ca319e95042f7b4fea42_hq.gif);
+  background-image: url(https://pa1.narvii.com/6518/be80fca32214e8fb3485ca319e95042f7b4fea42_hq.gif);
+}
+
+::ng-deep section {
+  background: #eeeeee !important;
+}
+
+.border_radius_card{
+    border-radius: 20px;
 }

@@ -23,7 +23,7 @@ a:focus {
 
 .login-screen {
   background-image: url(../../assets/FondoSigau/fondopp.jpg);
-  background-position: center;
+  //background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
@@ -46,9 +46,32 @@ a:focus {
   left: 0;
 }
 
-.imge-principal{
+.imge-principal {
   opacity: 9;
-  
+  width: 90%;
+  text-align: center;
+}
+
+footer {
+  bottom: 0;
+  z-index: 10;
+  color: white;
+  width: 100%;
+  text-align: center;
+  left: 0;
+}
+
+img {
+  vertical-align: middle;
+  border-style: none;
+}
+
+footer img {
+  margin-right: .5em;
+}
+
+.unas-logo{
+  width: 3%;
 }
 
 .cardlogin {
@@ -61,15 +84,17 @@ a:focus {
 .label {
   color: #fff;
 }
-
+.centrado{
+  display: flex;
+  justify-content: center;
+}
 .register-right {
   border-top-left-radius: 10% 50%;
   border-bottom-left-radius: 10% 50%;
   margin-top: 4%;
 }
 
-.register-left {
-  text-align: right;
+.login_margin {
   margin-top: 4%;
 }
 
@@ -105,11 +130,11 @@ input label {
   color: #9e9e9e;
 }
 
-.colorcredenciales{
+.colorcredenciales {
   color: #0080ff;
 }
 
-::ng-deep  .mat-form-field-appearance-legacy .mat-form-field-label {
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
   -webkit-transform: perspective(100px);
   transform: perspective(100px);
   -ms-transform: none;
@@ -143,5 +168,5 @@ input label {
 }
 
 ::ng-deep .mat-focused .mat-form-field-required-marker {
-  color:#01579b;
+  color: #01579b;
 }
