@@ -12,6 +12,7 @@ import { alumnoRequisito } from '../../../Models/alumnoRequisito';
 import { ServicioSolicitadoService } from '../../../services/servicio-solicitado.service';
 import { servicioSolicitadoQuery } from '../../../BD/query/servicioSolitadoQuery';
 import { servicioSolicitados } from '../../../Models/servicioSolicitados';
+import { servicioSolicitadoSandBox } from '../../../sandBox/servicioSolicitadoSandBox';
 
 @Component({
   selector: 'app-lista',
@@ -20,30 +21,30 @@ import { servicioSolicitados } from '../../../Models/servicioSolicitados';
 })
 export class ListaComponent implements OnInit {
 
-  serviciosSolicitado$: Observable<servicioSolicitados[]>
+  listaDeServiciosSolicitado$: Observable<servicioSolicitados[]>
+  loadingListaServicioSolicitado$: Observable<boolean>
   idModalListaRequisitos: string = "idModalListaRequisitos";
   alumnoSeleccionado: alumno;
   numeroTotalServicioSolicitado$: Observable<number>;
   listaAlumnoRequisitoPorAlumnoYSemestre: alumnoRequisito[];
   listaEstadoPorArchivo: estadoArchivoRequisito[]
   @BlockUI() blockUI: NgBlockUI;
-  constructor(private servicioSolicitadoService: ServicioSolicitadoService,
-    private servicioSolicitadoQuery: servicioSolicitadoQuery,
-    private alumnoRequisitoService: AlumnoRequisitoService) { }
+  constructor(private servicioSolicitadoQuery: servicioSolicitadoQuery,
+    private alumnoRequisitoService: AlumnoRequisitoService,
+    private servicioSolicitadoSandBox: servicioSolicitadoSandBox) { }
 
   ngOnInit() {
     this.listarServicioSolicitadoPorSemestreActual();
 
+    this.listaDeServiciosSolicitado$ = this.servicioSolicitadoQuery.selectAll();
+    this.loadingListaServicioSolicitado$ = this.servicioSolicitadoQuery.selectLoading();
     functionsGlobal.iniciarModal();
   }
   listarServicioSolicitadoPorSemestreActual() {
-    this.abrirBlock();
     let json = {
       codigoMatricula: "2019-1"
     }
-    this.servicioSolicitadoService.listarServicioSolicitadoPorSemestreActual(json).subscribe(servicios => this.cerrarBlock());
-    this.serviciosSolicitado$ = this.servicioSolicitadoQuery.selectAll();
-    this.numeroTotalServicioSolicitado$ = this.servicioSolicitadoQuery.selectCount();
+    this.servicioSolicitadoSandBox.listarServicioSolicitado(json);
   }
   listarRequisitoPorAlumnoYSemestreActual(idServicioSolicitado: ID) {
     this.abrirBlock();
