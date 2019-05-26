@@ -38,10 +38,11 @@ import { registro_graduado_titulado } from '../../Models/registro_graduado_titul
 import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
 import { RegistroAlumnoGraduadoService } from '../../services/registro-alumno-graduado.service';
 import { alumno_registroAlumnoGraduadoTitulado } from '../../Models/alumno_registroAlumnoGraduadoTitulado';
-
-
-
-
+import { v4 as uuid } from 'uuid';
+import FileUploadWithPreview from 'file-upload-with-preview'
+import { FileService } from 'src/app/global/services/file.service';
+import { flatMap, map, take } from 'rxjs/operators';
+import { variables } from 'src/app/global/variablesGlobales';
 
 @Component({
   selector: 'app-registrobachiller',
@@ -74,7 +75,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   checkedSeleccionado: any
   imageUrl: string = "../../../../../assets/UsuarioDefecto/noimage.png";
   fileToUpload: File = null;
-
+  fileUpload: FileUploadWithPreview;
   listaAlumnoExcel: Array<alumno_registroAlumnoGraduadoTitulado>
   displayedColumnsAlumno_Excel =
     ['nombre_completo', 'Especialidad', 'Facultad'];
@@ -91,21 +92,6 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     }
     reader.readAsDataURL(this.fileToUpload);
   }
-
-
-  data: any = [
-    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  ];
-
 
 
   //codigo del stepper (pasar una transicion de pantalla)
@@ -167,14 +153,15 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     private notificacionService: NotificacionBusService,
     private alumnoGraduadoService: AlumnoGraduadoService,
     private registroAlumnoGraduadoService: RegistroAlumnoGraduadoService,
-    private excelService: ExporterService) { }
+    private excelService: ExporterService,
+    private fileService: FileService) { }
 
 
   /*CODIGO PARA INICIAR LOS METODOS*/
   ngOnInit() {
 
     this.listaAlumnoExcel = new Array<alumno_registroAlumnoGraduadoTitulado>();
-
+    //this.fileUpload = new FileUploadWithPreview("foto");
     //FILTRAR
     this.dataSource.filterPredicate = function (data, filter: string): boolean {
       return data.persona.numero_documento.toLowerCase().includes(filter) || data.persona.nombre_completo.toLowerCase().includes(filter) || data.escuela_profesional.nombre.toLowerCase().includes(filter);
@@ -242,10 +229,73 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.listaAlumnoGraduadoTitulado = new Array();
   }
   /*FIN DE CODIGO PARA INICIAR LOS METODOS*/
-
+  crearIntanciaFoto() {
+    if (!this.fileUpload) {
+      this.fileUpload = new FileUploadWithPreview("foto");
+    }
+  }
   //EXPORTAR EXCEL//
   exportAsXLSX(): void {
-    this.excelService.exportTOExcel(this.data, 'my_export');
+    let id = 1
+    let listaModificada = this.listaAlumnoExcel.map(alumnoExcel => {
+
+      return {
+        ID: id++,
+        CODUNIV: alumnoExcel.alumno_graduado.empresa.codigo,
+        RAZ_SOC: alumnoExcel.alumno_graduado.empresa.nombre,
+        MATRI_FEC: alumnoExcel.alumno_graduado.fecha_ingreso,
+        FAC_NOM: alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre,
+        CARR_PROG: alumnoExcel.alumno.escuela_profesional.nombre,
+        ESC_POS: "",
+        EGRES_FEC: alumnoExcel.alumno_graduado.fecha_egreso,
+        APEPAT: alumnoExcel.alumno.persona.apellido_paterno,
+        APEMAT: alumnoExcel.alumno.persona.apellido_materno,
+        NOMBRE: alumnoExcel.alumno.persona.nombre,
+        SEXO: alumnoExcel.alumno.persona.sexo,
+        DOCU_TIP: alumnoExcel.alumno.persona.tipo_documento.nombre,
+        DOCU_NUM: alumnoExcel.alumno.persona.numero_documento,
+        PROC_BACH: "",
+        GRAD_TITU: alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.nombre,
+        DEN_GRAD: alumnoExcel.alumno_graduado.denominacion_grado_titulo.nombre,
+        SEG_ESP: "",
+        TRAB_INV: alumnoExcel.alumno_graduado.trabajo_investigacion.nombre,
+
+        NUM_CRED: alumnoExcel.alumno_graduado.creditos_aprobados,
+        REG_METADATO: alumnoExcel.alumno_graduado.nombre_programa_estudio.nombre,
+        PROG_ESTU: alumnoExcel.alumno_graduado.nombre_programa_estudio.nombre,
+        PROC_TITULO_PED: "",
+        MOD_OBT: alumnoExcel.alumno_graduado.modalidad_estudio.nombre,
+        MOD_EST: alumnoExcel.alumno_graduado.modalidad_estudio.sigla,
+        ABRE_GYT: alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.siglas,
+        PROC_REV_PAIS: "",
+        PROC_REV_UNIV: "",
+        PROC_REV_GRADO: "",
+        RESO_NUM: alumnoExcel.registro_alumno_graduado.numero_resolucion,
+        RESO_FEC: alumnoExcel.registro_alumno_graduado.fecha_resolucion,
+        DIPL_FEC_ORG: alumnoExcel.registro_alumno_graduado.fecha_emision_diploma,
+        DIPL_FEC_DUP: "",
+        DIPL_NUM: alumnoExcel.registro_alumno_graduado.numero_diploma,
+        DIPL_TIP_EMI: alumnoExcel.registro_alumno_graduado.tipo_diploma.sigla,
+        REG_LIBRO: alumnoExcel.registro_alumno_graduado.registro_libro,
+        REG_FOLIO: alumnoExcel.registro_alumno_graduado.registro_folio,
+        REG_REGISTRO: alumnoExcel.registro_alumno_graduado.numero_registro,
+        CARGO1: "RECTOR",
+        AUTORIDAD1: alumnoExcel.registro_alumno_graduado.rector.docente.persona.nombre_completo,
+        CARGO2: "SECRETARIO GENERAL",
+        AUTORIDAD2: alumnoExcel.registro_alumno_graduado.trabajador_areas.administrativo.persona.nombre_completo,
+        CARGO3: "DECANO",
+        AUTORIDAD3: alumnoExcel.decano.docente.persona.nombre_completo,
+        PROC_PAIS_EXT: "",
+        PROC_UNIV_EXT: "",
+        PROC_GRADO_EXT: "",
+        REG_OFICIO: alumnoExcel.registro_alumno_graduado.numero_oficio,
+        FEC_MAT_PROG: "",
+        FEC_INICIO_PROG: "",
+        FEC_FIN_PROG: "",
+      }
+    });
+
+    this.excelService.exportTOExcel(listaModificada, 'my_export');
   }
 
   ngAfterViewInit(): void {
@@ -301,23 +351,32 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
     if (this.alumnoGraduadoTituladoCreado && this.alumnoGraduadoTituladoCreado.id) {
       //CUANDO SE EDITA EL ALUMNO
-      alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
-      this.alumnoGraduadoService.editarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
-        this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
-        this.notificacionService.showSuccess("Se editó correctamente los datos del alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
-      });
-      console.log(alumnoGraduadoTitulado)
+      this.subirFotoAlumnoGraduado(this.fileUpload.cachedFileArray).subscribe(url => {
+        alumnoGraduadoTitulado.foto = url;
+        alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
+        this.alumnoGraduadoService.editarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
+          this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
+          this.notificacionService.showSuccess("Se editó correctamente los datos del alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
+        });
+      })
+
     } else {
       //CUANDO RECIEN SE VA A CREAR EL ALUMNO
-      alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.id;
-      alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
-      alumnoGraduadoTitulado.tipo_alumno_id = 1
-      this.alumnoGraduadoService.guardarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
-        this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
-        this.notificacionService.showSuccess("Se guardó correctamente los datos del alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
-      });
+      this.subirFotoAlumnoGraduado(this.fileUpload.cachedFileArray).subscribe(url => {
+        alumnoGraduadoTitulado.foto = url;
+        alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.id;
+        alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
+        alumnoGraduadoTitulado.tipo_alumno_id = 1
+
+        this.alumnoGraduadoService.guardarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
+          this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
+          this.notificacionService.showSuccess("Se guardó correctamente los datos del alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
+        });
+      })
+
 
     }
+
 
     /*
     if (!this.listaAlumnoGraduadoTitulado.find(alumnoGraduado => alumnoGraduado.alumno_general_id == this.alumnoBachillerSeleccionado.id)) {
@@ -330,7 +389,15 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     //console.log(alumnoGraduadoTitulado)
 
   }
-
+  subirFotoAlumnoGraduado(file: File[]): Observable<string> {
+    return from(file).pipe(take(file.length), map((archivo: File) => {
+      let formData = new FormData();
+      formData.append("archivo", archivo)
+      formData.append("id", uuid());
+      formData.append("nombreCarpeta", variables.carpetaGradosYTitulos + "bachilleres")
+      return formData
+    }), flatMap((formData: any) => this.fileService.guardarArchivo(formData)))
+  }
   guardarAlumnoBachiller(registroalumnoGraduadoTitulado: any) {
     if (this.registroAlumnoGraduadoTitulado && this.registroAlumnoGraduadoTitulado.id) {
       //CUANDO SE EDITA EL ALUMNO

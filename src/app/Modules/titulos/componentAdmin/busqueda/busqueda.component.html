@@ -1,85 +1,154 @@
 <div class="row">
   <div class="col s12 m6 putLeft ">
     <div class="dvContentTitMod ">
-      <span class="putLeft tituloModalG">REGISTRO NACIONAL DE </span>
+      <span class="putLeft tituloModalG">BUSQUEDA NACIONAL DE </span>
       <span class="putLeft tituloModalM">GRADOS ACADEMICOS Y TITULOS PROFESIONALES</span>
     </div>
   </div>
 </div>
 <mat-divider></mat-divider>
-<div class="row">
-  <div class="col s12">
-    <div class="card">
-      <div class="card-content">
-        <form [formGroup]="busquedaForm" (submit)="filtrar(busquedaForm.value)">
-          <div class="row">
-            <mat-form-field class="col s12 m3">
-              <input matInput placeholder="dni" formControlName="dni">
-            </mat-form-field>
-            <mat-form-field class="col s12 m3">
-              <input matInput placeholder="nombre" formControlName="nombre">
-            </mat-form-field>
-            <mat-form-field class="col s12 m3">
-              <input matInput placeholder="apellido Paterno" formControlName="apellidoPaterno">
-            </mat-form-field>
-            <mat-form-field class="col s12 m3">
-              <input matInput placeholder="apellido Materno" formControlName="apellidoMaterno">
-            </mat-form-field>
+
+<button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+  {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+</button>
+<mat-horizontal-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Buscar Graduado o Titulado</ng-template>
+      <div class="card">
+        <div class="card-panel">
+          <mat-form-field>
+            <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+          </mat-form-field>
+          <div>
+            <button mat-button matStepperNext>Next</button>
           </div>
-          <button class="btn btn-primary waves-effect" [disabled]="!busquedaForm.valid">Buscar</button>
-        </form>
+          <div class="row">
+            <div class="col s12">
+              <div class="card">
+                <div class="card-content">
+                  <form [formGroup]="busquedaForm" (submit)="filtrar(busquedaForm.value)">
+                    <div class="row">
+                      <mat-form-field class="col s12 m3">
+                        <input matInput placeholder="dni" formControlName="dni">
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m3">
+                        <input matInput placeholder="nombre" formControlName="nombre">
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m3">
+                        <input matInput placeholder="apellido Paterno" formControlName="apellidoPaterno">
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m3">
+                        <input matInput placeholder="apellido Materno" formControlName="apellidoMaterno">
+                      </mat-form-field>
+                    </div>
+                    <button class="btn btn-primary waves-effect" [disabled]="!busquedaForm.valid">Buscar</button>
+                  </form>
 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="col s12">
-    <div class="card">
-      <div class="card-content">
-        <table class="responsive-table centered">
-          <thead>
-            <tr>
-              <th>N°</th>
-              <th>Graduado</th>
-              <th>DNI</th>
-              <th>Grado o Título</th>
-              <th>Denominación del Grado</th>
-              <th>Ver</th>
-            </tr>
-          </thead>
+    </form>
 
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Franklin Mijahuanca López</td>
-              <td>47253956</td>
-              <td>Bachiller</td>
-              <td>Bachiller en Informática y sistemas</td>
-              <td>
-                <a class="btn-floating btn-large waves-effect waves-light fondo-ocda"
-                  (click)="abrirModal(modalBusqueda)">
-                  <i class="material-icons">assignment</i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Franklin Mijahuanca López</td>
-              <td>47253956</td>
-              <td>Titulado</td>
-              <td>ingeniero en Informática y sistemas</td>
-              <td>
-                <a class="btn-floating btn-large waves-effect waves-light fondo-ocda"
-                  (click)="abrirModal(modalBusqueda)">
-                  <i class="material-icons">assignment</i>
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <h4> </h4>
+    <h4> </h4>
+    <!--TABLA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
+    <div class="row">
+      <mat-accordion>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Exportar Data a Excel
+            </mat-panel-title>
+            <mat-panel-description>
+              Datos de los Alumnos Egresados Bachilleres
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <!--CODIGO DE TABLA PARA MOSTRAR DATOS A EXPORTAR A EXCEL-->
+          <div class="row">
+            <div style="overflow-x:auto;" class="striped highlight">
+              <table class="centered responsive-table highlight table1">
+                <thead>
+                  <tr>
+                    <th>N°</th>
+                    <th>Graduado</th>
+                    <th>DNI</th>
+                    <th>Grado o Título</th>
+                    <th>Denominación del Grado</th>
+                    <th>Ver</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Franklin Mijahuanca López</td>
+                    <td>47253956</td>
+                    <td>Bachiller</td>
+                    <td>Bachiller en Informática y sistemas</td>
+                    <td>
+                      <a class="btn-floating btn-large waves-effect waves-light fondo-ocda"
+                        (click)="abrirModal(modalBusqueda)">
+                        <i class="material-icons">assignment</i>
+                      </a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Franklin Mijahuanca López</td>
+                    <td>47253956</td>
+                    <td>Titulado</td>
+                    <td>ingeniero en Informática y sistemas</td>
+                    <td>
+                      <a class="btn-floating btn-large waves-effect waves-light fondo-ocda"
+                        (click)="abrirModal(modalBusqueda)">
+                        <i class="material-icons">assignment</i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <mat-action-row>
+            <div class="col s12 m12 right-align">
+              <button mat-raised-button color="primary" class="waves-effect waves-light btn">Export <i
+                  class="far fa-file-excel"></i></button>
+            </div>
+          </mat-action-row>
+          <!-- FIN CODIGO DE TABLA PARA MOSTRAR DATOS A EXPORTAR A EXCEL-->
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
-  </div>
-</div>
+
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Lista de Graduados o Titulado</ng-template>
+      <mat-form-field>
+        <input matInput placeholder="Address" formControlName="secondCtrl" required>
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+
+
 
 
 <!-- Modal Structure  para visualizar los dotos del graduado-->

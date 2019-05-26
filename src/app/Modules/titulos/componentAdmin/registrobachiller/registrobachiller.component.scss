@@ -239,7 +239,7 @@ table.centered tbody tr td {
 }*/
 
 ::ng-deep .mat-horizontal-stepper-header-container {
-  background: #eeeeee !important;
+  background: #e0e0e0 !important;
 }
 
 ::ng-deep .mat-horizontal-content-container {
@@ -254,6 +254,7 @@ table.centered tbody tr td {
 ::ng-deep .mat-horizontal-content-container {
   overflow: hidden !important;
   padding: none !important;
+  background: #e0e0e0 !important;
 }
 
 ::ng-deep .sidenav {

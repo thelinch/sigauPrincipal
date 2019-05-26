@@ -12,12 +12,15 @@ export class BusquedaComponent implements OnInit {
 
   busquedaForm: FormGroup;
   secondFormGroup: FormGroup;
-  modalBusqueda: string  = "modalBusqueda"
-  constructor(private _formBuilder: FormBuilder) {}
+  isLinear = false;
+  firstFormGroup: FormGroup;
+  modalBusqueda: string = "modalBusqueda"
+
+  constructor(private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.busquedaForm = this._formBuilder.group({
-      dni: ["", [Validators.maxLength(8),Validators.pattern(/^[0-9_-]{8,8}$/)]],
+      dni: ["", [Validators.maxLength(8), Validators.pattern(/^[0-9_-]{8,8}$/)]],
       nombre: [''],
       apellidoPaterno: [''],
       apellidoMaterno: [''],
@@ -26,13 +29,13 @@ export class BusquedaComponent implements OnInit {
       secondCtrl: ['', Validators.required]
     });
   }
-  abrirModal( idModal:string){
+  abrirModal(idModal: string) {
     functionsGlobal.openModal(idModal)
   }
-  cerrarModal(idModal:string){
+  cerrarModal(idModal: string) {
     functionsGlobal.closeModal(idModal)
   }
-  filtrar(formValue:any){
+  filtrar(formValue: any) {
     console.log(formValue)
   }
 }

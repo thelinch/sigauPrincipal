@@ -189,6 +189,7 @@
                   <thead class="colorTR">
                     <tr>
                       <th> ID </th>
+                      <th> FOTO </th>
                       <th> CODUNIV </th>
                       <th> RAZ_SOC </th>
                       <th> MATRI_FEC </th>
@@ -244,6 +245,9 @@
                   <tbody class="fonttable">
                     <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
                       <td> </td>
+                      <td>
+                        <img  class="circle responsive-img" src="http://localhost:8000{{alumnoExcel.alumno_graduado.foto}}" alt="FOTO">
+                      </td>
                       <td> {{alumnoExcel.alumno_graduado.empresa.codigo}}</td>
                       <td> {{alumnoExcel.alumno_graduado.empresa.nombre}}</td>
                       <td> {{alumnoExcel.alumno_graduado.fecha_ingreso}}</td>
@@ -288,7 +292,7 @@
                         {{alumnoExcel.registro_alumno_graduado.trabajador_areas.administrativo.persona.nombre_completo}}
                       </td>
                       <td> DECANO</td>
-                      <td> </td>
+                      <td> {{alumnoExcel.decano.docente.persona.nombre_completo}}</td>
                       <td> </td>
                       <td> </td>
                       <td> </td>
@@ -476,10 +480,23 @@
 
                   <div class="col s12 m4 margintop">
                     <mat-card class="example-card ">
-                      <img mat-card-image [src]="imageUrl" alt="Photo of a Shiba Inu" class="" style="height: 300px">
+                      <!--<img mat-card-image [src]="imageUrl" alt="Photo of a Shiba Inu" class="" style="height: 300px">
                       <mat-card-actions>
                         <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)">
-                      </mat-card-actions>
+                      </mat-card-actions>-->
+                      <div class="custom-file-container" data-upload-id="foto">
+                        <label>Archivos: <a href="javascript:void(0)"
+                            class="custom-file-container__image-clear  red-text" title="Clear Image"><i
+                              class="material-icons">cancel</i></a></label>
+                        <label class="custom-file-container__custom-file">
+                          <input type="file" (click)="crearIntanciaFoto()"
+                            class="custom-file-container__custom-file__custom-file-input" accept="*"
+                            aria-label="Subir Archivos">
+                          <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                          <span class="custom-file-container__custom-file__custom-file-control"></span>
+                        </label>
+                        <div class="custom-file-container__image-preview"></div>
+                      </div>
                     </mat-card>
                   </div>
 
