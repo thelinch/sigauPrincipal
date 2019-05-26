@@ -12,7 +12,6 @@ export interface Lista {
   templateUrl: './registrodocente.component.html',
   styleUrls: ['./registrodocente.component.scss']
 })
-
 export class RegistrodocenteComponent implements OnInit {
   isLinear = false;
   firstFormGroup: FormGroup;
@@ -73,8 +72,8 @@ export class RegistrodocenteComponent implements OnInit {
 
   RegimenContratos: Lista[] = [
     {value: 'cas', viewValue: 'CAS'},
-    {value: 'auxiliar', viewValue: 'AUXILIAR'},
-    {value: 'principal', viewValue: 'PRINCIPAL'},
+    // {value: 'auxiliar', viewValue: 'AUXILIAR'},
+    // {value: 'principal', viewValue: 'PRINCIPAL'},
   ];
   
   NivelEstudios: Lista[] = [
@@ -118,6 +117,10 @@ export class RegistrodocenteComponent implements OnInit {
 
   abrirModal(id: string){
     functionsGlobal.openModal(id);
+  }
+
+  closeModal(id: string) {
+    functionsGlobal.closeModal(id)
   }
 
 }

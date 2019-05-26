@@ -1,14 +1,7 @@
-.boton_position{
- position: relative;
- left: 55px;
- top: 150px;
+.bottom_margin{
+    margin: 2px;
 }
 
-.div_container{
-    position: relative;
-    height: 300px;
-    padding: 25px;
-     }
 .div_child {
     padding: 10px;
 }
@@ -24,31 +17,10 @@
 // box-shadow: 0px 2px 5px #c0c0c0; 
 }
 
-.line_verticalDatoLaorales{
-    width: 2px;
-    height: 180px;
-    background-color: #26a69a;
-    position: relative;
-    left:470px;
-    top:30px;
-   }
+.padding_top{
+    padding-top: 20px;
+}
 
-.div_containerDatoProfesion{
-    position: relative;
-    height: 320px;
-    padding: 25px;
-     }
-
-.boton_positionDatoProfesion{
-    position: relative;
-    left: 235px;
-    top: 110px;
-    margin: 5px;
-    }
-
-.boton_positionDatoLaboral{
-    position: relative;
-    left: 90px;
-    top: 170px;
-    margin: 5px;
-    }
+.margin_estudiosSuperiores{
+ margin: 20px;
+}
