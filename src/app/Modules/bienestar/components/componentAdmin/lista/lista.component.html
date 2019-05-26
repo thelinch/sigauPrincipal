@@ -1,5 +1,5 @@
 <block-ui>
-  <div class="row" *ngIf="serviciosSolicitado$ | async as listaServicioSolicitado">
+  <div class="row" *ngIf="listaDeServiciosSolicitado$ | async as listaServicioSolicitado">
     <div>{{numeroTotalServicioSolicitado$ | async}}</div>
     <div class="col s12 m5" *ngFor="let servicioSolicitado of listaServicioSolicitado">
       <div class="card horizontal hoverable">

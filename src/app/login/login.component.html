@@ -1,74 +1,92 @@
 <div class="login-screen ">
     <particles [params]="params" [style]="style " [width]="width" [height]="height"></particles>
-
 </div>
-<div class="login-center">
-    <div class="row">
-        <div class="col s12 m3 offset-m1 register-right">
-            <img src="../../assets/LogoSigau/logosigauPrincipal1.png"
-                class="materialboxed responsive-img imge-principal" alt="">
 
-        </div>
-        <div class="col s12 m4 offset-m3 register-left ">
-            <div class="row">
-                <div class="col s12 m12">
-                    <div class="card  cardlogin transparent">
-                        <div class="card-content">
-                            <div class="front signin_form">
-                                <h6 style="color:#ffffff ; text-align: center">Ingrese su cuenta </h6>
-                                <form class="login-form">
-                                    <div class="row">
-                                        <form class="col s12">
-                                            <div class="row">
-                                                <div class="input-field col s12 colorIconsLogin">
-                                                    <div class="example-container">
-                                                        <mat-form-field>
-                                                            <input matInput placeholder="Escribe tu email"
-                                                                [formControl]="email" required>
-                                                            <!--  <mat-error *ngIf="email.invalid">
-                                                                {{getErrorMessage()}}</mat-error>  -->
-                                                            <mat-icon class="colorIconsLogin" matSuffix>person
-                                                            </mat-icon>
-                                                            <!-- <mat-hint>email institucional</mat-hint> -->
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
+<div class="tile">
+    <div class="tile-header">
+        <h2
+            style="color: white; opacity: 1; font-size: 4rem; display: flex; justify-content: center; align-items: center; height: 100%; margin-top: 20px">
+            <img src="../../assets/LogoSigau/logo sigau.png" class="materialboxed responsive-img imge-principal" alt="">
+        </h2>
+    </div>
 
-                                                <div class="input-field col s12 colorIconsLogin">
-                                                    <p></p>
-                                                    <div class="example-container">
-                                                        <mat-form-field>
-                                                            <input matInput placeholder="Escribe tu password"
-                                                                [type]="hide ? 'password' : 'text'">
-                                                            <mat-icon class="colorIconsLogin" matSuffix
-                                                                (click)="hide = !hide">
-                                                                {{hide ? 'lock' : 'lock_open'}}
-                                                            </mat-icon>
-                                                        </mat-form-field>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="checkbox right-align colorIconsLogin">
-                                                <mat-checkbox> Recuerdame la proxima vez.</mat-checkbox>
-                                            </div>
+    <div class="tile-body">
+        <form id="form">
+            <label class="form-input">
+                <i class="material-icons">person</i>
+                <input type="text" autofocus="true" required />
+                <span class="label">Email</span>
+                <span class="underline"></span>
+            </label>
 
-                                            <div class="form-group sign-btn right-align">
-                                                <h1></h1>
-                                                <a class="waves-effect waves-light btn  light-blue darken-4"
-                                                    style="color:white"
-                                                    [routerLink]="['../principal','usuario','1','modulos']"
-                                                    routerLinkActive="router-link-active">
-                                                    Iniciar sesión
-                                                </a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+            <label class="form-input">
+                <i class="material-icons">lock</i>
+                <input type="password" required />
+                <span class="label">Password</span>
+                <div class="underline"></div>
+            </label>
+
+            <div class="submit-container clearfix" style="margin-top: 2rem;">
+                <div id="submit" role="button" type="button" class="waves-effect waves-light btn  light-blue darken-4"
+                    tabindex="0" [routerLink]="['../principal','usuario','1','modulos']"
+                    routerLinkActive="router-link-active">
+                    <span>SIGN IN</span>
+                </div>
+
+                <div class="login-pending">
+                    <div class=spinner>
+                        <span class="dot1"></span>
+                        <span class="dot2"></span>
+                    </div>
+
+                    <div class="login-granted-content">
+                        <i class="material-icons">done</i>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
+    </div>
+</div>
+
+<!--
+<div class="container">
+    <div class="middle">
+        <div id="login">
+
+            <form action="javascript:void(0);" method="get">
+                <fieldset class="clearfix">
+                    <p><span class="fa fa-user"></span><input type="text" Placeholder="Username" required></p>
+                    
+                    <p><span class="fa fa-lock"></span><input type="password" Placeholder="Password" required></p>
+                  
+                    <div>
+                        <span style="width:48%; text-align:left;  display: inline-block;">
+                            <mat-checkbox> Recuerdame.</mat-checkbox>
+                        </span>
+                        <span style="width:38%; text-align:right;  display: inline-block;"><input type="submit"
+                                value="Sign In" [routerLink]="['../principal','usuario','1','modulos']"
+                                routerLinkActive="router-link-active"></span>
+                    </div>
+                </fieldset>
+                <div class="clearfix"></div>
+            </form>
+            <div class="clearfix"></div>
+        </div> 
+        <div class="logo">SIGAU
+            <div class="clearfix"></div>
+        </div> 
+    </div>
+</div>
+-->
+
+<div class="row">
+    <div class="col s12 m12">
+        <footer class="footer--visa right-align" style="opacity: 0.75;">
+            <p class=""> <img src="../../assets/Logo UNAS/UNAS-LOGO.png" alt="" class="unas-logo">Copyright
+                <a href="https://www.unas.edu.pe/web/" target="_blank">UNAS</a> © 2019 Universidad Nacional Agraria de
+                la Selva.
+            </p>
+        </footer>
+
     </div>
 </div>
