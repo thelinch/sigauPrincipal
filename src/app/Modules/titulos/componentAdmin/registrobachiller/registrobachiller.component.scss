@@ -314,3 +314,51 @@ table.centered tbody tr td {
   margin-bottom: 0px !important;
   padding-bottom: 0 !important;
 }
+
+.custom-file-container__image-preview {
+  overflow: auto !important;
+  margin-bottom: 10px !important;
+  height: 300px !important;
+  margin-top: 10px !important;
+  background-size: contain !important;
+  //background-position: center !important;
+}
+
+.custom-file-container__custom-file__custom-file-control {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  height: calc(2.25rem + 2px);
+  padding: 0.5rem 0.75rem;
+  overflow: hidden;
+  line-height: 1.5;
+  color: #333;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #c0c0af;
+  border-radius: 0.25rem;
+}
+
+.custom-file-container__custom-file__custom-file-control__button {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 6;
+  display: block;
+  height: calc(2.25rem + 2px);
+  padding: 0.5rem 0.75rem;
+  line-height: 1.25;
+  color: #333;
+  background-color: #edede8;
+  border-left: 1px solid #c0c0af;
+  box-sizing: border-box;
+}
+
