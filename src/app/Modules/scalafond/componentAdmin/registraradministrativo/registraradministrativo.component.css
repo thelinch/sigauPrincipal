@@ -6,7 +6,26 @@
   font-weight:bold;
   font-size: x-large
 }
-.putLeft {
-    float: left !important;
- 
-  }
+
+.div_container_child{
+  padding: 10px;
+}
+
+.position_bottom{
+  position: relative;
+  top: 60px;
+  left: 45px;
+}
+
+.bottom_margin{
+  margin: 2px;
+}
+
+.padding_top{
+  padding-top: 20px;
+}
+
+.margin_estudiosSuperiores{
+margin: 20px;
+}
+
