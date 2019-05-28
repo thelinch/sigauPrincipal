@@ -96,7 +96,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
   //codigo del stepper (pasar una transicion de pantalla)
   panelOpenState = false;
-  isLinear = false;
+  isLinear = true;
   firstFormGroup: FormGroup;
   formularioRegistroBachiller: FormGroup;
   formularioGuardarBachiller: FormGroup;
@@ -424,7 +424,10 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         // this.registroAlumnoGraduadoTitulado = registroAlumnoGraduadoTitulado;
         this.listaAlumnoExcel.push(registroAlumnoGraduadoTitulado)
         this.alumnoGraduadoTituladoCreado = null;
-        this.registroAlumnoGraduadoTitulado = null
+        this.registroAlumnoGraduadoTitulado = null;
+        this.alumnoPregradoSeleccionado = null;
+        this.fileUpload.cachedFileArray = [];
+        this.fileUpload.clearImagePreviewPanel();
         console.log(this.listaAlumnoExcel)
         this.notificacionService.showSuccess("Se Graduo correctamente el alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
         this.formularioGuardarBachiller.reset();
