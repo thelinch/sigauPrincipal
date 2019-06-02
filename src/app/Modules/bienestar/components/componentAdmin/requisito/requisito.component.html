@@ -35,8 +35,26 @@
             <li *ngIf="requisito.requerido" matTooltip="requerido"><a class="btn-floating btn-small red"><i
                   class="fas fa-asterisk  lighten-1"></i></a>
             </li>
-            <li *ngFor="let tipo of requisito.tipos"><a class="btn-floating btn-small yellow darken-1"
-                [matTooltip]="tipo.nombre"><i class=" fas  {{tipo.icono}}"></i></a>
+            <li *ngFor="let tipo of requisito.tipos" [popperApplyClass]="'amber,z_index,darken-1'"
+              [popperTrigger]="'click'" [popper]="listaActualizacion" popoverTitle="wdd" [popperShowOnStart]="false"
+              [popperPlacement]="'top'"><a class="btn-floating btn-small yellow darken-1" [matTooltip]="tipo.nombre"><i
+                  class=" fas  {{tipo.icono}}"></i></a>
+              <popper-content #listaActualizacion>
+                <div class="row">
+                  <mat-slide-toggle class="col s12 m3" color="primary" [checked]="tipo.pivot.actualizacion"
+                    #actualizacion>
+                  </mat-slide-toggle>
+                  <mat-form-field class="col s12 m5">
+                    <input matInput placeholder="Años" type="number" [disabled]="!actualizacion.checked" #tiempo
+                      [value]="tipo.pivot.numero_anios_actualizacion">
+                  </mat-form-field>
+                  <div class="col s12 m4">
+                    <a class="btn-floating blue" 
+                      (click)="cambiarActualizacion(actualizacion.checked,requisito.id,tipo.id,tiempo.value)"><i
+                        class="material-icons">cached</i></a>
+                  </div>
+                </div>
+              </popper-content>
             </li>
             <li *ngFor="let servicio of requisito.servicios"><a [matTooltip]="servicio.nombre"
                 class="btn-floating btn-small green"><i class="fas  {{servicio.icono}} "></i></a></li>
@@ -45,11 +63,6 @@
                   class="fas fa-star yellow-text"></i></a>
             </li>
           </ul>
-        </div>
-        <div class="position_absolute top_0 right_0">
-          <mat-slide-toggle matTooltip=" Actualizar Requisito" color="primary"
-            (change)="cambiarActualizacion($event.checked,requisito.id)" [checked]="requisito.actualizacion">
-          </mat-slide-toggle>
         </div>
         <div class="card-stacked">
           <div class="card-action  position_relative center-align">

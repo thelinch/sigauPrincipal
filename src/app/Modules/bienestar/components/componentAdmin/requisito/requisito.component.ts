@@ -225,11 +225,23 @@ export class RequisitoComponent implements OnInit {
       this.abrirModal(this.idModalArchivos)
     })*/
   }
-  cambiarActualizacion(isChecked: boolean, idRequisito: ID) {
+  cambiarActualizacion(isChecked: boolean, idRequisito: ID, tipoId: number, tiempo: number) {
+    console.log(tiempo)
+    if (tiempo <=0) {
+      Swal.fire({
+        type: "error",
+        text: "Los años deben ser mayor a 0",
+        showCloseButton: true
+      })
+      return;
+    }
     let json = {
       checked: isChecked,
-      idRequisito: idRequisito
+      tipo_id: tipoId,
+      idRequisito: idRequisito,
+      tiempo: tiempo
     }
+    console.log(json)
     this.sb.cambioActualizacion(json);
   }
   listarArchivosPorRequisito() {
