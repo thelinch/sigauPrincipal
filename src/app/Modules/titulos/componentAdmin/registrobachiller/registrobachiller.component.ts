@@ -43,6 +43,7 @@ import FileUploadWithPreview from 'file-upload-with-preview'
 import { FileService } from 'src/app/global/services/file.service';
 import { flatMap, map, take } from 'rxjs/operators';
 import { variables } from 'src/app/global/variablesGlobales';
+import { IfStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-registrobachiller',
@@ -96,7 +97,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
   //codigo del stepper (pasar una transicion de pantalla)
   panelOpenState = false;
-  isLinear = true;
+  isLinear = false;
   firstFormGroup: FormGroup;
   formularioRegistroBachiller: FormGroup;
   formularioGuardarBachiller: FormGroup;
@@ -496,11 +497,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   }
 
   iniciarData() {
-    this.alumnoService.AlumnosPregrado().subscribe({
-      next: (listaAlumnos) => {
-        this.dataSource.data = listaAlumnos
-      },
-      complete: () => {
+    
         this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
         this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
         this.listaModalidadEstudios$ = this.modalidadEstudio.listaModalidadEstudio();
@@ -508,8 +505,6 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         this.listaDecanosFaultades$ = this.decanofacultadService.DecanoFacultad();
         this.listaRectores$ = this.rectorService.Rector();
         this.listaTrabajadorAreas$ = this.trabajadorareaService.TrabajadorArea();
-      }
-    })
   }
 
 
@@ -521,8 +516,9 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   }
 
   filtarAlumnos(valor: any) {
+    valor.especialidad=valor.especialidad=="todos"?null:valor.especialidad;
     this.alumnoService.listaAlumnosFiltrado(valor).subscribe(listaFiltrada => {
-      //this.dataSource.data = listaFiltrada;
+      this.dataSource.data = listaFiltrada;
       console.log(valor)
       console.log(listaFiltrada)
     })
