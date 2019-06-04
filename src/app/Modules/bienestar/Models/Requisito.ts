@@ -15,7 +15,6 @@ export interface requisito {
   tipos: tipoRequisito[]
   servicios: servicio[]
   archivos: archivoBase[]
-  actualizacion: boolean
   estado: boolean
   created_at: Date
   updated_at: Date

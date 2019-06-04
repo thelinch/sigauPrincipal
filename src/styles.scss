@@ -197,6 +197,9 @@ position: absolute;
 
   }
 }
+.padding_card{
+  padding: 0.2rem;
+}
 .button_create{
   margin-top: 10px;
 }
@@ -243,4 +246,7 @@ position: absolute;
   height: 50px;
   width: 50px;
   border-radius: 50%;
+}
+.z_index{
+  z-index: 1000;
 }

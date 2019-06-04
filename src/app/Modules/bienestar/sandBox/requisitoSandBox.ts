@@ -3,7 +3,7 @@ import { requisitoStore } from '../BD/store/Requisito.store';
 import { RequisitoService } from '../services/requisito.service';
 import { requisito } from '../Models/Requisito';
 import { VISIBILITY_FILTER } from '../filter/filterRequisito.model';
-import { ID, arrayRemove } from '@datorama/akita';
+import { ID, arrayRemove, arrayUpdate } from '@datorama/akita';
 import { take, map, flatMap } from 'rxjs/operators';
 import { from, Subject, Observable } from 'rxjs';
 import { FileService } from 'src/app/global/services/file.service';
@@ -11,6 +11,7 @@ import { NotificacionBusService } from 'src/app/global/services/NotificacionBusS
 import { TipoRequisitoService } from '../services/tipo-requisito.service';
 import { variables } from 'src/app/global/variablesGlobales';
 import { archivoBase } from '../Models/archivoBase';
+import { tipoRequisito } from '../Models/tipoRequisito';
 @Injectable({ providedIn: "root" })
 export class requisitoSandBox {
 
@@ -98,9 +99,13 @@ export class requisitoSandBox {
     }
     cambioActualizacion(json: any) {
         this.requisitoService.cambiarActualizaconRequisito(json).subscribe(requisitoActualizado => {
-            this.store.update(requisitoActualizado.id, requisito => {
-                return { ...requisito, actualizacion: requisitoActualizado.actualizacion }
-            })
+            /*this.store.update(requisitoActualizado.id, requisito => {
+                tipos: arrayUpdate(requisito.tipos, json.tipo_id, { pivot.actualizacion: json.checked })
+            })*/
+            this.store.update(requisitoActualizado.id, requisito => ({
+                tipos: arrayUpdate(requisito.tipos, json.tipo_id, { "pivot": { actualizacion: json.checked, numero_anios_actualizacion: json.tiempo } })
+            }));
+            //  this.store.update(1, arrayUpdate<requisito, tipoRequisito>('tipos', 1, { pivot.actualizacion: true }))
             this.notificacionBusServicio.showInfo("Se Actualizo correctamente el requisito " + requisitoActualizado.nombre)
         })
     }
