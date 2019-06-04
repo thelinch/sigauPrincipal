@@ -36,4 +36,8 @@ export class AlumnoService {
   listarRequisitosPorAlumnoYSemestreActual(json: any): Observable<alumnoRequisito[]> {
     return this.http.post<alumnoRequisito[]>(this.urlControlador + "alumno/requisitos", JSON.stringify(json), { headers: this.header });
   }
+
+  listaAlumnosFiltrado(json: any): Observable<alumno[]>{
+    return this.http.post<alumno[]>(this.urlControlador + "alumnoFiltrado", JSON.stringify(json), {headers: this.header});
+  }
 }

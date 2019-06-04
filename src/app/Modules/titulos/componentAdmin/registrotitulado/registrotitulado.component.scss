@@ -1,0 +1,379 @@
+.tituloModalM {
+  color: #01579b;
+  padding: 1px;
+  font-weight: bold;
+  margin-top: 2px;
+  width: max-content;
+}
+.putLeft {
+  float: left !important;
+  margin-block-start: 2%;
+}
+
+.dvContentTitMod {
+  border-bottom: 2px solid #01579b;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  width: min-content;
+}
+
+.modalMargin {
+  margin-top: 1%;
+}
+
+.textalinaer {
+  text-align: justify;
+}
+
+.margen {
+  margin-top: 0%;
+}
+.margintop {
+  margin-top: 10px;
+}
+.margenBsucar {
+  margin-top: 2%;
+}
+
+.chip img {
+  float: left;
+  margin: 0 10px 0 -25px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+.btn-small {
+  margin-left: 5px;
+}
+
+.boxshadow {
+  -webkit-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.6);
+}
+
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+  padding: 0;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+tr.mat-header-row {
+  height: 56px;
+  background: #00bfa5;
+}
+.colortablewhite {
+  color: white;
+}
+
+.marginfiltertable {
+  margin-left: 50px;
+}
+.colorTR {
+  background: #00bfa5;
+  color: white;
+}
+
+.titleLista {
+  margin-right: 20px;
+}
+
+.example-container {
+  height: 400px;
+  overflow: auto;
+}
+
+.example-container {
+  height: 320px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.fonttable {
+  font-size: 14px;
+}
+
+/*CSS PARA DAR NUMERACION A LA TABLA*/
+.table1 tr {
+  counter-increment: rowNumber;
+}
+
+.table1 tr td:first-child::before {
+  content: counter(rowNumber);
+  min-width: 1em;
+  margin-right: 0.5em;
+}
+
+/*CODIGO PARA AÑADIR SCROLL HORIZONTAL A UNA TABLA*/
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th,
+td {
+  text-align: left;
+  //padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.colorOcad {
+  color: #00bfa5;
+}
+
+/*CSS DE LA TABLA DE CONTENIDO*/
+
+/*
+  tbody {
+    display: block;
+    height: 500px;
+    width: 100%;
+    overflow: auto;
+  }
+  thead,
+  tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+  thead {
+    width: calc(100%);
+  }
+  table {
+    width: 100%;
+  }
+  */
+
+/*TABLE RESPONSIVE*/
+/*
+  table.centered thead tr th,
+  table.centered tbody tr td {
+    text-align: center;
+  }
+  
+  @media only screen and (max-width: 992px) {
+    table.responsive-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      display: block;
+      position: relative;
+    }
+    table.responsive-table td:empty:before {
+      content: "\00a0";
+    }
+    table.responsive-table th,
+    table.responsive-table td {
+      margin: 0;
+      vertical-align: top;
+    }
+    table.responsive-table th {
+      text-align: left;
+    }
+    table.responsive-table thead {
+      display: block;
+      float: left;
+    }
+    table.responsive-table thead tr {
+      display: block;
+      padding: 0 10px 0 0;
+    }
+    table.responsive-table thead tr th::before {
+      content: "\00a0";
+    }
+    table.responsive-table tbody {
+      display: block;
+      width: auto;
+      position: relative;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    table.responsive-table tbody tr {
+      display: inline-block;
+      vertical-align: top;
+    }
+    table.responsive-table th {
+      display: block;
+      text-align: right;
+    }
+    table.responsive-table td {
+      display: block;
+      min-height: 1.25em;
+      text-align: left;
+    }
+    table.responsive-table tr {
+      border-bottom: none;
+      padding: 0 10px;
+    }
+    table.responsive-table thead {
+      border: 0;
+      border-right: 1px solid rgba(0, 0, 0, 0.12);
+    }
+  
+    tbody {
+      display: inline-flex;
+      height: auto;
+      overflow: auto;
+    }
+    thead,
+    tbody tr {
+      display: table;
+      width: auto;
+      table-layout: auto;
+    }
+    thead {
+      width: auto;
+    }
+    table {
+      width: auto;
+    }
+  }*/
+
+::ng-deep .mat-horizontal-stepper-header-container {
+  background: #e0e0e0 !important;
+}
+
+::ng-deep .mat-horizontal-content-container {
+  margin-top: 0px !important;
+  padding: 0 5px 5px 5px !important;
+}
+
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+::ng-deep .mat-horizontal-content-container {
+  overflow: hidden !important;
+  padding: none !important;
+  background: #e0e0e0 !important;
+}
+
+::ng-deep .sidenav {
+  padding-bottom: 150px !important;
+}
+
+///// color
+::ng-deep .mat-form-field-underline .mat-form-field-ripple {
+  color: #c0c0c0 !important;
+  background-color: #c0c0c0 !important;
+}
+
+::ng-deep .mat-form-field-underline {
+  color: #c0c0c0 !important;
+  background-color: #c0c0c0 !important;
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
+  transform: perspective(100px);
+  -ms-transform: none;
+  color: #9e9e9e;
+}
+
+::ng-deep .mat-form-field-appearance-legacy .mat-form-field-label {
+  -webkit-transform: perspective(100px);
+  transform: perspective(100px);
+  -ms-transform: none;
+  color: #c0c0c0;
+}
+
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label {
+  color: #757575;
+}
+
+::ng-deep .mat-form-field-invalid .mat-input-element {
+  caret-color: #757575;
+}
+
+::ng-deep .mat-form-field.mat-form-field-invalid .mat-form-field-label .mat-form-field-required-marker {
+  color: #757575;
+}
+
+::ng-deep .mat-focused .mat-form-field-required-marker {
+  color: #757575;
+}
+
+::ng-deep section {
+  background: #e0e0e0 !important;
+}
+
+::ng-deep .mat-stepper-horizontal,
+.mat-stepper-vertical {
+  background-color: #eeeeee !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-done,
+.mat-step-header .mat-step-icon-state-edit {
+  background-color: #1c75db !important;
+  color: white;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-edit {
+  background-color: #1c75db !important;
+  color: white;
+}
+
+::ng-deep .mat-card > .mat-card-actions:last-child {
+  margin-bottom: 0px !important;
+  padding-bottom: 0 !important;
+}
+
+.custom-file-container__image-preview {
+  overflow: auto !important;
+  margin-bottom: 10px !important;
+  height: 300px !important;
+  margin-top: 10px !important;
+  background-size: contain !important;
+  //background-position: center !important;
+}
+
+.custom-file-container__custom-file__custom-file-control {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 5;
+  height: calc(2.25rem + 2px);
+  padding: 0.5rem 0.75rem;
+  overflow: hidden;
+  line-height: 1.5;
+  color: #333;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #c0c0af;
+  border-radius: 0.25rem;
+}
+
+.custom-file-container__custom-file__custom-file-control__button {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 6;
+  display: block;
+  height: calc(2.25rem + 2px);
+  padding: 0.5rem 0.75rem;
+  line-height: 1.25;
+  color: #333;
+  background-color: #edede8;
+  border-left: 1px solid #c0c0af;
+  box-sizing: border-box;
+}

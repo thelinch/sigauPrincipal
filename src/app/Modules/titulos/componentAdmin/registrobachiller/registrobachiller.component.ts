@@ -134,6 +134,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+
   }
 
   @BlockUI() blockUI: NgBlockUI;
@@ -163,9 +164,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     this.listaAlumnoExcel = new Array<alumno_registroAlumnoGraduadoTitulado>();
     //this.fileUpload = new FileUploadWithPreview("foto");
     //FILTRAR
-    this.dataSource.filterPredicate = function (data, filter: string): boolean {
-      return data.persona.numero_documento.toLowerCase().includes(filter) || data.persona.nombre_completo.toLowerCase().includes(filter) || data.escuela_profesional.nombre.toLowerCase().includes(filter);
-    };
+    this.dataSource.filterPredicate = this.filtrarData
     //FIN DE FILTAR
 
     //NOTIFICACIONES
@@ -175,7 +174,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         type: notificacion.severidad,
         toast: true,
         position: "top-end",
-        timer: 3000,
+        timer: 2000,
       })
     })
     //FIN DE NOTIFICACIONES
@@ -227,6 +226,21 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     });
 
     this.listaAlumnoGraduadoTitulado = new Array();
+  }
+  filtrarPorEspecialidad(event: any) {
+    //this.filtrarData(this.dataSource.data,event.source.value.nombre);
+    if (event.source._selected) {
+      console.log(event.source.value)
+      this.applyFilter(event.source.value.nombre)
+    }
+  }
+  filtrarData(data, filter: string) {
+    return data.persona.numero_documento.toLowerCase().includes(filter) || 
+    data.persona.nombre.toLowerCase().includes(filter) || 
+    data.persona.apellido_paterno.toLowerCase().includes(filter) ||
+    data.persona.apellido_materno.toLowerCase().includes(filter) || 
+    data.persona.nombre_completo.toLowerCase().includes(filter) || 
+    data.escuela_profesional.nombre.toLowerCase().includes(filter);
   }
   /*FIN DE CODIGO PARA INICIAR LOS METODOS*/
   crearIntanciaFoto() {
@@ -506,6 +520,14 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     })
   }
 
+  filtarAlumnos(valor: any) {
+    this.alumnoService.listaAlumnosFiltrado(valor).subscribe(listaFiltrada => {
+      //this.dataSource.data = listaFiltrada;
+      console.log(valor)
+      console.log(listaFiltrada)
+    })
+    
+  }
 
   /*CODIGO PARA MOSTRAR LOS ESTUDIANTES DE PRE-GRADO
   public alumnosPregado() {

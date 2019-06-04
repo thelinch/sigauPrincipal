@@ -1,3 +1,766 @@
-<p>
-  registrotitulado works!
-</p>
+<div>
+  <!--CODIGO DE TITULO GENERAL-->
+  <div class="row">
+    <div class="col s12 m6 putLeft ">
+      <div class="dvContentTitMod ">
+        <span class="putLeft tituloModalG">REGISTRO NACIONAL DE </span>
+        <span class="putLeft tituloModalM">GRADOS ACADEMICOS Y TITULOS PROFESIONALES</span>
+      </div>
+    </div>
+  </div>
+  <!--FIN DE CODIGO DE TITULO GENERAL-->
+  <mat-divider></mat-divider>
+  <!--CODIGO PARA LISTAR LOS ALUMNOS-->
+  <div class="">
+    <blockquote>
+      <p class="left black-text titleLista"><b>Lista de Estudiantes para Graduar</b></p>
+      <a class="waves-effect waves-light btn  white darken-4 black-text tooltipped"
+        (click)="abrirModal(idModalAgregarAlumnoPregrado)" data-tooltip="Seleccionar"><i
+          class="material-icons right">group_add</i>Agregar</a>
+    </blockquote>
+  </div>
+  <!--FIN DE CODIGO PARA LISTAR LOS ALUMNOS-->
+  <mat-divider></mat-divider>
+
+  <!--CODIGO PARA MOSTRAR LA LISTA DE ALUMNOS A GRADUAR-->
+  <!--
+    <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+    {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+  </button>
+  -->
+  <mat-horizontal-stepper [linear]="isLinear" #stepper *ngIf="listaAlumnoSeleccionados.selected.length>0">
+    <!---->
+    <mat-step [stepControl]="firstFormGroup" [completed]="false">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Lista de Alumnos</ng-template>
+        <!--LISTA DE ALUMNOS CON CARDS-->
+        <div class="card">
+          <div class="card-panel">
+            <div class="row">
+
+              <mat-form-field class="col s12 m6">
+                <input matInput placeholder="First name, First name" formControlName="firstCtrl" required>
+              </mat-form-field>
+
+              <!--LISTA DE ALMUNOS-->
+              <div class="col s12 m8 ">
+                <table *ngIf="listaAlumnoSeleccionados.selected.length>0"
+                  class=" centered responsive-table highlight table1 ">
+                  <thead class="colorTR">
+                    <tr>
+                      <th> <i class="material-icons">check</i></th>
+                      <th>DNI</th>
+                      <th>Nombres</th>
+                      <th>Apellidos</th>
+                      <th>Escuela Profesional</th>
+                      <th>Operaciones</th>
+                    </tr>
+                  </thead>
+                  <tbody class="fonttable">
+                    <tr (click)="clickAlumnoCard(alumnoSeleccionado)"
+                      *ngFor="let alumnoSeleccionado of listaAlumnoSeleccionados.selected ">
+                      <td>
+                        <mat-checkbox [disabled]="true" #check></mat-checkbox>
+                      </td>
+                      <td>{{alumnoSeleccionado.persona.numero_documento}} </td>
+                      <td>{{alumnoSeleccionado.persona.nombre}} </td>
+                      <td>
+                        {{alumnoSeleccionado.persona.apellido_paterno +" "+alumnoSeleccionado.persona.apellido_materno}}
+                      </td>
+                      <td> {{alumnoSeleccionado.escuela_profesional.nombre}}</td>
+                      <td>
+                        <button mat-button matStepperNext [disabled]="check.checked"
+                          class="btn-floating btn-small waves-effect blue tooltipped"
+                          (click)="seleccionarAlumno(alumnoSeleccionado,check);listarDenominacionGradoPorEspecialidad(alumnoSeleccionado);listarUniversidades();limpiarFormularioAlumnoGraduadoTitulado();limpiarFormularioRegistroGraduadoTitulado()"
+                          matTooltip="Agregar datos al alumno"><i class="material-icons">border_color</i></button>
+                        <!--
+                        <a matTooltip="visualizar  datos del alumno"
+                          class="btn-floating btn-small waves-effect tooltipped"><i
+                            class="material-icons">remove_red_eye</i></a>
+                         -->
+                        <button matTooltip="remover  alumno" [disabled]="check.checked"
+                          (click)="removerAlumno(alumnoSeleccionado)"
+                          class="btn-floating btn-small waves-effect red tooltipped"><i
+                            class="material-icons">delete</i></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <!--FIN DE LISTA DE ALUMNOS-->
+
+              <!--CARD DE DATOS DEL ALUMNO PPREGRADO-->
+              <div class="col s12 m4">
+                <div class="card" *ngIf="listaAlumnoSeleccionados.selected.length>0 && alumnoPregradoSeleccionado">
+                  <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" src="{{alumnoPregradoSeleccionado.persona.foto}}" style="height: 350px">
+                    <span class="card-title">UNAS</span>
+                    <div
+                      class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
+                      <input class="colortablewhite" matInput placeholder="Documento de Identidad "
+                        value="DNI: {{alumnoPregradoSeleccionado.persona.numero_documento}}" readonly>
+                    </div>
+                    <div class="estado position_absolute top_0  right_0">
+                      <span
+                        class="chip fondo-ocda white-text light-blue darken-4">{{gradoacademico(alumnoPregradoSeleccionado)}}</span>
+                    </div>
+                  </div>
+                  <div class="card-content">
+                    <span
+                      class="card-title activator grey-text text-darken-4">{{alumnoPregradoSeleccionado.persona.nombre}}
+                      {{alumnoPregradoSeleccionado.persona.apellido_paterno}}
+                      {{alumnoPregradoSeleccionado.persona.apellido_materno}} <i
+                        class="material-icons right">more_vert</i></span>
+                    <p><a>{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}</a></p>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title grey-text text-darken-4 center-align teal accent-4"><b
+                        class="white-text">Datos</b><i class="material-icons right">close</i></span>
+                    <mat-divider> </mat-divider>
+                    <p></p>
+                    <div class="row">
+                      <mat-form-field class="col s7 m7 example-full-width  ">
+                        <input matInput placeholder="Código de Estudiante" value="{{alumnoPregradoSeleccionado.codigo}}"
+                          readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s5 m5 example-full-width">
+                        <input matInput placeholder="DNI"
+                          value="{{alumnoPregradoSeleccionado.persona.numero_documento}}" readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s7 m7 example-full-width">
+                        <input matInput placeholder="Nombres" value="{{alumnoPregradoSeleccionado.persona.nombre}}"
+                          readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s5 m5 example-full-width">
+                        <input matInput placeholder="Fecha de Nacimiento "
+                          value="{{alumnoPregradoSeleccionado.persona.fecha_nacimiento}}" readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m12 example-full-width">
+                        <input matInput placeholder="Apellidos "
+                          value="{{alumnoPregradoSeleccionado.persona.apellido_paterno}} {{alumnoPregradoSeleccionado.persona.apellido_materno}}"
+                          readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m12 example-full-width">
+                        <input matInput placeholder="Facultad"
+                          value="{{alumnoPregradoSeleccionado.escuela_profesional.facultad_oficina.nombre}}" readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m12 example-full-width">
+                        <input matInput placeholder="Escuela Profesional"
+                          value="{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}" readonly>
+                      </mat-form-field>
+                      <mat-form-field class="col s12 m12 example-full-width">
+                        <input matInput placeholder="Correo Institucional"
+                          value="{{alumnoPregradoSeleccionado.correo_institucional}}" readonly>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--FIN DE CARD DE DATOS DEL ALUMNO PPREGRADO-->
+              <!--
+              <div class="col s12 m12 right-align">
+                <button mat-button matStepperPrevious class="waves-effect waves-light btn"><i
+                    class="material-icons right">save</i>Registrar</button>
+              </div>
+              -->
+            </div>
+          </div>
+        </div>
+        <!--FIN DE LISTA DE ALUMNOS CON CARDS-->
+      </form>
+      <h4> </h4>
+      <h4> </h4>
+      <!--TABLA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
+      <div class="row">
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Exportar Data a Excel
+              </mat-panel-title>
+              <mat-panel-description>
+                Datos de los Alumnos Egresados Bachilleres
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <!--CODIGO DE TABLA PARA MOSTRAR DATOS A EXPORTAR A EXCEL-->
+            <div class="row">
+              <div style="overflow-x:auto;" class="striped highlight">
+                <table class="centered responsive-table highlight table1">
+                  <thead class="colorTR">
+                    <tr>
+                      <th> ID </th>
+                      <!--
+                      <th> FOTO </th>-->
+                      <th> CODUNIV </th>
+                      <th> RAZ_SOC </th>
+                      <th> MATRI_FEC </th>
+                      <th> FAC_NOM </th>
+                      <th> CARR_PROG </th>
+                      <th> ESC_POS </th>
+                      <th> EGRES_FEC </th>
+                      <th> APEPAT </th>
+                      <th> APEMAT </th>
+                      <th> NOMBRE </th>
+                      <th> SEXO </th>
+                      <th>DOCU_TIP </th>
+                      <th>DOCU_NUM </th>
+                      <th> PROC_BACH </th>
+                      <th> GRAD_TITU </th>
+                      <th> DEN_GRAD </th>
+                      <th> SEG_ESP </th>
+                      <th> TRAB_INV </th>
+                      <th> NUM_CRED </th>
+                      <th> REG_METADATO </th>
+                      <th> PROG_ESTU </th>
+                      <th> PROC_TITULO_PED </th>
+                      <th> MOD_OBT </th>
+                      <th> MOD_EST </th>
+                      <th> ABRE_GYT </th>
+                      <th> PROC_REV_PAIS </th>
+                      <th> PROC_REV_UNIV </th>
+                      <th> PROC_REV_GRADO </th>
+                      <th> RESO_NUM </th>
+                      <th> RESO_FEC </th>
+                      <th> DIPL_FEC_ORG </th>
+                      <th> DIPL_FEC_DUP </th>
+                      <th> DIPL_NUM </th>
+                      <th> DIPL_TIP_EMI </th>
+                      <th> REG_LIBRO </th>
+                      <th> REG_FOLIO </th>
+                      <th> REG_REGISTRO </th>
+                      <th> CARGO1 </th>
+                      <th> AUTORIDAD1 </th>
+                      <th> CARGO2 </th>
+                      <th> AUTORIDAD2 </th>
+                      <th> CARGO3 </th>
+                      <th> AUTORIDAD3 </th>
+                      <th> ROC_PAIS_EXT </th>
+                      <th> PROC_UNIV_EXT </th>
+                      <th> PROC_GRADO_EXT </th>
+                      <th> REG_OFICIO </th>
+                      <th> FEC_MAT_PROG </th>
+                      <th> FEC_INICIO_PROG </th>
+                      <th> FEC_FIN_PROG </th>
+                    </tr>
+                  </thead>
+                  <tbody class="fonttable">
+                    <tr *ngFor="let alumnoExcel  of listaAlumnoExcel">
+                      <td> </td>
+                      <!--
+                      <td>
+                        <img class="circle responsive-img"
+                          src="http://localhost:8000{{alumnoExcel.alumno_graduado.foto}}" alt="FOTO">
+                      </td>
+                      -->
+                      <td> {{alumnoExcel.alumno_graduado.empresa.codigo}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.empresa.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.fecha_ingreso}}</td>
+                      <td> {{alumnoExcel.alumno.escuela_profesional.facultad_oficina.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.escuela_profesional.nombre}}</td>
+                      <td></td>
+                      <td> {{alumnoExcel.alumno_graduado.fecha_egreso}}</td>
+                      <td> {{alumnoExcel.alumno.persona.apellido_paterno}}</td>
+                      <td> {{alumnoExcel.alumno.persona.apellido_materno}}</td>
+                      <td> {{alumnoExcel.alumno.persona.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.persona.sexo}}</td>
+                      <td> {{alumnoExcel.alumno.persona.tipo_documento.nombre}}</td>
+                      <td> {{alumnoExcel.alumno.persona.numero_documento}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.nombre}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.creditos_aprobados}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.trabajo_investigacion.url}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.nombre_programa_estudio.nombre}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.nombre}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.modalidad_estudio.sigla}}</td>
+                      <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.siglas}}</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_resolucion}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.fecha_resolucion}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.fecha_emision_diploma}}</td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_diploma}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.tipo_diploma.sigla}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.registro_libro}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.registro_folio}}</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_registro}}</td>
+                      <td> RECTOR</td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.rector.docente.persona.nombre_completo}}</td>
+                      <td> SECRETARIO GENERAL</td>
+                      <td>
+                        {{alumnoExcel.registro_alumno_graduado.trabajador_areas.administrativo.persona.nombre_completo}}
+                      </td>
+                      <td> DECANO</td>
+                      <td> {{alumnoExcel.decano.docente.persona.nombre_completo}}</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                      <td> {{alumnoExcel.registro_alumno_graduado.numero_oficio}}</td>
+                      <td> </td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <mat-action-row>
+              <div class="col s12 m12 right-align">
+                <button mat-raised-button color="primary" (click)="exportAsXLSX()" [disabled]="!listaAlumnoExcel.length"
+                  class="waves-effect waves-light btn">Export <i class="far fa-file-excel"></i></button>
+              </div>
+            </mat-action-row>
+            <!-- FIN CODIGO DE TABLA PARA MOSTRAR DATOS A EXPORTAR A EXCEL-->
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+      <!--FIN DE TABALA DE ALUMNOS GRADUADOS TITULADOS EXCEL-->
+
+
+    </mat-step>
+    <!--//////////////////////////////////////-->
+    <!--AGREGAR DATOS DEL ALUMNO PARA GRADUAR-->
+    <mat-step [stepControl]="formularioRegistroBachiller" [completed]=false>
+      <form [formGroup]="formularioRegistroBachiller" (submit)="agregarDatosAlumno(formularioRegistroBachiller.value)">
+        <ng-template matStepLabel>Ingresar datos del Bachiller</ng-template>
+        <input type="hidden" formControlName="id">
+        <div class="card">
+          <div class="card-panel">
+            <div [id]="idModalParaRegistroDeDenominaciones" class="">
+              <div class="modal-content">
+                <div class="row">
+                  <div *ngIf="alumnoPregradoSeleccionado" class="col s12 m12">
+                    <blockquote>
+                      <h5 class="colorOcad"><a style="margin-left: 0px;" class="breadcrumb grey-text" href="#!">Alumno
+                          /</a>
+                        {{alumnoPregradoSeleccionado.persona.nombre_completo}}
+                      </h5>
+                      <mat-divider> </mat-divider>
+                    </blockquote>
+                    <p></p>
+                  </div>
+
+                  <!--Imagen-->
+
+                  <div class="col s12 m4 margintop">
+                    <mat-card class="example-card ">
+                      <!--<img mat-card-image [src]="imageUrl" alt="Photo of a Shiba Inu" class="" style="height: 300px">
+                      <mat-card-actions>
+                        <input type="file" #Image accept="image/*" (change)="handleFileInput($event.target.files)">
+                      </mat-card-actions>-->
+                      <div class="custom-file-container" data-upload-id="foto">
+
+                        <label class="custom-file-container__custom-file">
+                          <input type="file" (click)="crearIntanciaFoto()"
+                            class="custom-file-container__custom-file__custom-file-input" accept="*"
+                            aria-label="Subir Archivos">
+                          <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
+                          <span class="custom-file-container__custom-file__custom-file-control">
+                            <span class="custom-file-container__custom-file__custom-file-control__button">Subir</span>
+                          </span>
+                        </label>
+                        <label>Quitar Foto: <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                            title="Clear Image"><i class="material-icons">cancel</i></a></label>
+                        <div class="custom-file-container__image-preview"></div>
+                      </div>
+                    </mat-card>
+                  </div>
+
+                  <div class="col s12 m8">
+                    <div class="card-panel">
+                      <h5> Datos Generales</h5>
+                      <div class="row">
+                        <mat-form-field class="col s12 m12 margen">
+                          <mat-label>Universidad que otorga el Grado académico *</mat-label>
+                          <mat-select [compareWith]="compareObjeto" formControlName="empresa_id">
+                            <mat-option *ngFor="let empresa of listaEmpresas" [value]="empresa">
+                              {{empresa.codigo}} / {{empresa.nombre | uppercase }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+
+
+                        <mat-form-field class="col s12 m12 margen">
+                          <mat-label>Denominación de grado académico *</mat-label>
+                          <mat-select [compareWith]="compareObjeto" formControlName="denominacion_grado_titulo">
+                            <mat-option *ngFor="let denominacion of listaDenominacionesPorEspecialidad"
+                              [value]="denominacion">
+                              {{denominacion.nombre}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="col s12 m6 margen">
+                          <input matInput [matDatepicker]="picker" (click)="picker.open()"
+                            placeholder="Fecha de Matricula *" formControlName="fecha_ingreso">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="col s12 m6 margen">
+                          <input matInput [matDatepicker]="pickerto" (click)="pickerto.open()"
+                            placeholder="Fecha de Egreso *" formControlName="fecha_egreso">
+                          <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
+                          <mat-datepicker #pickerto></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="col s12 m6">
+                          <mat-label>Créditos Aprobados *</mat-label>
+                          <input matInput #input maxlength="3" placeholder="Créditos Aprobados *"
+                            formControlName="creditos_aprobados">
+                        </mat-form-field>
+
+                        <mat-form-field class="col s12 m6 margen">
+                          <mat-label>Nombre de programa de Estudios *</mat-label>
+                          <mat-select formControlName="nombre_programa_estudio">
+                            <mat-option>Ninguna</mat-option>
+                            <ng-container
+                              *ngIf="listaNombreProgramaEstudios$ | async;let listaNombreProgramaEstudios;else efectoCarga">
+                              <mat-option *ngFor="let listaNombreprogramaEstudio of listaNombreProgramaEstudios"
+                                [value]="listaNombreprogramaEstudio">
+                                {{listaNombreprogramaEstudio.nombre}}</mat-option>
+                            </ng-container>
+                          </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="col s12 m6 margen">
+                          <mat-label>Modalidad de Estudios *</mat-label>
+                          <mat-select formControlName="modalidad_de_estudio">
+                            <mat-option>Ninguna</mat-option>
+                            <ng-container
+                              *ngIf="listaModalidadEstudios$ | async;let listaModalidadEstudios;else efectoCarga">
+                              <mat-option *ngFor="let listaModalidadEstudio of listaModalidadEstudios"
+                                [value]="listaModalidadEstudio">
+                                {{listaModalidadEstudio.nombre}}</mat-option>
+                            </ng-container>
+                          </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="col s12 m6 margen">
+                          <mat-label>Modalidad de Obtención de grado *</mat-label>
+                          <mat-select formControlName="obtencion_grado">
+                            <mat-option>Ninguna</mat-option>
+                            <ng-container
+                              *ngIf="listaObtencionGrados$ | async;let listaObtencionGrados;else efectoCarga">
+                              <mat-option *ngFor="let listaObtencionGrado of listaObtencionGrados"
+                                [value]="listaObtencionGrado">
+                                {{listaObtencionGrado.nombre}}</mat-option>
+                            </ng-container>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col s12 m12">
+                    <div class="card-panel">
+                      <h5> Trabajo de investigación</h5>
+                      <div class="row">
+                        <div [formGroup]="formularioRegistroBachiller.get('trabajo_investigacion')">
+                          <input type="hidden" formControlName="id">
+                          <mat-form-field class="col s12 m12">
+                            <mat-label>Nombre</mat-label>
+                            <textarea matInput placeholder="Nombre" formControlName="nombre"></textarea>
+                          </mat-form-field>
+
+                          <mat-form-field class="col s12 m12">
+                            <mat-label>URL</mat-label>
+                            <input matInput placeholder="URL" formControlName="url" type="url" size="150">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <div class="row">
+                  <div class="col s6 m6 left-align">
+                    <button mat-button matStepperPrevious class="waves-effect waves-light btn"><i
+                        class="material-icons right">keyboard_return</i>Atrás</button>
+                    <!--    
+                  <button mat-button matStepperNext>Next</button>
+                  -->
+                  </div>
+                  <div class="col s6 m6 right-align">
+                    <button mat-button matStepperNext (click)="idModalParaRegistroDeDenominaciones" type="submit"
+                      [disabled]="!formularioRegistroBachiller.valid" class="waves-effect waves-light btn"><i
+                        class="material-icons right">assignment_ind</i>agregar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--FIN DE MODAL PARA INGRESAR DATOS DEL BACHILLER-->
+      </form>
+    </mat-step>
+    <!--FIN DE AGREGAR DATOS DEL ALUMNO PARA GRADUAR-->
+    <!--//////////////////////////////////////-->
+
+    <!--REGISTRO DE DOCUMENTOS DEL ALUMNO GRADUADO-->
+    <mat-step>
+      <form [formGroup]="formularioGuardarBachiller"
+        (submit)="guardarAlumnoBachiller(formularioGuardarBachiller.value)">
+        <ng-template matStepLabel>Registro del Alumno Graduado</ng-template>
+        <input type="hidden" formControlName="id">
+        <div class="card">
+          <div class="card-panel">
+            <div class="row">
+              <div *ngIf="alumnoPregradoSeleccionado" class="col s12 m12">
+                <blockquote>
+                  <h5 class="colorOcad"><a style="margin-left: 0px;" class="breadcrumb grey-text" href="#!">Alumno
+                      /</a>
+                    {{alumnoPregradoSeleccionado.persona.nombre_completo}}
+                  </h5>
+                  <mat-divider> </mat-divider>
+                </blockquote>
+                <p></p>
+              </div>
+
+              <div class="col s12 m12">
+                <div class="card-panel">
+                  <h6>Oficio</h6>
+                  <div class="row">
+                    <mat-form-field class="col s12 m4">
+                      <mat-label>Número de Oficio *</mat-label>
+                      <input matInput placeholder="Número de Oficio *" formControlName="numero_oficio">
+                      <mat-icon matSuffix>filter_9_plus</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col s12 m6">
+                <div class="card-panel">
+                  <h6> Resolución</h6>
+                  <div class="row">
+                    <mat-form-field class="col s12 m12">
+                      <mat-label>Número de Resolución *</mat-label>
+                      <input matInput placeholder="Número de Resolución *" formControlName="numero_resolucion">
+                    </mat-form-field>
+
+                    <mat-form-field class="col s12 m12">
+                      <input matInput [matDatepicker]="pickertwo" (click)="pickertwo.open()"
+                        placeholder="Fecha de Emisión *" formControlName="fecha_resolucion">
+                      <mat-datepicker-toggle matSuffix [for]="pickertwo"></mat-datepicker-toggle>
+                      <mat-datepicker #pickertwo></mat-datepicker>
+                    </mat-form-field>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="col s12 m6">
+                <div class="card-panel">
+                  <h6> Diploma</h6>
+                  <div class="row">
+                    <mat-form-field class="col s12 m12">
+                      <mat-label>Número de Diploma *</mat-label>
+                      <input matInput placeholder="Número de Diploma *" formControlName="numero_diploma">
+                    </mat-form-field>
+
+                    <mat-form-field class="col s12 m12">
+                      <input matInput [matDatepicker]="pickerbi" (click)="pickerbi.open()"
+                        placeholder="Fecha de Emisión *" formControlName="fecha_emision_diploma">
+                      <mat-datepicker-toggle matSuffix [for]="pickerbi"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerbi></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col s12 m12">
+                <div class="card-panel">
+                  <h6> Registro en el Libro</h6>
+                  <div class="row">
+                    <mat-form-field class="col s12 m4">
+                      <mat-label>Libro *</mat-label>
+                      <input matInput placeholder="Libro *" formControlName="registro_libro">
+                      <mat-icon matSuffix>content_paste</mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="col s12 m4">
+                      <mat-label>Folio *</mat-label>
+                      <input matInput placeholder="Folio *" formControlName="registro_folio">
+                      <mat-icon matSuffix>event_note</mat-icon>
+                    </mat-form-field>
+                    <mat-form-field class="col s12 m4">
+                      <mat-label>Número de Registro *</mat-label>
+                      <input matInput placeholder="Número de Registro *" formControlName="numero_registro">
+                      <mat-icon matSuffix>filter_9_plus</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col s12 m12">
+                <div class="card-panel">
+                  <h6> Autoridades</h6>
+                  <div class="row">
+
+                    <mat-form-field class="col s12 m12 margen">
+                      <mat-label>Decano de la Facultad</mat-label>
+                      <mat-select formControlName="director_decano">
+                        <mat-option>Ninguna</mat-option>
+                        <ng-container *ngIf="listaDecanosFaultades$ | async;let listaDecanosFaultades;else efectoCarga">
+                          <mat-option *ngFor="let listaDecanosFaultad of listaDecanosFaultades"
+                            [value]="listaDecanosFaultad">
+                            {{listaDecanosFaultad.docente.persona.nombre_completo}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="col s12 m12 margen">
+                      <mat-label>Rector de la Universidad</mat-label>
+                      <mat-select formControlName="rector">
+                        <mat-option>Ninguna</mat-option>
+                        <ng-container *ngIf="listaRectores$ | async;let listaRectores;else efectoCarga">
+                          <mat-option *ngFor="let listaRector of listaRectores" [value]="listaRector">
+                            {{listaRector.docente.persona.nombre_completo}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="col s12 m12 margen">
+                      <mat-label>Secretario General</mat-label>
+                      <mat-select formControlName="trabajador_areas">
+                        <mat-option>Ninguna</mat-option>
+                        <ng-container *ngIf="listaTrabajadorAreas$ | async;let listaTrabajadorAreas;else efectoCarga">
+                          <mat-option *ngFor="let listaTrabajadorArea of listaTrabajadorAreas"
+                            [value]="listaTrabajadorArea">
+                            {{listaTrabajadorArea.administrativo.persona.nombre_completo}}</mat-option>
+                        </ng-container>
+                      </mat-select>
+                    </mat-form-field>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s12 m6 left-align">
+                <button mat-button (click)="editarFormularioBachiller()" matStepperPrevious
+                  class="waves-effect waves-light btn"><i class="material-icons right">keyboard_return</i>Atrás</button>
+              </div>
+              <div class="col s12 m6 right-align">
+                <button mat-button (click)="stepper.reset()" class="waves-effect waves-light btn" type="submit"
+                  [disabled]="!formularioGuardarBachiller.valid"><i
+                    class="material-icons right">folder_shared</i>Registrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+  </mat-horizontal-stepper>
+  <!--FIN DE CODIGO PARA MOSTRAR LA LISTA DE ALUMNOS A GRADUAR-->
+  <mat-divider></mat-divider>
+</div>
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- ESTRUCTURA DE MODALES -->
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+<!-- Modal Structure Buscar estudiantes-->
+<div [id]="idModalAgregarAlumnoPregrado" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <form  #filtro= "ngForm" (submit)="filtarAlumnos(filtro.value)">
+      <div class="row">
+        <!-- Codigo para Filtrar-->
+        <mat-form-field class=" col s12 m4 margen">
+          <input matInput (keyup)="applyFilter($event.target.value)" name="numero_documento" type="number" ngModel placeholder="Filtrar N° Documento">
+        </mat-form-field>
+
+        <mat-form-field class=" col s12 m4 margen ">
+          <input matInput (keyup)="applyFilter($event.target.value)" name="apellido" ngModel placeholder="Filtrar por Nombre y Apellidos">
+        </mat-form-field>
+
+        <mat-form-field class="col s12 m4 margen">
+          <mat-label>Seleccione Especialidad</mat-label>
+          <mat-select name="especialidad" ngModel>
+            <mat-option value="todos" (onSelectionChange)="applyFilter('')">Todos</mat-option>
+            <ng-container *ngIf="listaEscuelaprofesionales$ | async;let listaEscuelaprofesionales;else efectoCarga">
+              <mat-option (onSelectionChange)="filtrarPorEspecialidad($event)"
+                *ngFor="let EscuelaProfesional of listaEscuelaprofesionales" [value]="EscuelaProfesional">
+                {{EscuelaProfesional.nombre}}</mat-option>
+            </ng-container>
+
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <button type="submit">Buscar</button>
+    </form>
+    <!--Codigo para hacer mostrar los estudiantes internos y externos-->
+    <div class="example-container">
+      <table mat-table [dataSource]="dataSource" class=" centered  highlight">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+              [checked]="listaAlumnoSeleccionados.hasValue() && isAllSelected()"
+              [indeterminate]="listaAlumnoSeleccionados.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+              (change)="$event ? listaAlumnoSeleccionados.toggle(row) : null"
+              [checked]="listaAlumnoSeleccionados.isSelected(row)" [aria-label]="checkboxLabel(row)" [disabled]="false"
+              #check>
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Position Column -->
+
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="DNI">
+          <th mat-header-cell *matHeaderCellDef class="colortablewhite"> DNI.</th>
+          <td mat-cell *matCellDef="let alumnobachiller "> {{alumnobachiller.persona.numero_documento}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Nombre">
+          <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Nombre.</th>
+          <td mat-cell *matCellDef="let alumnobachiller "> {{alumnobachiller.persona.nombre}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Apellidos">
+          <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Apellidos.</th>
+          <td mat-cell *matCellDef="let alumnobachiller ">
+            {{alumnobachiller.persona.apellido_paterno +" "+alumnobachiller.persona.apellido_materno}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="Escuela profesional">
+          <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Escuela Profesional.</th>
+          <td mat-cell *matCellDef="let alumnobachiller ">
+            {{alumnobachiller.escuela_profesional.nombre}}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns  sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="listaAlumnoSeleccionados.toggle(row)">
+        </tr>
+      </table>
+      <mat-paginator class=" " [pageSizeOptions]="[4, 8, 16]" showFirstLastButtons></mat-paginator>
+    </div>
+    <!-- Fin de Codigo para hacer mostrar los estudiantes internos y externos-->
+
+  </div>
+  <div class="modal-footer">
+    <a (click)="cerrarModal(idModalAgregarAlumnoPregrado)" class="waves-effect waves-red btn-flat">cerrar</a>
+  </div>
+</div>
+<!-- Fin de Modal Buscar estudiante Externo o interno -->
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<!-- FIN ESTRUCTURA DE MODALES -->
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+<ng-template #efectoCarga>
+  <mat-spinner></mat-spinner>
+</ng-template>

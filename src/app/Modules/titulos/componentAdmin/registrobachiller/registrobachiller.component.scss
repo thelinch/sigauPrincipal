@@ -317,12 +317,12 @@ table.centered tbody tr td {
 ::ng-deep .mat-step-header .mat-step-icon-selected,
 .mat-step-header .mat-step-icon-state-done,
 .mat-step-header .mat-step-icon-state-edit {
-  background-color: #1C75DB !important;
+  background-color: #1c75db !important;
   color: white;
 }
 
 ::ng-deep .mat-step-header .mat-step-icon-state-edit {
-  background-color: #1C75DB  !important;
+  background-color: #1c75db !important;
   color: white;
 }
 
@@ -376,4 +376,10 @@ table.centered tbody tr td {
   background-color: #edede8;
   border-left: 1px solid #c0c0af;
   box-sizing: border-box;
+}
+
+.botn {
+
+  display: inline-block;
+  cursor: pointer;
 }
