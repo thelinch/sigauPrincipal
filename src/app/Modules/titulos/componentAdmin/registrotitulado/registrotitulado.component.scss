@@ -137,110 +137,110 @@ tr:nth-child(even) {
 /*CSS DE LA TABLA DE CONTENIDO*/
 
 /*
-  tbody {
-    display: block;
-    height: 500px;
+tbody {
+  display: block;
+  height: 500px;
+  width: 100%;
+  overflow: auto;
+}
+thead,
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+thead {
+  width: calc(100%);
+}
+table {
+  width: 100%;
+}
+*/
+
+/*TABLE RESPONSIVE*/
+/*
+table.centered thead tr th,
+table.centered tbody tr td {
+  text-align: center;
+}
+
+@media only screen and (max-width: 992px) {
+  table.responsive-table {
     width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: block;
+    position: relative;
+  }
+  table.responsive-table td:empty:before {
+    content: "\00a0";
+  }
+  table.responsive-table th,
+  table.responsive-table td {
+    margin: 0;
+    vertical-align: top;
+  }
+  table.responsive-table th {
+    text-align: left;
+  }
+  table.responsive-table thead {
+    display: block;
+    float: left;
+  }
+  table.responsive-table thead tr {
+    display: block;
+    padding: 0 10px 0 0;
+  }
+  table.responsive-table thead tr th::before {
+    content: "\00a0";
+  }
+  table.responsive-table tbody {
+    display: block;
+    width: auto;
+    position: relative;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  table.responsive-table tbody tr {
+    display: inline-block;
+    vertical-align: top;
+  }
+  table.responsive-table th {
+    display: block;
+    text-align: right;
+  }
+  table.responsive-table td {
+    display: block;
+    min-height: 1.25em;
+    text-align: left;
+  }
+  table.responsive-table tr {
+    border-bottom: none;
+    padding: 0 10px;
+  }
+  table.responsive-table thead {
+    border: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  tbody {
+    display: inline-flex;
+    height: auto;
     overflow: auto;
   }
   thead,
   tbody tr {
     display: table;
-    width: 100%;
-    table-layout: fixed;
+    width: auto;
+    table-layout: auto;
   }
   thead {
-    width: calc(100%);
+    width: auto;
   }
   table {
-    width: 100%;
+    width: auto;
   }
-  */
-
-/*TABLE RESPONSIVE*/
-/*
-  table.centered thead tr th,
-  table.centered tbody tr td {
-    text-align: center;
-  }
-  
-  @media only screen and (max-width: 992px) {
-    table.responsive-table {
-      width: 100%;
-      border-collapse: collapse;
-      border-spacing: 0;
-      display: block;
-      position: relative;
-    }
-    table.responsive-table td:empty:before {
-      content: "\00a0";
-    }
-    table.responsive-table th,
-    table.responsive-table td {
-      margin: 0;
-      vertical-align: top;
-    }
-    table.responsive-table th {
-      text-align: left;
-    }
-    table.responsive-table thead {
-      display: block;
-      float: left;
-    }
-    table.responsive-table thead tr {
-      display: block;
-      padding: 0 10px 0 0;
-    }
-    table.responsive-table thead tr th::before {
-      content: "\00a0";
-    }
-    table.responsive-table tbody {
-      display: block;
-      width: auto;
-      position: relative;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-    table.responsive-table tbody tr {
-      display: inline-block;
-      vertical-align: top;
-    }
-    table.responsive-table th {
-      display: block;
-      text-align: right;
-    }
-    table.responsive-table td {
-      display: block;
-      min-height: 1.25em;
-      text-align: left;
-    }
-    table.responsive-table tr {
-      border-bottom: none;
-      padding: 0 10px;
-    }
-    table.responsive-table thead {
-      border: 0;
-      border-right: 1px solid rgba(0, 0, 0, 0.12);
-    }
-  
-    tbody {
-      display: inline-flex;
-      height: auto;
-      overflow: auto;
-    }
-    thead,
-    tbody tr {
-      display: table;
-      width: auto;
-      table-layout: auto;
-    }
-    thead {
-      width: auto;
-    }
-    table {
-      width: auto;
-    }
-  }*/
+}*/
 
 ::ng-deep .mat-horizontal-stepper-header-container {
   background: #e0e0e0 !important;
@@ -376,4 +376,10 @@ tr:nth-child(even) {
   background-color: #edede8;
   border-left: 1px solid #c0c0af;
   box-sizing: border-box;
+}
+
+.botn {
+
+  display: inline-block;
+  cursor: pointer;
 }

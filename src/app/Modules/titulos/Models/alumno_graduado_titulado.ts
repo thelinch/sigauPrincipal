@@ -5,6 +5,7 @@ import { nombreProgramaestudio } from './nombre_programa_estudio';
 import { obtenciongradostitulo } from './obtencion_grados_titulo';
 import { empresa } from './empresa';
 import { modalidadEstudio } from './modalidad_estudio';
+import { gradoTitulo } from './grado_titulo';
 
 export interface alumnoGraduadoTitulado {
     id: number
@@ -20,4 +21,5 @@ export interface alumnoGraduadoTitulado {
     obtencion_grado : obtenciongradostitulo
     modalidad_estudio : modalidadEstudio
     trabajo_investigacion: trabajo_investigacion
-}
+    grado_titulo_id : gradoTitulo
+} 

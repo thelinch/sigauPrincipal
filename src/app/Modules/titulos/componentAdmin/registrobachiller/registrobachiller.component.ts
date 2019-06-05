@@ -175,7 +175,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         type: notificacion.severidad,
         toast: true,
         position: "top-end",
-        timer: 2000,
+        timer: 3000,
       })
     })
     //FIN DE NOTIFICACIONES
@@ -236,12 +236,12 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     }
   }
   filtrarData(data, filter: string) {
-    return data.persona.numero_documento.toLowerCase().includes(filter) || 
-    data.persona.nombre.toLowerCase().includes(filter) || 
-    data.persona.apellido_paterno.toLowerCase().includes(filter) ||
-    data.persona.apellido_materno.toLowerCase().includes(filter) || 
-    data.persona.nombre_completo.toLowerCase().includes(filter) || 
-    data.escuela_profesional.nombre.toLowerCase().includes(filter);
+    return data.persona.numero_documento.toLowerCase().includes(filter) ||
+      data.persona.nombre.toLowerCase().includes(filter) ||
+      data.persona.apellido_paterno.toLowerCase().includes(filter) ||
+      data.persona.apellido_materno.toLowerCase().includes(filter) ||
+      data.persona.nombre_completo.toLowerCase().includes(filter) ||
+      data.escuela_profesional.nombre.toLowerCase().includes(filter);
   }
   /*FIN DE CODIGO PARA INICIAR LOS METODOS*/
   crearIntanciaFoto() {
@@ -444,7 +444,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         this.fileUpload.cachedFileArray = [];
         this.fileUpload.clearImagePreviewPanel();
         console.log(this.listaAlumnoExcel)
-        this.notificacionService.showSuccess("Se Graduo correctamente el alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
+        this.notificacionService.showSuccess("Se Graduó correctamente el alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
         this.formularioGuardarBachiller.reset();
       });
 
@@ -497,14 +497,13 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   }
 
   iniciarData() {
-    
-        this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
-        this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
-        this.listaModalidadEstudios$ = this.modalidadEstudio.listaModalidadEstudio();
-        this.listaObtencionGrados$ = this.obtencionGrado.listaObtencionGrado();
-        this.listaDecanosFaultades$ = this.decanofacultadService.DecanoFacultad();
-        this.listaRectores$ = this.rectorService.Rector();
-        this.listaTrabajadorAreas$ = this.trabajadorareaService.TrabajadorArea();
+    this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
+    this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
+    this.listaModalidadEstudios$ = this.modalidadEstudio.listaModalidadEstudio();
+    this.listaObtencionGrados$ = this.obtencionGrado.listaObtencionGrado();
+    this.listaDecanosFaultades$ = this.decanofacultadService.DecanoFacultad();
+    this.listaRectores$ = this.rectorService.Rector();
+    this.listaTrabajadorAreas$ = this.trabajadorareaService.TrabajadorArea();
   }
 
 
@@ -516,13 +515,19 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   }
 
   filtarAlumnos(valor: any) {
-    valor.especialidad=valor.especialidad=="todos"?null:valor.especialidad;
+    valor.especialidad = valor.especialidad == "todos" ? null : valor.especialidad;
     this.alumnoService.listaAlumnosFiltrado(valor).subscribe(listaFiltrada => {
+      
       this.dataSource.data = listaFiltrada;
+      if (this.dataSource.data.length == 0) {
+        this.notificacionService.showInfo("No se encontraron coincidencias");
+      } else {
+        this.notificacionService.showSuccess("Se encontró " + this.dataSource.data.length + " coincidencias");
+      }
       console.log(valor)
       console.log(listaFiltrada)
     })
-    
+
   }
 
   /*CODIGO PARA MOSTRAR LOS ESTUDIANTES DE PRE-GRADO
