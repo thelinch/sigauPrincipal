@@ -22,4 +22,5 @@ export interface alumnoGraduadoTitulado {
     modalidad_estudio : modalidadEstudio
     trabajo_investigacion: trabajo_investigacion
     grado_titulo_id : gradoTitulo
+    estadograduado : boolean
 } 

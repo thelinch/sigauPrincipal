@@ -13,9 +13,9 @@
   <!--CODIGO PARA LISTAR LOS ALUMNOS-->
   <div class="">
     <blockquote>
-      <p class="left black-text titleLista"><b>Lista de Estudiantes para Graduar</b></p>
+      <p class="left black-text titleLista"><b>Lista de Estudiantes para Titular</b></p>
       <a class="waves-effect waves-light btn  white darken-4 black-text tooltipped"
-        (click)="abrirModal(idModalAgregarAlumnoPregrado)" data-tooltip="Seleccionar"><i
+        (click)="abrirModal(idModalAgregarAlumnoBachiller)" data-tooltip="Seleccionar"><i
           class="material-icons right">group_add</i>Agregar</a>
     </blockquote>
   </div>
@@ -61,12 +61,12 @@
                       <td>
                         <mat-checkbox [disabled]="true" #check></mat-checkbox>
                       </td>
-                      <td>{{alumnoSeleccionado.persona.numero_documento}} </td>
-                      <td>{{alumnoSeleccionado.persona.nombre}} </td>
+                      <td>{{alumnoSeleccionado.alumno.persona.numero_documento}} </td>
+                      <td>{{alumnoSeleccionado.alumno.persona.nombre}} </td>
                       <td>
-                        {{alumnoSeleccionado.persona.apellido_paterno +" "+alumnoSeleccionado.persona.apellido_materno}}
+                        {{alumnoSeleccionado.alumno.persona.apellido_paterno +" "+alumnoSeleccionado.alumno.persona.apellido_materno}}
                       </td>
-                      <td> {{alumnoSeleccionado.escuela_profesional.nombre}}</td>
+                      <td> {{alumnoSeleccionado.alumno.escuela_profesional.nombre}}</td>
                       <td>
                         <button mat-button matStepperNext [disabled]="check.checked"
                           class="btn-floating btn-small waves-effect blue tooltipped"
@@ -92,12 +92,12 @@
               <div class="col s12 m4">
                 <div class="card" *ngIf="listaAlumnoSeleccionados.selected.length>0 && alumnoPregradoSeleccionado">
                   <div class="card-image waves-effect waves-block waves-light">
-                    <img class="activator" src="{{alumnoPregradoSeleccionado.persona.foto}}" style="height: 350px">
+                    <img class="activator" src="http://localhost:8000{{alumnoPregradoSeleccionado.alumno_graduado.foto}}" style="height: 350px">
                     <span class="card-title">UNAS</span>
                     <div
                       class="facultad position_absolute bottom_0 left_0 with_100 light-blue darken-4 center-align white-text truncate">
                       <input class="colortablewhite" matInput placeholder="Documento de Identidad "
-                        value="DNI: {{alumnoPregradoSeleccionado.persona.numero_documento}}" readonly>
+                        value="DNI: {{alumnoPregradoSeleccionado.alumno.persona.numero_documento}}" readonly>
                     </div>
                     <div class="estado position_absolute top_0  right_0">
                       <span
@@ -106,11 +106,11 @@
                   </div>
                   <div class="card-content">
                     <span
-                      class="card-title activator grey-text text-darken-4">{{alumnoPregradoSeleccionado.persona.nombre}}
-                      {{alumnoPregradoSeleccionado.persona.apellido_paterno}}
-                      {{alumnoPregradoSeleccionado.persona.apellido_materno}} <i
+                      class="card-title activator grey-text text-darken-4">{{alumnoPregradoSeleccionado.alumno.persona.nombre}}
+                      {{alumnoPregradoSeleccionado.alumno.persona.apellido_paterno}}
+                      {{alumnoPregradoSeleccionado.alumno.persona.apellido_materno}} <i
                         class="material-icons right">more_vert</i></span>
-                    <p><a>{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}</a></p>
+                    <p><a>{{alumnoPregradoSeleccionado.alumno.escuela_profesional.nombre}}</a></p>
                   </div>
                   <div class="card-reveal">
                     <span class="card-title grey-text text-darken-4 center-align teal accent-4"><b
@@ -119,37 +119,44 @@
                     <p></p>
                     <div class="row">
                       <mat-form-field class="col s7 m7 example-full-width  ">
-                        <input matInput placeholder="Código de Estudiante" value="{{alumnoPregradoSeleccionado.codigo}}"
+                        <input matInput placeholder="Código de Estudiante" value="{{alumnoPregradoSeleccionado.alumno.codigo}}"
                           readonly>
                       </mat-form-field>
+
                       <mat-form-field class="col s5 m5 example-full-width">
                         <input matInput placeholder="DNI"
-                          value="{{alumnoPregradoSeleccionado.persona.numero_documento}}" readonly>
+                          value="{{alumnoPregradoSeleccionado.alumno.persona.numero_documento}}" readonly>
                       </mat-form-field>
+
                       <mat-form-field class="col s7 m7 example-full-width">
-                        <input matInput placeholder="Nombres" value="{{alumnoPregradoSeleccionado.persona.nombre}}"
+                        <input matInput placeholder="Nombres" value="{{alumnoPregradoSeleccionado.alumno.persona.nombre}}"
                           readonly>
                       </mat-form-field>
+
                       <mat-form-field class="col s5 m5 example-full-width">
                         <input matInput placeholder="Fecha de Nacimiento "
-                          value="{{alumnoPregradoSeleccionado.persona.fecha_nacimiento}}" readonly>
+                          value="{{alumnoPregradoSeleccionado.alumno.persona.fecha_nacimiento}}" readonly>
                       </mat-form-field>
+
                       <mat-form-field class="col s12 m12 example-full-width">
                         <input matInput placeholder="Apellidos "
-                          value="{{alumnoPregradoSeleccionado.persona.apellido_paterno}} {{alumnoPregradoSeleccionado.persona.apellido_materno}}"
+                          value="{{alumnoPregradoSeleccionado.alumno.persona.apellido_paterno}} {{alumnoPregradoSeleccionado.alumno.persona.apellido_materno}}"
                           readonly>
                       </mat-form-field>
+                      <!--
                       <mat-form-field class="col s12 m12 example-full-width">
                         <input matInput placeholder="Facultad"
-                          value="{{alumnoPregradoSeleccionado.escuela_profesional.facultad_oficina.nombre}}" readonly>
+                          value="{{alumnoPregradoSeleccionado.alumno.escuela_profesional.facultad_oficina.nombre}}" readonly>
                       </mat-form-field>
+                      -->
                       <mat-form-field class="col s12 m12 example-full-width">
                         <input matInput placeholder="Escuela Profesional"
-                          value="{{alumnoPregradoSeleccionado.escuela_profesional.nombre}}" readonly>
+                          value="{{alumnoPregradoSeleccionado.alumno.escuela_profesional.nombre}}" readonly>
                       </mat-form-field>
+
                       <mat-form-field class="col s12 m12 example-full-width">
                         <input matInput placeholder="Correo Institucional"
-                          value="{{alumnoPregradoSeleccionado.correo_institucional}}" readonly>
+                          value="{{alumnoPregradoSeleccionado.alumno.correo_institucional}}" readonly>
                       </mat-form-field>
                     </div>
                   </div>
@@ -264,7 +271,7 @@
                       <td> {{alumnoExcel.alumno.persona.sexo}}</td>
                       <td> {{alumnoExcel.alumno.persona.tipo_documento.nombre}}</td>
                       <td> {{alumnoExcel.alumno.persona.numero_documento}}</td>
-                      <td> </td>
+                      <td> {{alumnoExcel.alumno_graduado.empresa.codigo}}</td>
                       <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.nombre}}</td>
                       <td> {{alumnoExcel.alumno_graduado.denominacion_grado_titulo.nombre}}</td>
                       <td> </td>
@@ -338,7 +345,7 @@
                     <blockquote>
                       <h5 class="colorOcad"><a style="margin-left: 0px;" class="breadcrumb grey-text" href="#!">Alumno
                           /</a>
-                        {{alumnoPregradoSeleccionado.persona.nombre_completo}}
+                        {{alumnoPregradoSeleccionado.alumno.persona.nombre_completo}}
                       </h5>
                       <mat-divider> </mat-divider>
                     </blockquote>
@@ -516,7 +523,7 @@
                 <blockquote>
                   <h5 class="colorOcad"><a style="margin-left: 0px;" class="breadcrumb grey-text" href="#!">Alumno
                       /</a>
-                    {{alumnoPregradoSeleccionado.persona.nombre_completo}}
+                    {{alumnoPregradoSeleccionado.alumno.persona.nombre_completo}}
                   </h5>
                   <mat-divider> </mat-divider>
                 </blockquote>
@@ -668,7 +675,7 @@
 <!--/////////////////////////////////////////////////////////////////////////////////////////////////////-->
 
 <!-- Modal Structure Buscar estudiantes-->
-<div [id]="idModalAgregarAlumnoPregrado" class="modal modal-fixed-footer">
+<div [id]="idModalAgregarAlumnoBachiller" class="modal modal-fixed-footer">
   <div class="modal-content">
     <form #filtro="ngForm" (submit)="filtarAlumnos(filtro.value)">
       <div class="row">
@@ -742,22 +749,22 @@
         <!-- Name Column -->
         <ng-container matColumnDef="DNI">
           <th mat-header-cell *matHeaderCellDef class="colortablewhite"> DNI.</th>
-          <td mat-cell *matCellDef="let alumno "> {{alumno.persona.numero_documento}} </td>
+          <td mat-cell *matCellDef="let alumno "> {{alumno.alumno.persona.numero_documento}} </td>
         </ng-container>
         <ng-container matColumnDef="Nombre">
           <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Nombre.</th>
-          <td mat-cell *matCellDef="let alumno "> {{alumno.persona.nombre}} </td>
+          <td mat-cell *matCellDef="let alumno "> {{alumno.alumno.persona.nombre}} </td>
         </ng-container>
         <ng-container matColumnDef="Apellidos">
           <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Apellidos.</th>
           <td mat-cell *matCellDef="let alumno ">
-            {{alumno.persona.apellido_paterno +" "+alumno.persona.apellido_materno}}
+            {{alumno.alumno.persona.apellido_paterno +" "+alumno.alumno.persona.apellido_materno}}
           </td>
         </ng-container>
         <ng-container matColumnDef="Escuela profesional">
           <th mat-header-cell *matHeaderCellDef class="colortablewhite"> Escuela Profesional.</th>
           <td mat-cell *matCellDef="let alumno ">
-            {{alumno.escuela_profesional.nombre}}
+            {{alumno.alumno.escuela_profesional.nombre}}
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns  sticky: true"></tr>
@@ -770,7 +777,7 @@
 
   </div>
   <div class="modal-footer">
-    <a (click)="cerrarModal(idModalAgregarAlumnoPregrado)" class="waves-effect waves-red btn-flat">cerrar</a>
+    <a (click)="cerrarModal(idModalAgregarAlumnoBachiller)" class="waves-effect waves-red btn-flat">cerrar</a>
   </div>
 </div>
 <!-- Fin de Modal Buscar estudiante Externo o interno -->

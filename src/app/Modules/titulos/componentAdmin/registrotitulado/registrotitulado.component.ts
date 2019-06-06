@@ -44,6 +44,7 @@ import { FileService } from 'src/app/global/services/file.service';
 import { flatMap, map, take } from 'rxjs/operators';
 import { variables } from 'src/app/global/variablesGlobales';
 import { IfStmt } from '@angular/compiler';
+import { listaAlumnosgraduadoBachillerService } from '../../services/listaalumnosgraduado-bachiller.service';
 
 @Component({
   selector: 'app-registrotitulado',
@@ -51,7 +52,7 @@ import { IfStmt } from '@angular/compiler';
   styleUrls: ['./registrotitulado.component.scss']
 })
 export class RegistrotituladoComponent implements OnInit, AfterViewInit {
-  idModalAgregarAlumnoPregrado: string = "modalAgregarAlumnoPregrado"
+  idModalAgregarAlumnoBachiller: string = "modalAgregarAlumnoBachiller"
   idModalParaRegistroDeDenominaciones: string = "modalRegistroDenominaciones"
 
   listaEscuelaprofesionales$: Observable<EscuelaProfesional[]>
@@ -62,17 +63,17 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
   listaTrabajadorAreas$: Observable<TranajadorArea[]>
   listaRectores$: Observable<Rector[]>
   listaEmpresas: Array<empresa>
-  listaAlumnosSeleccionados: Array<alumno>
+  listaAlumnosSeleccionados: Array<alumno_registroAlumnoGraduadoTitulado>
   listaAlumnoGraduadoTitulado: Array<alumnoGraduadoTitulado>;
 
   displayedColumns: string[] = ['select', 'DNI', 'Nombre', "Apellidos", "Escuela profesional"];
-  dataSource = new MatTableDataSource<alumno>();
+  dataSource = new MatTableDataSource<alumno_registroAlumnoGraduadoTitulado>();
   listaDenominacionesPorEspecialidad: denominacionGradoTitulo[]
-  listaAlumnoSeleccionados = new SelectionModel<alumno>(true);
-  alumnoBachillerSeleccionado: alumno
+  listaAlumnoSeleccionados = new SelectionModel<alumno_registroAlumnoGraduadoTitulado>(true);
+  alumnoBachillerSeleccionado: alumno_registroAlumnoGraduadoTitulado
   alumnoGraduadoTituladoCreado: alumnoGraduadoTitulado
   registroAlumnoGraduadoTitulado: registro_graduado_titulado
-  alumnoPregradoSeleccionado: alumno
+  alumnoPregradoSeleccionado: alumno_registroAlumnoGraduadoTitulado
   checkedSeleccionado: any
   imageUrl: string = "../../../../../assets/UsuarioDefecto/noimage.png";
   fileToUpload: File = null;
@@ -119,11 +120,11 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
       this.dataSource.data.forEach(row => this.listaAlumnoSeleccionados.select(row));
   }
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: alumno): string {
+  checkboxLabel(row?: alumno_registroAlumnoGraduadoTitulado): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.listaAlumnoSeleccionados.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+    return `${this.listaAlumnoSeleccionados.isSelected(row) ? 'deselect' : 'select'} row ${row.alumno_graduado.id + 1}`;
   }
 
 
@@ -142,6 +143,7 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
   selecion: any
 
   constructor(private alumnoService: AlumnoService,
+    private listaAlumnosgraduadoBachillerService: listaAlumnosgraduadoBachillerService,
     private escuelaprofesionalService: EscuelaprofesionalService,
     private denominacionService: DenominacionesService,
     private nombreProgramaestudio: NombreprogramasService,
@@ -236,12 +238,12 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
     }
   }
   filtrarData(data, filter: string) {
-    return data.persona.numero_documento.toLowerCase().includes(filter) ||
-      data.persona.nombre.toLowerCase().includes(filter) ||
-      data.persona.apellido_paterno.toLowerCase().includes(filter) ||
-      data.persona.apellido_materno.toLowerCase().includes(filter) ||
-      data.persona.nombre_completo.toLowerCase().includes(filter) ||
-      data.escuela_profesional.nombre.toLowerCase().includes(filter);
+    return data.alumno.persona.numero_documento.toLowerCase().includes(filter) ||
+      data.alumno.persona.nombre.toLowerCase().includes(filter) ||
+      data.alumno.persona.apellido_paterno.toLowerCase().includes(filter) ||
+      data.alumno.persona.apellido_materno.toLowerCase().includes(filter) ||
+      data.alumno.persona.nombre_completo.toLowerCase().includes(filter) ||
+      data.alumno.escuela_profesional.nombre.toLowerCase().includes(filter);
   }
   /*FIN DE CODIGO PARA INICIAR LOS METODOS*/
   crearIntanciaFoto() {
@@ -269,7 +271,7 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
         SEXO: alumnoExcel.alumno.persona.sexo,
         DOCU_TIP: alumnoExcel.alumno.persona.tipo_documento.nombre,
         DOCU_NUM: alumnoExcel.alumno.persona.numero_documento,
-        PROC_BACH: "",
+        PROC_BACH: alumnoExcel.alumno_graduado.empresa.codigo,
         GRAD_TITU: alumnoExcel.alumno_graduado.denominacion_grado_titulo.grado_titulo.nombre,
         DEN_GRAD: alumnoExcel.alumno_graduado.denominacion_grado_titulo.nombre,
         SEG_ESP: "",
@@ -323,7 +325,7 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
   registrarAlumnosBachiller() {
   }
 
-  seleccionarAlumno(alumno: alumno, check: any) {
+  seleccionarAlumno(alumno: alumno_registroAlumnoGraduadoTitulado, check: any) {
     this.alumnoBachillerSeleccionado = alumno;
     this.checkedSeleccionado = check;
   }
@@ -350,10 +352,11 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
 
   }
 
-  listarDenominacionGradoPorEspecialidad(alumnoParametro: alumno) {
+  listarDenominacionGradoPorEspecialidad(alumnoParametro: alumno_registroAlumnoGraduadoTitulado) {
     this.abrirBlock();
     let json = {
-      id: alumnoParametro.escuela_profesional.id
+      id: alumnoParametro.alumno.escuela_profesional.id,
+      gradoTitulo: 2
     }
     console.log(json)
     this.denominacionService.listarDenominacionesPorEspecialidad(json).subscribe(listaDenominacion => {
@@ -371,7 +374,7 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
         alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
         this.alumnoGraduadoService.editarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
           this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
-          this.notificacionService.showSuccess("Se editó correctamente los datos del alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
+          this.notificacionService.showSuccess("Se editó correctamente los datos del alumno " + this.alumnoBachillerSeleccionado.alumno.persona.nombre);
         });
       })
 
@@ -379,13 +382,14 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
       //CUANDO RECIEN SE VA A CREAR EL ALUMNO
       this.subirFotoAlumnoGraduado(this.fileUpload.cachedFileArray).subscribe(url => {
         alumnoGraduadoTitulado.foto = url;
-        alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.id;
+        alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.alumno_graduado.id;
         alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
         alumnoGraduadoTitulado.tipo_alumno_id = 1
+        alumnoGraduadoTitulado.grado_titulo_id = 2
 
         this.alumnoGraduadoService.guardarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
           this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
-          this.notificacionService.showSuccess("Se guardó correctamente los datos del alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
+          this.notificacionService.showSuccess("Se guardó correctamente los datos del alumno " + this.alumnoBachillerSeleccionado.alumno.persona.nombre);
         });
       })
 
@@ -444,7 +448,7 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
         this.fileUpload.cachedFileArray = [];
         this.fileUpload.clearImagePreviewPanel();
         console.log(this.listaAlumnoExcel)
-        this.notificacionService.showSuccess("Se Graduo correctamente el alumno " + this.alumnoBachillerSeleccionado.persona.nombre);
+        this.notificacionService.showSuccess("Se Tituló correctamente el alumno " + this.alumnoBachillerSeleccionado.alumno.persona.nombre);
         this.formularioGuardarBachiller.reset();
       });
 
@@ -472,39 +476,46 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
   }
 
 
-  removerAlumno(alumno: alumno) {
+  removerAlumno(alumno: alumno_registroAlumnoGraduadoTitulado) {
     if (this.listaAlumnoSeleccionados.isSelected(alumno)) {
       this.listaAlumnoSeleccionados.deselect(alumno);
-      let index = this.listaAlumnoGraduadoTitulado.findIndex(alumnoGraduado => alumnoGraduado.alumno_general_id == alumno.id)
+      let index = this.listaAlumnoGraduadoTitulado.findIndex(alumnoGraduado => alumnoGraduado.alumno_general_id == alumno.alumno_graduado.id)
       this.listaAlumnoGraduadoTitulado.splice(index, 1)
       this.alumnoPregradoSeleccionado = null
       console.log(this.listaAlumnoGraduadoTitulado)
     }
   }
 
-  clickAlumnoCard(alumno: alumno) {
-    this.alumnoPregradoSeleccionado = alumno;
-    console.log(this.alumnoPregradoSeleccionado)
+  clickAlumnoCard(alumnoBachiller: alumno_registroAlumnoGraduadoTitulado) {
+    this.alumnoPregradoSeleccionado = alumnoBachiller;
+    console.log(this.alumnoPregradoSeleccionado.alumno_graduado)
     //this.isLinear = false;
   }
 
-  gradoacademico(alumno: alumno) {
+  gradoacademico(alumno: alumno_registroAlumnoGraduadoTitulado) {
     this.alumnoPregradoSeleccionado = alumno;
-    if (this.alumnoPregradoSeleccionado.grado_alumno === true) {
-      var grado: string = 'Alumno Pregrado';
+    if (this.alumnoPregradoSeleccionado.alumno_graduado.estadograduado === true) {
+      var grado: string = 'Alumno Bachiller';
     }
     return grado
   }
 
   iniciarData() {
 
-    this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
-    this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
-    this.listaModalidadEstudios$ = this.modalidadEstudio.listaModalidadEstudio();
-    this.listaObtencionGrados$ = this.obtencionGrado.listaObtencionGrado();
-    this.listaDecanosFaultades$ = this.decanofacultadService.DecanoFacultad();
-    this.listaRectores$ = this.rectorService.Rector();
-    this.listaTrabajadorAreas$ = this.trabajadorareaService.TrabajadorArea();
+    this.listaAlumnosgraduadoBachillerService.listaAlumnosGraduadosBachilleres().subscribe({
+      next: (listaAlumnos) => {
+        this.dataSource.data = listaAlumnos
+      },
+      complete: () => {
+        this.listaEscuelaprofesionales$ = this.escuelaprofesionalService.EscuelaProfesional();
+        this.listaNombreProgramaEstudios$ = this.nombreProgramaestudio.listaNombreprogramaEstudio();
+        this.listaModalidadEstudios$ = this.modalidadEstudio.listaModalidadEstudio();
+        this.listaObtencionGrados$ = this.obtencionGrado.listaObtencionGrado();
+        this.listaDecanosFaultades$ = this.decanofacultadService.DecanoFacultad();
+        this.listaRectores$ = this.rectorService.Rector();
+        this.listaTrabajadorAreas$ = this.trabajadorareaService.TrabajadorArea();
+      }
+    })
   }
 
 
@@ -516,9 +527,10 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
   }
 
   filtarAlumnos(valor: any) {
+    /*
     valor.especialidad = valor.especialidad == "todos" ? null : valor.especialidad;
     console.log(valor)
-   this.alumnoService.listaAlumnosFiltrado(valor).subscribe(listaFiltrada => {
+    this.alumnoService.listaAlumnosFiltrado(valor).subscribe(listaFiltrada => {
       this.dataSource.data = listaFiltrada;
       if (this.dataSource.data.length == 0) {
         this.notificacionService.showInfo("No se encontraron coincidencias");
@@ -526,8 +538,7 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
         this.notificacionService.showSuccess("Se encontró " + this.dataSource.data.length + " coincidencias");
       }
       console.log(listaFiltrada)
-    })
-
+    })*/
   }
 
   /*CODIGO PARA MOSTRAR LOS ESTUDIANTES DE PRE-GRADO

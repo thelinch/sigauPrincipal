@@ -353,7 +353,8 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
   listarDenominacionGradoPorEspecialidad(alumnoParametro: alumno) {
     this.abrirBlock();
     let json = {
-      id: alumnoParametro.escuela_profesional.id
+      id: alumnoParametro.escuela_profesional.id,
+      gradoTitulo: 1
     }
     console.log(json)
     this.denominacionService.listarDenominacionesPorEspecialidad(json).subscribe(listaDenominacion => {
@@ -382,6 +383,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
         alumnoGraduadoTitulado.alumno_general_id = this.alumnoBachillerSeleccionado.id;
         alumnoGraduadoTitulado.trabajo_investigacion = alumnoGraduadoTitulado.trabajo_investigacion
         alumnoGraduadoTitulado.tipo_alumno_id = 1
+        alumnoGraduadoTitulado.grado_titulo_id = 1
 
         this.alumnoGraduadoService.guardarAlumnoGraduado(alumnoGraduadoTitulado).subscribe(alumnoGraduadoTituladoCreado => {
           this.alumnoGraduadoTituladoCreado = alumnoGraduadoTituladoCreado;
