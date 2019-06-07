@@ -128,7 +128,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
 
 
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
 
   applyFilter(filterValue: string) {
     //this.dataSource.filter = filterValue.trim().toLowerCase();

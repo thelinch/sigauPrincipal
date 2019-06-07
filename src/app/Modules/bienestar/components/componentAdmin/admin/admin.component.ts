@@ -9,7 +9,7 @@ import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 })
 export class AdminComponent implements OnInit, AfterViewInit {
 
-  @ViewChild("navegacion") navegacionTemplate;
+  @ViewChild("navegacion", { static: false }) navegacionTemplate;
   constructor(private navegacionService: NavegacionService) { }
   ngAfterViewInit(): void {
   }

@@ -6,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { AppRoutingModule } from './app.routing.module';
 import { NavegacionService } from './global/services/navegacion.service';
-import { ParticlesModule } from 'angular-particle';
 import { BlockUIModule } from 'ng-block-ui';
 import { MaterialModule } from './global/global.module';
 import { registerLocaleData } from '@angular/common';
@@ -19,7 +18,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FileService } from './global/services/file.service';
 import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
 import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
-
+import { ParticlesModule } from 'angular-particle';
 registerLocaleData(localePy, 'es');
 
 @NgModule({
@@ -31,10 +30,10 @@ registerLocaleData(localePy, 'es');
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
+    ParticlesModule,
     HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    ParticlesModule,
     MaterialModule,
 
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),

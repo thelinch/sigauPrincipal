@@ -8,12 +8,12 @@ const routes: Routes = [
   {
     path: '', component: PrincipalModulosComponent, children: [
       { path: "modulos", component: ModulosComponent },
-      { path: "bienestar", loadChildren: "../Modules/bienestar/bienestar.module#BienestarModule" },
-      { path: "scalafond", loadChildren: "../Modules/scalafond/scalafond.module#ScalafondModule" },
+      { path: "bienestar", loadChildren: () => import('../Modules/bienestar/bienestar.module').then(m => m.BienestarModule) },
+      { path: "scalafond", loadChildren: () => import('../Modules/scalafond/scalafond.module').then(m => m.ScalafondModule) },
       {
-        path: "titulos", loadChildren: "../Modules/titulos/titulos.module#TitulosModule"
+        path: "titulos", loadChildren: () => import('../Modules/titulos/titulos.module').then(m => m.TitulosModule)
       },
-      { path: "convenios", loadChildren: "../Modules/convenios/convenios.module#ConveniosModule" }
+      { path: "convenios", loadChildren: () => import('../Modules/convenios/convenios.module').then(m => m.ConveniosModule) }
     ]
   },
 

@@ -11,7 +11,7 @@ import { NavegacionDirective } from '../global/directives/navegacion.directive';
 export class PrincipalModulosComponent implements OnInit, AfterViewInit {
 
   //@ViewChild("sideNav") sideNav: ElementRef;
-  @ViewChild("menu") menu: ElementRef;
+  @ViewChild("menu", { static: false }) menu: ElementRef;
   //@ViewChildren("container") queryList: QueryList<NavegacionDirective>
 
   constructor(private navegacionService: NavegacionService, private renderer: Renderer2) { }

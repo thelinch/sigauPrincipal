@@ -50,7 +50,7 @@ export class RequisitoComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
   loadingRequisito$: Observable<boolean>
   fileUpload: FileUploadWithPreview;
-  @ViewChild("selectTipoArchivo")
+  @ViewChild("selectTipoArchivo", { static: false })
   private selectTipoArchivo;
   controlFiltrado: FormControl
   estadoActualizarResgitrarFormularion: boolean = false;
@@ -227,7 +227,7 @@ export class RequisitoComponent implements OnInit {
   }
   cambiarActualizacion(isChecked: boolean, idRequisito: ID, tipoId: number, tiempo: number) {
     console.log(tiempo)
-    if (tiempo <=0) {
+    if (tiempo <= 0) {
       Swal.fire({
         type: "error",
         text: "Los años deben ser mayor a 0",
