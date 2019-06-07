@@ -85,12 +85,13 @@ export class ServiciosComponent implements OnInit {
       id: new FormControl(),
       nombre: new FormControl("", [Validators.required]),
       icono: new FormControl(""),
-      matricula: new FormControl("", [Validators.required])
+      matricula: new FormControl("", [Validators.required]),
+      divisio_personas: new FormControl("", [Validators.required])
     })
     this.formularioCreacionAmpliacion = this.fb.group({
-      mujer: new FormControl(""),
-      varon: new FormControl(""),
-      total: new FormControl("")
+      mujer: new FormControl("", [Validators.required]),
+      varon: new FormControl("", [Validators.required]),
+      total: new FormControl("", [Validators.required])
     })
     this.formularioActualizacionFechaServicio = this.fb.group({
       fechaInicio: new FormControl("", Validators.required),
@@ -126,6 +127,8 @@ export class ServiciosComponent implements OnInit {
       this.formularioServicio.get("nombre").setValue(this.servicioSeleccionado.nombre);
       this.formularioServicio.get("icono").setValue(this.servicioSeleccionado.icono);
       this.formularioServicio.get("matricula").patchValue({ id: this.servicioSeleccionado.ciclo_academico_actual.ciclo_academico.id })
+      this.formularioServicio.get("divisio_personas").setValue(this.servicioSeleccionado.divisio_personas);
+
     }
   }
   cambiarCicloAcademico(event: any) {
@@ -232,7 +235,15 @@ export class ServiciosComponent implements OnInit {
   enabledFormularioServicio() {
     this.formularioServicio.enable();
   }
-  nuevaAmpliacion() {
+  nuevaAmpliacion(servicioS: servicio) {
+    if (!servicioS.divisio_personas) {
+      this.formularioCreacionAmpliacion.get("varon").disable();
+      this.formularioCreacionAmpliacion.get("mujer").disable();
+
+    } else {
+      this.formularioCreacionAmpliacion.get("varon").enable();
+      this.formularioCreacionAmpliacion.get("mujer").enable();
+    }
     this.formularioCreacionAmpliacion.reset();
   }
 

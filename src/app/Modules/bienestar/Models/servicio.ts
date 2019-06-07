@@ -9,6 +9,7 @@ export class servicio {
   estado: number
   total: number
   icono: string
+  divisio_personas: boolean
   ciclo_academico_actual: cicloAcademicoActual
   requisitos?: requisito[]
   ampliaciones?: ampliacion[]
