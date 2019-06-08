@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
 import { requisito } from '../../Models/Requisito';
-import { QueryEntity } from '@datorama/akita';
+import { QueryEntity, QueryConfig, Order } from '@datorama/akita';
 import { requisitoState, requisitoStore } from '../store/Requisito.store';
 import { combineLatest } from 'rxjs';
 import { VISIBILITY_FILTER } from '../../filter/filterRequisito.model';
+@QueryConfig({
+    sortBy: "requerido",
+    sortByOrder: Order.DESC
+})
 @Injectable({ providedIn: "root" })
 export class requisitoQuery extends QueryEntity<requisitoState, requisito>{
     selectVisibleFilter$ = this.select(state => state.filter)

@@ -14,18 +14,16 @@ export class ServicioSolicitadoService {
   private header: HttpHeaders = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  constructor(private http: HttpClient,
-    private servicioSolicitadoStore: servicioSolicitadoStore,
-    private servicioSolicitadoQuery: servicioSolicitadoQuery) { }
+  constructor(private http: HttpClient) { }
 
   listarServicioSolicitadoPorSemestreActual(json: any): Observable<servicioSolicitados[]> {
 
-    const request$ = this.http.post<servicioSolicitados[]>(this.urlControlador + "listaServicioSolicitadoPorSemestreActual", JSON.stringify(json), { headers: this.header }).pipe(tap(listaServicioSolicitado => {
-      this.servicioSolicitadoStore.set(listaServicioSolicitado);
-    }));
-    return this.servicioSolicitadoQuery.getHasCache() ? of() : request$;
+    return this.http.post<servicioSolicitados[]>(this.urlControlador + "listaServicioSolicitadoPorSemestreActual", JSON.stringify(json), { headers: this.header });
   }
   registrarServicioSolicitadoPorAlumnoYSemestreActual(json: any): Observable<servicioSolicitados> {
-    return this.http.post<servicioSolicitados>(this.urlControlador + "registroServicioSolicitadoPorAlumno", JSON.stringify(json), { headers: this.header }).pipe(tap(servicioSolicitadoCreado => this.servicioSolicitadoStore.add(servicioSolicitadoCreado)));
+    return this.http.post<servicioSolicitados>(this.urlControlador + "registroServicioSolicitadoPorAlumno", JSON.stringify(json), { headers: this.header });
+  }
+  servicioSolicitadoPorAlumnoComedorYInternadoYSemestreActual(json: any): Observable<servicioSolicitados> {
+    return this.http.post<servicioSolicitados>(this.urlControlador + "servicioSolicitadoPorAlumnoComedorYInternadoYSemestreActual", JSON.stringify(json), { headers: this.header })
   }
 }

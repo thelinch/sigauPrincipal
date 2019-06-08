@@ -25,6 +25,9 @@ export class functionsGlobal {
     M.FloatingActionButton.getInstance($("#" + idFixedAction)).close();
 
   }
+  static iniciarCarousel() {
+    M.Carousel.init($(".carousel"));
+  }
   static iniciarSideNav() {
     M.Sidenav.init($(".sidenav"));
   }
@@ -58,7 +61,7 @@ export class functionsGlobal {
     M.FormSelect.init($('select'));
   }
 
-  
+
   static iniciarScrollSpy() {
     M.ScrollSpy.init($('.scrollspy'), { scrollOffset: 100 });
   }

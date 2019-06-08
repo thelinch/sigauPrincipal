@@ -22,4 +22,9 @@ export class servicioSolicitadoSandBox {
             this.store.addActive(servicioSolicitado);
         })
     }
+    servicioSolicitadoPorAlumnoYSemestreActual(json: any) {
+        this.servicioSolicitadoService.servicioSolicitadoPorAlumnoComedorYInternadoYSemestreActual(json).subscribe(servicioSolicitado => {
+            this.store.add(servicioSolicitado);
+        })
+    }
 }

@@ -9,7 +9,7 @@
           </div>
           <div class="padding_2rem right-align ">
             <a matTooltip="Nueva solicitud" class="btn-floating z-depth-3 btn-large waves-effect waves-light blue"
-              [ngClass]="{disabled:servicioSolicitadoActualPorAlumnoYSemestreActual$ | async}"
+              [ngClass]="{disabled:servicioSolicitadoActualPorAlumnoYSemestreActual}"
               (click)="verificarExistenciaDeServicioSolicitado(idModalServicio)">
               <i class="material-icons">add</i>
             </a>
@@ -20,8 +20,7 @@
           <div class="card-content">
             <div class="row">
               <div class="col s12">
-                <div class="card hoverable"
-                  *ngIf="servicioSolicitadoActualPorAlumnoYSemestreActual$ | async as servicioSolicitadoActualPorAlumnoYSemestreActual">
+                <div class="card hoverable" *ngIf="servicioSolicitadoActualPorAlumnoYSemestreActual">
                   <div class="card-title">
                     <h5 class="padding_4">
                       {{servicioSolicitadoActualPorAlumnoYSemestreActual.codigoMatricula}}
@@ -89,7 +88,7 @@
         <mat-form-field class="col s12 m6">
           <mat-select placeholder="Servicios" multiple [formControl]="formControlListaServicio"
             (selectionChange)="changeSelectListaServicios($event)">
-            <mat-option [value]="servicio.id" *ngFor="let servicio of listaServiciosActivados">
+            <mat-option [value]="servicio.id" *ngFor="let servicio of listaServiciosActivados$ | async">
               {{servicio.nombre}}
               <i class="fas  {{servicio.icono}} "></i>
             </mat-option>
@@ -97,37 +96,50 @@
         </mat-form-field>
       </div>
       <mat-vertical-stepper #stepper>
-        <span *ngIf="listaRequisitosPorServicio">{{listaRequisitosPorServicio.length}}</span>
-        <mat-step #matStep [stepControl]="formFile" [matTooltip]="requisito.nombre" class="position_relative"
-          [optional]="!requisito.requerido" *ngFor="let requisito of listaRequisitosPorServicio">
-          <ng-template matStepLabel>{{requisito.nombre | titlecase}}</ng-template>
-          <a #boton matTooltip="Registar Requisito" [ngClass]="{'disabled': !formFile.valid}"
-            (click)="subirImagenFileWithPreview(requisito.id,requisito.tipoArchivo,requisito.nombreArchivo,requisito,stepper,matStep,boton)"
-            class="btn-floating btn-small waves-effect waves-light red  position_absolute right_0 top_0"
-            style="z-index: 100"><i class="material-icons">cloud_upload</i></a>
-          <div class="card" [matTooltip]="requisito.descripcion">
-            <div class="card-content truncate ">
-              {{requisito.descripcion}}
+        <ng-container *ngIf="listaRequisitosPorServicio$ | async as listaRequisitosPorServicio ">
+          <span>{{listaRequisitosPorServicio.length}}</span>
+          <mat-step #matStep [stepControl]="formFile" [matTooltip]="requisito.nombre" class="position_relative"
+            [optional]="!requisito.requerido" *ngFor="let requisito of listaRequisitosPorServicio">
+            <ng-template matStepLabel>{{requisito.nombre | titlecase}}</ng-template>
+            <a #boton matTooltip="Registar Requisito" [ngClass]="{'disabled': !formFile.valid}"
+              (click)="subirImagenFileWithPreview(requisito.id,requisito.tipoArchivo,requisito.nombreArchivo,requisito,stepper,matStep,boton)"
+              class="btn-floating btn-small waves-effect waves-light red  position_absolute right_0 top_0"
+              style="z-index: 100"><i class="material-icons">cloud_upload</i></a>
+            <ngu-carousel #myCarousel [inputs]="carouselTile">
+              <ngu-tile NguCarouselItem *ngFor="let archivo of requisito.archivos;let i=index">
+                <div class="tile" [style.background]="'url(http://localhost:8000'+archivo.url+')'">
+                  <h1>{{i + 1}}</h1>
+                </div>
+              </ngu-tile>
+
+              <button NguCarouselPrev class="leftRs">&lt;</button>
+              <button NguCarouselNext class="rightRs">&gt;</button>
+            </ngu-carousel>
+            <div class="card" [matTooltip]="requisito.descripcion">
+              <div class="card-content truncate ">
+                {{requisito.descripcion}}
+              </div>
             </div>
-          </div>
-          <!-- <dropzone [message]="'Arrastar o hacer click'" (sending)="onSending($event,requisito.id)"
-            #drpzone="ngxDropzone" (success)="onUploadSuccess($event)" class="dropzone-container">
-          </dropzone>-->
-          <form #formFile="ngForm">
-            <div class="custom-file-container" [attr.data-upload-id]="requisito.id">
-              <label>Archivos: <a href="javascript:void(0)" class="custom-file-container__image-clear  red-text"
-                  title="Clear Image"><i class="material-icons">cancel</i></a></label>
-              <label class="custom-file-container__custom-file">
-                <input type="file" class="custom-file-container__custom-file__custom-file-input"
-                  [accept]="requisito.tipoArchivo" name="file" ngModel required multiple aria-label="Subir Archivos"
-                  (click)="crearInstanciaFileWithPreview(requisito.id)">
-                <input type="hidden" name="MAX_FILE_SIZE" value="12485760" />
-                <span class="custom-file-container__custom-file__custom-file-control"></span>
-              </label>
-              <div class="custom-file-container__image-preview"></div>
-            </div>
-          </form>
-        </mat-step>
+            <!-- <dropzone [message]="'Arrastar o hacer click'" (sending)="onSending($event,requisito.id)"
+                #drpzone="ngxDropzone" (success)="onUploadSuccess($event)" class="dropzone-container">
+              </dropzone>-->
+            <form #formFile="ngForm">
+              <div class="custom-file-container" [attr.data-upload-id]="requisito.id">
+                <label>Archivos: <a href="javascript:void(0)" class="custom-file-container__image-clear  red-text"
+                    title="Clear Image"><i class="material-icons">cancel</i></a></label>
+                <label class="custom-file-container__custom-file">
+                  <input type="file" class="custom-file-container__custom-file__custom-file-input"
+                    [accept]="requisito.tipoArchivo" name="file" ngModel required multiple aria-label="Subir Archivos"
+                    (click)="crearInstanciaFileWithPreview(requisito.id)">
+                  <input type="hidden" name="MAX_FILE_SIZE" value="12485760" />
+                  <span class="custom-file-container__custom-file__custom-file-control"></span>
+                </label>
+                <div class="custom-file-container__image-preview"></div>
+              </div>
+            </form>
+          </mat-step>
+        </ng-container>
+
       </mat-vertical-stepper>
     </div>
     <div class="modal-footer">
@@ -210,5 +222,8 @@
     </div>
   </div>
 
+  <ng-template #efectoCarga>
+    <mat-spinner></mat-spinner>
+  </ng-template>
 
 </block-ui>

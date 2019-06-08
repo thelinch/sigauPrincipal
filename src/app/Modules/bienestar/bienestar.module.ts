@@ -21,6 +21,8 @@ import { ListaServiciosComponent } from './components/componentUsuario/lista/lis
 import { ServiciosComponent } from './components/componentAdmin/servicios/servicios.component';
 import { RequisitoComponent } from './components/componentAdmin/requisito/requisito.component';
 import { JpImagePreloadModule } from '@jaspero/ng-image-preload';
+import { ListaRequisitoComponent } from './partialsComponent/lista-requisito/lista-requisito.component';
+import { NguCarouselModule } from '@ngu/carousel';
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
@@ -29,10 +31,12 @@ import { JpImagePreloadModule } from '@jaspero/ng-image-preload';
     ListaComponent,
     ListaServiciosComponent,
     ServiciosComponent,
-    FilterEstadoActualPipe
+    FilterEstadoActualPipe,
+    ListaRequisitoComponent
   ],
   imports: [CommonModule,
     BienestarRoutingModule,
+    NguCarouselModule,
     FormsModule,
     BlockUIModule.forRoot(),
     HttpClientModule,

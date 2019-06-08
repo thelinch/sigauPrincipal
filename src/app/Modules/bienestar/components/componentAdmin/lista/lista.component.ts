@@ -9,7 +9,6 @@ import { ID } from '@datorama/akita';
 import { flatMap, map } from 'rxjs/operators';
 import { estadoArchivoRequisito } from '../../../Models/estadoArchivoRequisito';
 import { alumnoRequisito } from '../../../Models/alumnoRequisito';
-import { ServicioSolicitadoService } from '../../../services/servicio-solicitado.service';
 import { servicioSolicitadoQuery } from '../../../BD/query/servicioSolitadoQuery';
 import { servicioSolicitados } from '../../../Models/servicioSolicitados';
 import { servicioSolicitadoSandBox } from '../../../sandBox/servicioSolicitadoSandBox';

@@ -10,8 +10,7 @@ import { FileService } from 'src/app/global/services/file.service';
 import { NotificacionBusService } from 'src/app/global/services/NotificacionBusService.service';
 import { TipoRequisitoService } from '../services/tipo-requisito.service';
 import { variables } from 'src/app/global/variablesGlobales';
-import { archivoBase } from '../Models/archivoBase';
-import { tipoRequisito } from '../Models/tipoRequisito';
+import { ServicioService } from '../services/servicio.service';
 @Injectable({ providedIn: "root" })
 export class requisitoSandBox {
 
@@ -24,7 +23,7 @@ export class requisitoSandBox {
         private fileService: FileService,
         private notificacionBusServicio: NotificacionBusService,
         private tipoRequisitoService: TipoRequisitoService,
-
+        private servicioService: ServicioService
     ) {
     }
     listaRequisitos(): void {
@@ -124,4 +123,12 @@ export class requisitoSandBox {
     getLoadingRequisito(): Observable<boolean> {
         return this.isLoadingRequisito.asObservable();
     }
+    //Funcionalidades del alumno 
+    listarRequisitosDeComedorYInternadoYTipoAlumno(json: any) {
+        this.servicioService.listarRequisitosPorListaDeServicio(json).subscribe(listaRequisitos => {
+            this.store.set(listaRequisitos)
+        })
+    }
+    
+    //Fin de funcionalidades del alumno
 }

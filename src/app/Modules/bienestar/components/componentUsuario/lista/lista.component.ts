@@ -1,4 +1,7 @@
-import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
+import { servicioSolicitadoSandBox } from './../../../sandBox/servicioSolicitadoSandBox';
+import { servicioQuery } from './../../../BD/query/servicioQuery';
+import { requisitoQuery } from './../../../BD/query/requisitoQuery';
+import { Component, OnInit, Renderer2, ElementRef, AfterViewInit } from '@angular/core';
 import { functionsGlobal } from 'src/app/global/funciontsGlobal';
 import { FormGroup, Validators, FormBuilder, FormControl } from '@angular/forms';
 import { Observable, from, of } from 'rxjs';
@@ -13,29 +16,31 @@ import { alumnoRequisito } from '../../../Models/alumnoRequisito';
 import { servicioSolicitados } from '../../../Models/servicioSolicitados';
 import { archivo } from '../../../Models/archivo';
 import { requisito } from '../../../Models/Requisito';
-import { ServicioService } from '../../../services/servicio.service';
 import { AlumnoRequisitoService } from '../../../services/alumno-requisito.service';
 import { ServicioSolicitadoService } from '../../../services/servicio-solicitado.service';
 import { servicioSolicitadoQuery } from '../../../BD/query/servicioSolitadoQuery';
+import { servicioSandBox } from '../../../sandBox/servicioSandBox';
+import { requisitoSandBox } from '../../../sandBox/requisitoSandBox';
+import { variables } from 'src/app/global/variablesGlobales';
+import { NguCarouselConfig } from '@ngu/carousel';
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
   styleUrls: ['./lista.component.scss']
 })
-export class ListaServiciosComponent implements OnInit {
+export class ListaServiciosComponent implements OnInit, AfterViewInit {
+
   idModalServicio: string = "modalServicio"
   modalListaRequisitoAlumno: string = "modalListaRequisitoAlumno"
   modalSubirArchivo: string = "modalSubirArchivo";
   isLinear = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
   formControlListaServicio: FormControl;
   showPopup: boolean = false;
-  listaServiciosActivados: servicio[]
+  listaServiciosActivados$: Observable<servicio[]>
   listaAlumnoRequisitoPorALumnoYSemestre: alumnoRequisito[]
-  servicioSolicitadoActualPorAlumnoYSemestreActual$: Observable<servicioSolicitados>;
+  servicioSolicitadoActualPorAlumnoYSemestreActual: servicioSolicitados
   archivoSeleccionado: archivo;
-  listaRequisitosPorServicio: any[]
+  listaRequisitosPorServicio$: Observable<requisito[]>
   listaRequisitosLlenadosPorUsuario: requisito[]
   listaRequisitoRegistrodoAlumno: Array<number>
   listaFotosParaSubir: Array<FileUploadWithPreview>
@@ -45,22 +50,32 @@ export class ListaServiciosComponent implements OnInit {
   @BlockUI() blockUI: NgBlockUI;
 
   constructor(private _formBuilder: FormBuilder,
-    private servicioService: ServicioService,
+    //private servicioService: ServicioService,
+    private servicioSandBox: servicioSandBox,
+    private requisitoSandBox: requisitoSandBox,
+    private requisitoQuery: requisitoQuery,
+    private servicioQuery: servicioQuery,
     private filseService: FileService,
     private render: Renderer2,
-    private alumnoService: AlumnoService,
     private alumnoRequisitoService: AlumnoRequisitoService,
-    private servicioSolicitado: ServicioSolicitadoService,
-    private servicioSolicitadoQuery: servicioSolicitadoQuery) { }
+    private servicioSolicitadoService: ServicioSolicitadoService,
+  ) { }
 
   ngOnInit() {
 
     this.listaFotosParaSubir = new Array<FileUploadWithPreview>();
     this.formControlListaServicio = new FormControl();
-    //this.artefactoParaSubirArchivo = new FileUploadWithPreview("subirArchivo");
     this.contadorTotalRequisitoEnviadoRequerido = 0;
+    this.listaRequisitosPorServicio$ = this.requisitoQuery.selectAll();
+    this.listaServiciosActivados$ = this.servicioQuery.selectAll({
+      filterBy: entity => entity.activador && (entity.nombre == "COMEDOR" || entity.nombre == "INTERNADO")
+    })
     this.iniciarDatos();
 
+
+  }
+  ngAfterViewInit(): void {
+    functionsGlobal.iniciarCarousel();
 
   }
   /**
@@ -70,21 +85,27 @@ export class ListaServiciosComponent implements OnInit {
    *
    */
   iniciarDatos() {
+    let json = { idAlumno: "1" };
+    this.servicioSandBox.listaServicio();
     this.abrirBlock();
-    let json = { idAlumno: "1", semestreActual: "2019-1" };
-    this.alumnoService.servicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(async servicioSolicitado => {
-      if (!servicioSolicitado) {
-        this.servicioService.listarServiciosActivados().subscribe(listaServiciosActivados => {
-          this.listaServiciosActivados = listaServiciosActivados;
-        })
-        console.log("entro al if")
-      }
-      await this.cerrarBlock();
-    });
-    this.servicioSolicitadoActualPorAlumnoYSemestreActual$ = this.servicioSolicitadoQuery.selectFirst();
+    this.servicioSolicitadoService.servicioSolicitadoPorAlumnoComedorYInternadoYSemestreActual(json).subscribe(servicioSolicitado => {
+      this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioSolicitado;
+      this.cerrarBlock();
+    })
 
   }
-
+  public carouselTile: NguCarouselConfig = {
+    grid: { xs: 2, sm: 3, md: 3, lg: 5, all: 0 },
+    slide: 2,
+    speed: 400,
+    animation: 'lazy',
+    point: {
+      visible: true
+    },
+    load: 2,
+    touch: true,
+    easing: 'ease'
+  };
 
   registrarServiciosParaEvaluacion() {
     if (this.contadorTotalRequisitoEnviadoRequerido != this.numeroTotalDeRequisitoRequerido) {
@@ -98,11 +119,10 @@ export class ListaServiciosComponent implements OnInit {
     let json = {
       idAlumno: "1",
       listaDeServicioSolicitados: this.formControlListaServicio.value,
-      codigoMatricula: "2019-1"
     }
     this.abrirBlock();
-    this.servicioSolicitado.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
-
+    this.servicioSolicitadoService.registrarServicioSolicitadoPorAlumnoYSemestreActual(json).subscribe(servicioRegistrado => {
+      this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioRegistrado;
       this.cerrarModal(this.idModalServicio)
       this.cerrarBlock();
     })
@@ -124,7 +144,7 @@ export class ListaServiciosComponent implements OnInit {
               formData.append("archivo", file)
               formData.append("idRequisito", requisito.id.toString());
               formData.append("idUsuario", "1");
-              formData.append("nombreCarpeta", "Comedor_internado/antony/" + "2019-1");
+              formData.append("nombreCarpeta", variables.carpetaOBUAlumnoArchivos + "antony/" + "2019-1");
               return formData
             }),
               flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
@@ -180,20 +200,11 @@ export class ListaServiciosComponent implements OnInit {
   changeSelectListaServicios(event: any) {
     let json = {
       listaServiciosSolicitados: this.formControlListaServicio.value,
-      idAlumno: "1",
-      codigoMatricula: "2019-1"
+      idAlumno: "1"
     }
-    this.servicioService.listarRequisitosPorListaDeServicio(json).subscribe(listaRequisito => {
-      //listaRequisito.sort(requisito => requisito.requerido ? -1 : 1);
-      this.listaRequisitosPorServicio = listaRequisito
+    this.requisitoSandBox.listarRequisitosDeComedorYInternadoYTipoAlumno(json);
 
-      from(this.listaRequisitosPorServicio).pipe(filter((requisito: requisito) => requisito.requerido), toArray()).subscribe(listaRequisitoRequerido => {
-        this.numeroTotalDeRequisitoRequerido = listaRequisitoRequerido.length;
-      })
-      this.listaFotosParaSubir = [];
-    }
-
-    )
+    this.listaFotosParaSubir = [];
   }
   listaRequisitosPorAlumnoYSemestre(serviciosolicitado: servicioSolicitados) {
     let json = {
@@ -227,18 +238,15 @@ export class ListaServiciosComponent implements OnInit {
     })
   }
   verificarExistenciaDeServicioSolicitado(idModalServicio: string) {
-    this.servicioSolicitadoActualPorAlumnoYSemestreActual$.subscribe(servicioSolicitado => {
-      console.log(servicioSolicitado)
-      if (servicioSolicitado !== undefined) {
-        Swal.fire({
-          html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
-          type: "info"
-        })
-        return
+    if (this.servicioSolicitadoActualPorAlumnoYSemestreActual) {
+      Swal.fire({
+        html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
+        type: "info"
+      })
+      return
 
-      }
-      this.abrilModal(idModalServicio)
-    })
+    }
+    this.abrilModal(idModalServicio)
   }
   abrirBlock() {
     this.blockUI.start();

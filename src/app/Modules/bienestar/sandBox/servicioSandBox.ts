@@ -98,6 +98,7 @@ export class servicioSandBox {
             this.notificacionService.showSuccess("se modifico el ciclo academico correctamente")
         })
     }
+
     updateEntityViewMode(id, viewMode: any) {
         this.store.ui.upsert(id, { viewMode });
     }

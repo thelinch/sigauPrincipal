@@ -39,8 +39,8 @@ registerLocaleData(localePy, 'es');
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
 
     environment.production ?
-        [] :
-        [ AkitaNgDevtools.forRoot(), AkitaNgRouterStoreModule.forRoot() ],
+      [] :
+      [AkitaNgDevtools.forRoot(), AkitaNgRouterStoreModule.forRoot()],
 
   ],
   exports: [],
