@@ -25,6 +25,9 @@ export class FileService {
   eliminarArchivoRequisito(json: any): Observable<archivoBase> {
     return this.http.post<archivoBase>(this.urlControlador + "fileUpload/elimarArchivoRequisito", JSON.stringify(json), { headers: this.headers });
   }
+  subirArchivoDeServicioSolicitado(formData: any): Observable<boolean> {
+    return this.http.post<boolean>(this.urlControlador + "fileUpload/archivosServicioSolicitado", formData, { headers: this.headers });
+  }
   downloadFile(archivoParametro: string) {
     let json = { archivo: archivoParametro }
     this.http.post(this.urlControlador + "download/file", JSON.stringify(json), { headers: this.headerImagen }).subscribe(archivos => {

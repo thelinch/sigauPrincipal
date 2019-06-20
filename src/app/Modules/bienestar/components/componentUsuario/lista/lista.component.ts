@@ -8,7 +8,7 @@ import { Observable, from, of } from 'rxjs';
 import { NgBlockUI, BlockUI } from 'ng-block-ui';
 import FileUploadWithPreview from 'file-upload-with-preview';
 import Swal from 'sweetalert2';
-import { flatMap, map, take, filter, toArray } from 'rxjs/operators';
+import { flatMap, map, take, filter, toArray, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/global/services/file.service';
 import { AlumnoService } from 'src/app/global/services/alumno.service';
 import { servicio } from '../../../Models/servicio';
@@ -22,7 +22,8 @@ import { servicioSolicitadoQuery } from '../../../BD/query/servicioSolitadoQuery
 import { servicioSandBox } from '../../../sandBox/servicioSandBox';
 import { requisitoSandBox } from '../../../sandBox/requisitoSandBox';
 import { variables } from 'src/app/global/variablesGlobales';
-import { NguCarouselConfig } from '@ngu/carousel';
+import { ServicioSolicitadoRequisitoService } from '../../../services/servicio-solicitado-requisito.service';
+import { servicioSolicitadoRequisito } from '../../../Models/servicioSolicitadoRequisito';
 @Component({
   selector: 'app-lista',
   templateUrl: './lista.component.html',
@@ -59,7 +60,15 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
     private render: Renderer2,
     private alumnoRequisitoService: AlumnoRequisitoService,
     private servicioSolicitadoService: ServicioSolicitadoService,
+    private servicioSolicitadoRequisitoService: ServicioSolicitadoRequisitoService
   ) { }
+  config: SwiperOptions = {
+    pagination: '.swiper-pagination',
+    paginationClickable: true,
+    nextButton: '.swiper-button-next',
+    prevButton: '.swiper-button-prev',
+    spaceBetween: 30
+  };
 
   ngOnInit() {
 
@@ -94,18 +103,7 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
     })
 
   }
-  public carouselTile: NguCarouselConfig = {
-    grid: { xs: 2, sm: 3, md: 3, lg: 5, all: 0 },
-    slide: 2,
-    speed: 400,
-    animation: 'lazy',
-    point: {
-      visible: true
-    },
-    load: 2,
-    touch: true,
-    easing: 'ease'
-  };
+
 
   registrarServiciosParaEvaluacion() {
     if (this.contadorTotalRequisitoEnviadoRequerido != this.numeroTotalDeRequisitoRequerido) {
@@ -128,50 +126,64 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
     })
 
   }
-  subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string, nombreArchivPermitido: string, requisito: requisito, stepper, matSteep, boton: ElementRef) {
+  subirImagenFileWithPreview(id: number, tipoArchivoAdmitido: string, nombreArchivoPermitido: string, requisito: requisito, stepper, matSteep, boton: ElementRef) {
     let instanciaFotos = this.listaFotosParaSubir.find(fileUploader => fileUploader.uploadId == id);
     if (instanciaFotos.cachedFileArray.length > 0) {
       let validacionImagen: boolean = functionsGlobal.validarArchivoImagen(instanciaFotos.cachedFileArray, tipoArchivoAdmitido);
       if (validacionImagen) {
         Swal.fire({
-          title: "Los archivos son correctos",
+          text: "Los archivos son correctos",
           type: "question"
         }).then(respuesta => {
           if (respuesta.value) {
             this.abrirBlock();
-            from(instanciaFotos.cachedFileArray).pipe(take(instanciaFotos.cachedFileArray.length), map((file: File) => {
+            let jsonServicioSolicitado = {
+              idAlumno: 1,
+              listaDeServicioSolicitados: this.formControlListaServicio.value
+            }
+            this.servicioSolicitadoService.registrarServicioSolicitadoPorAlumnoYSemestreActual(jsonServicioSolicitado).pipe(tap(servicioSolicitado => {
+              this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioSolicitado;
+            }), flatMap((servicioSolicitadoRegistrado: servicioSolicitados) => {
+              let json = {
+                "idServicioSolicitado": servicioSolicitadoRegistrado.id,
+                "idRequisito": requisito.id,
+                "codigoMatricula": servicioSolicitadoRegistrado.codigoMatricula
+              }
+              return this.servicioSolicitadoRequisitoService.registrarServicioSolicitadoRequisito(json);
+            }), map((servicioSolicitadoRequisitoRegistrado: servicioSolicitadoRequisito) => {
               let formData = new FormData();
-              formData.append("archivo", file)
-              formData.append("idRequisito", requisito.id.toString());
-              formData.append("idUsuario", "1");
-              formData.append("nombreCarpeta", variables.carpetaOBUAlumnoArchivos + "antony/" + "2019-1");
-              return formData
-            }),
-              flatMap((formData) => this.filseService.guardarArchivo(formData))).subscribe({
-                next: (respuesta) => { console.log(respuesta) },
-                complete: () => {
-                  functionsGlobal.getToast("Se subieron los archivos correctamente");
-                  stepper.next();
-                  matSteep.editable = false;
-                  matSteep.interacted = true;
-                  instanciaFotos.clearImagePreviewPanel();
-                  this.render.addClass(boton, "disabled")
-                  if (requisito.requerido) {
-                    this.contadorTotalRequisitoEnviadoRequerido++;
-                  }
-                  if (this.contadorTotalRequisitoEnviadoRequerido == this.numeroTotalDeRequisitoRequerido) {
-                    stepper.completed = true;
-                  }
-                  this.cerrarBlock();
+              formData.append("archivos", instanciaFotos.cachedFileArray)
+              formData.append("idServicioSolicitadoRegistrado", servicioSolicitadoRequisitoRegistrado.id.toString())
+              return formData;
+            })
+            ).subscribe(respuesta => {
+              if (respuesta) {
+                matSteep.editable = false;
+                matSteep.interacted = true;
+                instanciaFotos.clearImagePreviewPanel();
+                this.render.addClass(boton, "disabled")
+                if (requisito.requerido) {
+                  this.contadorTotalRequisitoEnviadoRequerido++;
                 }
-              })
+                if (this.contadorTotalRequisitoEnviadoRequerido == this.numeroTotalDeRequisitoRequerido) {
+                  stepper.completed = true;
+                }
+                Swal.fire({
+                  toast: true,
+                  type: "success",
+                  timer: 2000,
+                  text: "Se subieron correctamente los archivos"
+                })
+                this.cerrarBlock()
+              }
+            });
           }
         })
       } else {
         Swal.fire({
           title: "Error",
           type: "error",
-          html: "Por favor solo esta permitido archivos de tipo " + nombreArchivPermitido
+          html: "Por favor solo esta permitido archivos de tipo " + nombreArchivoPermitido
         })
       }
     } else {

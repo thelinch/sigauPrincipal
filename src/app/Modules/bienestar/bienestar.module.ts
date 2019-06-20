@@ -22,7 +22,7 @@ import { ServiciosComponent } from './components/componentAdmin/servicios/servic
 import { RequisitoComponent } from './components/componentAdmin/requisito/requisito.component';
 import { JpImagePreloadModule } from '@jaspero/ng-image-preload';
 import { ListaRequisitoComponent } from './partialsComponent/lista-requisito/lista-requisito.component';
-import { NguCarouselModule } from '@ngu/carousel';
+import { SwiperModule } from 'angular2-useful-swiper';
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
@@ -35,8 +35,8 @@ import { NguCarouselModule } from '@ngu/carousel';
     ListaRequisitoComponent
   ],
   imports: [CommonModule,
+    SwiperModule,
     BienestarRoutingModule,
-    NguCarouselModule,
     FormsModule,
     BlockUIModule.forRoot(),
     HttpClientModule,

@@ -31,11 +31,13 @@
               {
                 "input": "node_modules/@progress/kendo-theme-default/dist/all.css"
               },
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/swiper/dist/css/swiper.css" 
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/hammerjs/hammer.js",
+              "node_modules/swiper/dist/js/swiper.js" ,
               "node_modules/popper.js/dist/umd/popper.js",
               "node_modules/materialize-css/dist/js/materialize.min.js"
             ]
