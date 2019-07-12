@@ -134,7 +134,6 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
         Swal.fire({
           text: "Los archivos son correctos",
           type: "question",
-          toast:true
         }).then(respuesta => {
           if (respuesta.value) {
             this.abrirBlock();
@@ -142,8 +141,7 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
               idAlumno: 1,
               listaDeServicioSolicitados: this.formControlListaServicio.value
             }
-            if (!this.servicioSolicitadoActualPorAlumnoYSemestreActual) 
-            { 
+            if (!this.servicioSolicitadoActualPorAlumnoYSemestreActual) {
 
 
             }

@@ -75,6 +75,7 @@ export class RequisitoComponent implements OnInit {
         position: "top-end"
       })
     })
+    functionsGlobal.iniciarModal();
     this.loadingRequisito$ = this.sb.getLoadingRequisito();
     this.controlFiltrado.valueChanges.subscribe(opcion => {
       this.sb.actualizarFiltrado(opcion);

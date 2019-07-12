@@ -5,7 +5,8 @@
       <div class="card horizontal hoverable">
         <div class="card-image">
           <img class="materialboxed" src="../../../../../assets/UsuarioDefecto/user-defect.jpg"
-            [attr.data-caption]="servicioSolicitado.alumno.persona.nombre" alt="" srcset="">
+            [attr.data-caption]="servicioSolicitado.alumno.persona.nombre"
+            [alt]="servicioSolicitado.alumno.persona.nombre_completo" srcset="">
           <div class="estado position_absolute top_0  left_0">
             <span class="chip blue white-text">{{servicioSolicitado.alumno.tipo_alumno.nombre}}</span>
           </div>
@@ -15,10 +16,11 @@
         </div>
         <div class="card-stacked">
           <div class="card-content no-padding position_relative">
-            <div class="display_inline_block padding_2rem with_100 right-align">
+            <div
+              class="display_inline_block padding_2rem with_100 position_absolute right-align top_0 right_0 right-align">
               <i class="fas padding_2rem  {{servicio.icono}}" *ngFor="let servicio of servicioSolicitado.servicios"
                 [matTooltip]="servicio.nombre"></i>
-              <i class="material-icons tiny" [style.color]="servicioSolicitado.estado_servicio.color"
+              <i class="material-icons " [style.color]="servicioSolicitado.estado_servicio.color"
                 [matTooltip]="servicioSolicitado.estado_servicio.nombre">
                 flag
               </i>
@@ -28,7 +30,8 @@
                 {{servicioSolicitado.alumno.persona.nombre_completo}}</p>
               <p class="truncate">{{servicioSolicitado.alumno.persona.numero_documento}}</p>
             </div>
-
+            <mat-checkbox *ngIf="servicioSolicitado.alumno.tipo_alumno.nombre=='INGRESANTE'">Reservar Reunion
+            </mat-checkbox>
           </div>
           <div class="card-action right-align">
             <a (click)="listarRequisitoPorAlumnoYSemestreActual(servicioSolicitado.id)" matTooltip="Ver Archivos"

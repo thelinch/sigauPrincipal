@@ -102,6 +102,7 @@ export class ServiciosComponent implements OnInit {
     this.servicioSeleccionado$ = this.servicioQuery.selectActive();
     this.listaDecicloAcademico$ = this.cicloAcademicoQuery.selectAll();
     this.listarServicios();
+    functionsGlobal.iniciarModal();
 
 
   }

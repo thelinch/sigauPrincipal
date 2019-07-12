@@ -14,6 +14,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
   }
   ngOnInit() {
+    functionsGlobal.iniciarModal();
+
     this.iniciarNavegacion()
   }
 

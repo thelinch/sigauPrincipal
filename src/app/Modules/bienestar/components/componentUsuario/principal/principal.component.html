@@ -1,4 +1,121 @@
+<!--START DE HEADER-->
+<header>
+    <!--BARRA DE NAVEGACION-->
+    <div class="navbar-fixed">
+        <nav class="navbar-color gradient-45deg-light-ocda-cyan">
+            <div class="nav-wrapper">
+                <a class="brand-logo margin-top-navbar"><span class="avatar-statuss avatar-online">
+                        <img src="../../assets/LogoSigau/logo_blanca.png" alt="avatar">
+                    </span></a>
+                <a data-target="slide-out"
+                    class="sidenav-trigger sidebar-collapse btn-floating btn-large waves-effect waves-teal btn-flat  "><i
+                        class="material-icons">menu</i></a>
+                <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li>
+                        <a class="dropdown-trigger" data-target="perfile-dropdown">
+                            <i class="material-icons right">notifications_none</i></a>
+                    </li>
+                    <li>
+                        <a class="dropdown-trigger" data-target="perfile-dropdown">
+                            <span class="avatar-status avatar-online">
+                                <img src="../../assets/images/avatar/avatar-13.png" alt="avatar">
+                            </span> Franklin<i class="material-icons right">arrow_drop_down</i></a>
+                    </li>
+                </ul>
+            </div>
+            <!--DROWPDOWN DE BARRA DE NAVEGACION-->
+            <!-- Dropdown Structure USER -->
+            <ul id="perfile-dropdown" class="dropdown-content">
+                <li>
+                    <a href="#!" class="grey-text text-darken-1">
+                        <i class="material-icons">face</i> Profile</a>
+                </li>
+                <li>
+                    <a href="#!" class="grey-text text-darken-1">
+                        <i class="material-icons">settings</i> Settings</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#!" class="grey-text text-darken-1">
+                        <i class="material-icons">live_help</i> Help</a>
+                </li>
+            </ul>
+            <!--FIN DE DROPDOWN DE BARRA DE NAVEGACION-->
+        </nav>
+    </div>
 
+    <!--FIN DE BARRA DE NAVEGACION-->
+</header>
+<!--FIN DE HEADER-->
+<!--////////////////////////////////////////////////////-->
+<!-- START MAIN -->
+<div id="main">
+    <!-- START WRAPPER -->
+    <div class="wrapper">
+        <!-- START LEFT SIDEBAR NAV-->
+        <aside id="left-sidebar-nav">
+            <!--MENU DE NAVEGACION-->
+            <ul id="slide-out" class="sidenav sidenav-fixed top-navbar">
+                <li>
+                    <div class="user-view">
+                        <div class="backgroundd">
+                            <img src="../../assets/images/gallary/12.png">
+                        </div>
+                        <a><img class="circle" src="../../assets/images/avatar/avatar-13.png"></a>
+                        <a><span class="white-text name ">Franklin Mijahuanca López</span></a>
+                        <a><span class="white-text email font-zize">franklin.mijahuanca@unas.edu.pe</span></a>
+                    </div>
+                </li>
+                <li>
+                    <a><i class="material-icons">business</i>UNAS</a>
+                </li>
+                <li>
+                    <a>Tingo María - Huanuco - Perú</a>
+                </li>
+                <li>
+                    <div class="divider"></div>
+                </li>
+                <ul class="collapsible" #menu>
+                    <li>
+                        <a [routerLink]="['lista']" class="collapsible-header">
+                            <i class="material-icons">find_in_page</i>Servicios
+                        </a>
+                    </li>
+               
+                </ul>
+            </ul>
+        </aside>
+        <!-- END LEFT SIDEBAR NAV-->
+        <!-- //////////////////////////////////////////////////////////////////////////// -->
+        <!-- START CONTENT -->
+        <section id="content">
+            <!--start container-->
+            <div class="container">
+                <!--CONTENID DEL BODY-->
+                <router-outlet></router-outlet>
+            </div>
+            <!--end container-->
+        </section>
+        <!-- END CONTENT -->
+    </div>
+    <!-- END WRAPPER -->
+</div>
+<!-- END MAIN -->
 
-
-<router-outlet></router-outlet>
+<!--Footer-->
+<!--
+  <footer class="page-footer gradient-45deg-light-blue-cyan">
+    <div class="footer-copyright">
+      <div class="container">
+        <span>Copyright ©
+          <script type="text/javascript">
+            document.write(new Date().getFullYear());
+          </script>2019 <a class="grey-text text-lighten-2"
+            href="www.unas.edu.pe" target="_blank">UNAS</a> All rights
+          reserved.</span>
+        <span class="right hide-on-small-only"> Design and Developed by <a class="grey-text text-lighten-2"
+            href="www.unas.edu.pe">OTIC</a></span>
+      </div>
+    </div>
+  </footer>
+  -->

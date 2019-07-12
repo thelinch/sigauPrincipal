@@ -41,7 +41,7 @@ export class ListaComponent implements OnInit {
   }
   listarServicioSolicitadoPorSemestreActual() {
     let json = {
-      codigoMatricula: "2019-1"
+      codigoMatricula: "2019-2"
     }
     this.servicioSolicitadoSandBox.listarServicioSolicitado(json);
   }
