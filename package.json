@@ -42,6 +42,7 @@
     "ngx-dropzone-wrapper": "^7.2.1",
     "ngx-popper": "^6.0.7",
     "popper.js": "^1.15.0",
+    "rollbar": "^2.7.1",
     "rxjs": "~6.5.2",
     "rxjs-compat": "^6.0.0",
     "sweetalert2": "^8.2.6",

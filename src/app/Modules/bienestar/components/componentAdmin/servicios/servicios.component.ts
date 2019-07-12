@@ -86,7 +86,7 @@ export class ServiciosComponent implements OnInit {
       nombre: new FormControl("", [Validators.required]),
       icono: new FormControl(""),
       matricula: new FormControl("", [Validators.required]),
-      divisio_personas: new FormControl("", [Validators.required])
+      divisio_personas: new FormControl("")
     })
     this.formularioCreacionAmpliacion = this.fb.group({
       mujer: new FormControl("", [Validators.required]),
@@ -201,7 +201,13 @@ export class ServiciosComponent implements OnInit {
     let servicioSelecionado = this.servicioQuery.getEntity(this.servicioQuery.getActiveId());
     let fechaInicio = moment(formValue.fechaInicio)
     let fechaFin = moment(formValue.fechaFin)
-
+    if (fechaFin.diff(fechaInicio) <= 0) {
+      Swal.fire({
+        type: "error",
+        text: "la fecha fin debe ser mayor a la fecha inicio"
+      })
+      return
+    }
     let jsonFecha: any = {
       id: servicioSelecionado.id,
       fechaInicio: fechaInicio.format(),

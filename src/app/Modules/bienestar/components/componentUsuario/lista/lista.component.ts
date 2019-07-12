@@ -133,7 +133,8 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
       if (validacionImagen) {
         Swal.fire({
           text: "Los archivos son correctos",
-          type: "question"
+          type: "question",
+          toast:true
         }).then(respuesta => {
           if (respuesta.value) {
             this.abrirBlock();
@@ -141,6 +142,12 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
               idAlumno: 1,
               listaDeServicioSolicitados: this.formControlListaServicio.value
             }
+            if (!this.servicioSolicitadoActualPorAlumnoYSemestreActual) 
+            { 
+
+
+            }
+
             this.servicioSolicitadoService.registrarServicioSolicitadoPorAlumnoYSemestreActual(jsonServicioSolicitado).pipe(tap(servicioSolicitado => {
               this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioSolicitado;
             }), flatMap((servicioSolicitadoRegistrado: servicioSolicitados) => {
@@ -150,11 +157,11 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
                 "codigoMatricula": servicioSolicitadoRegistrado.codigoMatricula
               }
               return this.servicioSolicitadoRequisitoService.registrarServicioSolicitadoRequisito(json);
-            }), map((servicioSolicitadoRequisitoRegistrado: servicioSolicitadoRequisito) => {
+            }), flatMap((servicioSolicitadoRequisitoRegistrado: servicioSolicitadoRequisito) => {
               let formData = new FormData();
               formData.append("archivos", instanciaFotos.cachedFileArray)
               formData.append("idServicioSolicitadoRegistrado", servicioSolicitadoRequisitoRegistrado.id.toString())
-              return formData;
+              return this.filseService.guardarArchivo(formData);
             })
             ).subscribe(respuesta => {
               if (respuesta) {
