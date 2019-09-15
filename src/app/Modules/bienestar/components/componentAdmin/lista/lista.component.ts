@@ -10,7 +10,7 @@ import { flatMap, map } from 'rxjs/operators';
 import { estadoArchivoRequisito } from '../../../Models/estadoArchivoRequisito';
 import { alumnoRequisito } from '../../../Models/alumnoRequisito';
 import { servicioSolicitadoQuery } from '../../../BD/query/servicioSolitadoQuery';
-import { servicioSolicitados } from '../../../Models/servicioSolicitados';
+import { obuServicios } from '../../../Models/obuServicios';
 import { servicioSolicitadoSandBox } from '../../../sandBox/servicioSolicitadoSandBox';
 
 @Component({
@@ -20,7 +20,7 @@ import { servicioSolicitadoSandBox } from '../../../sandBox/servicioSolicitadoSa
 })
 export class ListaComponent implements OnInit {
 
-  listaDeServiciosSolicitado$: Observable<servicioSolicitados[]>
+  listaDeServiciosSolicitado$: Observable<obuServicios[]>
   loadingListaServicioSolicitado$: Observable<boolean>
   idModalListaRequisitos: string = "idModalListaRequisitos";
   alumnoSeleccionado: alumno;

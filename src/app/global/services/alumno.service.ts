@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { alumno } from '../Models/Alumno';
 import { servicio } from 'src/app/Modules/bienestar/Models/servicio';
-import { servicioSolicitados } from 'src/app/Modules/bienestar/Models/servicioSolicitados';
+import { obuServicios } from 'src/app/Modules/bienestar/Models/obuServicios';
 import { alumnoRequisito } from 'src/app/Modules/bienestar/Models/alumnoRequisito';
 import { servicioSolicitadoStore } from 'src/app/Modules/bienestar/BD/store/ServicioSolicitado.store';
 import { tap } from 'rxjs/operators';
@@ -27,8 +27,8 @@ export class AlumnoService {
   buscarAlumnoConRequisitosYServiciosPorId(json: any): Observable<alumno> {
     return this.http.post<alumno>(this.urlControlador + "alumno/bienestarUniversitario", JSON.stringify(json), { headers: this.header });
   }
-  servicioSolicitadoPorAlumnoYSemestreActual(json: any): Observable<servicioSolicitados> {
-    const request$ = this.http.post<servicioSolicitados>(this.urlControlador + "alumno/servicios", JSON.stringify(json), { headers: this.header }).pipe(tap(servicioSolicitado => {
+  servicioSolicitadoPorAlumnoYSemestreActual(json: any): Observable<obuServicios> {
+    const request$ = this.http.post<obuServicios>(this.urlControlador + "alumno/servicios", JSON.stringify(json), { headers: this.header }).pipe(tap(servicioSolicitado => {
       this.servicioSolicitadoStore.add(servicioSolicitado)
     }));
     return this.servicioSolicitadoQuery.getHasCache() ? of() : request$;
