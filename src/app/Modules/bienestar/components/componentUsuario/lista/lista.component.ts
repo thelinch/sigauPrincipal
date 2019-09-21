@@ -1,3 +1,4 @@
+import { tap, flatMap, map, zip } from "rxjs/operators";
 import { servicioSolicitadoSandBox } from "./../../../sandBox/servicioSolicitadoSandBox";
 import { servicioQuery } from "./../../../BD/query/servicioQuery";
 import { requisitoQuery } from "./../../../BD/query/requisitoQuery";
@@ -15,13 +16,11 @@ import {
   FormBuilder,
   FormControl
 } from "@angular/forms";
-import { Observable, from, of } from "rxjs";
+import { Observable, from, of, forkJoin } from "rxjs";
 import { NgBlockUI, BlockUI } from "ng-block-ui";
 import FileUploadWithPreview from "file-upload-with-preview";
 import Swal from "sweetalert2";
-import { flatMap, map, take, filter, toArray, tap } from "rxjs/operators";
 import { FileService } from "src/app/global/services/file.service";
-import { AlumnoService } from "src/app/global/services/alumno.service";
 import { servicio } from "../../../Models/servicio";
 import { alumnoRequisito } from "../../../Models/alumnoRequisito";
 import { obuServicios } from "../../../Models/obuServicios";
@@ -29,12 +28,12 @@ import { archivo } from "../../../Models/archivo";
 import { requisito } from "../../../Models/Requisito";
 import { AlumnoRequisitoService } from "../../../services/alumno-requisito.service";
 import { ServicioSolicitadoService } from "../../../services/servicio-solicitado.service";
-import { servicioSolicitadoQuery } from "../../../BD/query/servicioSolitadoQuery";
 import { servicioSandBox } from "../../../sandBox/servicioSandBox";
 import { requisitoSandBox } from "../../../sandBox/requisitoSandBox";
-import { variables } from "src/app/global/variablesGlobales";
 import { ServicioSolicitadoRequisitoService } from "../../../services/servicio-solicitado-requisito.service";
-import { servicioSolicitadoRequisito } from "../../../Models/servicioSolicitadoRequisito";
+import { variables } from "src/app/global/variablesGlobales";
+import { obuSolicitudRequisitoArchivos } from "../../../services/obuSolicitud-requisitos-archivos.service";
+
 @Component({
   selector: "app-lista",
   templateUrl: "./lista.component.html",
@@ -45,18 +44,19 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
   modalListaRequisitoAlumno: string = "modalListaRequisitoAlumno";
   modalSubirArchivo: string = "modalSubirArchivo";
   isLinear = false;
-  formControlListaServicio: FormControl;
+  //formControlListaServicio: FormControl;
+  formListService: FormGroup;
   showPopup: boolean = false;
   listaServiciosActivados$: Observable<servicio[]>;
   listaAlumnoRequisitoPorALumnoYSemestre: alumnoRequisito[];
-  servicioSolicitadoActualPorAlumnoYSemestreActual$: Observable<obuServicios>;
+  servicioSolicitadoActualPorAlumnoYSemestreActual: obuServicios;
   archivoSeleccionado: archivo;
   listaRequisitosPorServicio$: Observable<requisito[]>;
   listaRequisitosLlenadosPorUsuario: requisito[];
   listaRequisitoRegistrodoAlumno: Array<number>;
   listaFotosParaSubir: Array<FileUploadWithPreview>;
   artefactoParaSubirArchivo: FileUploadWithPreview;
-  numeroTotalDeRequisitoRequerido: number;
+  numeroTotalDeRequisitoRequerido$: Observable<number>;
   contadorTotalRequisitoEnviadoRequerido: number;
   @BlockUI() blockUI: NgBlockUI;
 
@@ -71,7 +71,8 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
     private render: Renderer2,
     private alumnoRequisitoService: AlumnoRequisitoService,
     private servicioSolicitadoService: ServicioSolicitadoService,
-    private servicioSolicitadoRequisitoService: ServicioSolicitadoRequisitoService
+    private servicioSolicitadoRequisitoService: ServicioSolicitadoRequisitoService,
+    private obuSolicitudRequisitoArchivo: obuSolicitudRequisitoArchivos
   ) {}
   config: SwiperOptions = {
     pagination: ".swiper-pagination",
@@ -81,9 +82,14 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
     spaceBetween: 30
   };
 
-  ngOnInit() {
+  async ngOnInit() {
     this.listaFotosParaSubir = new Array<FileUploadWithPreview>();
-    this.formControlListaServicio = new FormControl();
+    this.formListService = this._formBuilder.group({
+      listaDeServicioSolicitados: ["", Validators.required]
+    });
+    this.numeroTotalDeRequisitoRequerido$ = this.requisitoQuery.selectCount(
+      requisito => requisito.requerido
+    );
     this.contadorTotalRequisitoEnviadoRequerido = 0;
     this.listaRequisitosPorServicio$ = this.requisitoQuery.selectAll();
     this.listaServiciosActivados$ = this.servicioQuery.selectAll({
@@ -102,18 +108,19 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
    * @memberof ListaServiciosComponent
    *
    */
-  iniciarDatos() {
+  async iniciarDatos() {
     let json = { idAlumno: "1" };
     this.servicioSandBox.listaServicio();
-    this.servicioSolicitadoActualPorAlumnoYSemestreActual$ = this.servicioSolicitadoService.servicioSolicitadoPorAlumnoComedorYInternadoYSemestreActual(
-      json
-    );
+    this.servicioSolicitadoActualPorAlumnoYSemestreActual = await this.servicioSolicitadoService
+      .servicioSolicitadoPorAlumnoComedorYInternadoYSemestreActual(json)
+      .toPromise();
   }
 
-  registrarServiciosParaEvaluacion() {
+  async registrarServiciosParaEvaluacion() {
+    let numeroTotalDeRequisitoRequerido = await this.numeroTotalDeRequisitoRequerido$.toPromise();
     if (
       this.contadorTotalRequisitoEnviadoRequerido !=
-      this.numeroTotalDeRequisitoRequerido
+      numeroTotalDeRequisitoRequerido
     ) {
       Swal.fire({
         title: "Requisitos requeridos",
@@ -124,13 +131,13 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
     }
     let json = {
       idAlumno: "1",
-      listaDeServicioSolicitados: this.formControlListaServicio.value
+      listaDeServicioSolicitados: this.formListService.value
     };
-    this.servicioSolicitadoActualPorAlumnoYSemestreActual$ = this.servicioSolicitadoService.registrarServicioSolicitadoPorAlumnoYSemestreActual(
-      json
-    );
+    this.servicioSolicitadoActualPorAlumnoYSemestreActual = await this.servicioSolicitadoService
+      .registrarServicioSolicitadoPorAlumnoYSemestreActual(json)
+      .toPromise();
   }
-  subirImagenFileWithPreview(
+  async subirImagenFileWithPreview(
     id: number,
     tipoArchivoAdmitido: string,
     nombreArchivoPermitido: string,
@@ -148,42 +155,63 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
         tipoArchivoAdmitido
       );
       if (validacionImagen) {
-        Swal.fire({
+        const respuesta = await Swal.fire({
           text: "Los archivos son correctos",
           type: "question"
-        }).then(respuesta => {
-          if (respuesta.value) {
-            this.abrirBlock();
-            let jsonServicioSolicitado = {
-              idAlumno: 1,
-              listaDeServicioSolicitados: this.formControlListaServicio.value
-            };
+        });
 
-            /* this.servicioSolicitadoService.registrarServicioSolicitadoPorAlumnoYSemestreActual(jsonServicioSolicitado).pipe(tap(servicioSolicitado => {
-              this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioSolicitado;
-            }), flatMap((servicioSolicitadoRegistrado: obuServicios) => {
-              let json = {
-                "idServicioSolicitado": servicioSolicitadoRegistrado.id,
-                "idRequisito": requisito.id,
-                "codigoMatricula": servicioSolicitadoRegistrado.codigoMatricula
-              }
-              return this.servicioSolicitadoRequisitoService.registrarServicioSolicitadoRequisito(json);
-            }), flatMap((servicioSolicitadoRequisitoRegistrado: servicioSolicitadoRequisito) => {
-              let formData = new FormData();
-              formData.append("archivos", instanciaFotos.cachedFileArray)
-              formData.append("idServicioSolicitadoRegistrado", servicioSolicitadoRequisitoRegistrado.id.toString())
-              return this.filseService.guardarArchivo(formData);
-            })
-            ).subscribe(respuesta => {
-              if (respuesta) {
+        if (respuesta.value) {
+          let json = {
+            codigoMatricula: this
+              .servicioSolicitadoActualPorAlumnoYSemestreActual.codigoMatricula,
+            idServicioSolicitado: this
+              .servicioSolicitadoActualPorAlumnoYSemestreActual.id,
+            idRequisito: requisito.id
+          };
+          let obuSolicitudRequisito = await this.servicioSolicitadoRequisitoService
+            .registrarServicioSolicitadoRequisito(json)
+            .toPromise();
+          from(instanciaFotos.cachedFileArray)
+            .pipe(
+              map((file: File) => {
+                let formData = new FormData();
+                formData.append("archivo", file);
+                formData.append(
+                  "nombreCarpeta",
+                  variables.carpetaOBUArchivoRequisitos +
+                    `antony/${this.servicioSolicitadoActualPorAlumnoYSemestreActual.codigoMatricula}/`
+                );
+                return formData;
+              }),
+              flatMap(formData => {
+                return this.filseService.guardarArchivo(formData);
+              }),
+              flatMap((url: string) => {
+                let json = {
+                  obu_requisito_id: obuSolicitudRequisito.id,
+                  url: url
+                };
+                return this.obuSolicitudRequisitoArchivo.create(json);
+              }),
+              flatMap(respuesta => {
+                return this.requisitoQuery.selectCount(
+                  requisito => requisito.requerido
+                );
+              })
+            )
+            .subscribe(numeroTotalRequisitoRequerido => {
+              if (numeroTotalRequisitoRequerido) {
                 matSteep.editable = false;
                 matSteep.interacted = true;
                 instanciaFotos.clearImagePreviewPanel();
-                this.render.addClass(boton, "disabled")
+                this.render.addClass(boton, "disabled");
                 if (requisito.requerido) {
                   this.contadorTotalRequisitoEnviadoRequerido++;
                 }
-                if (this.contadorTotalRequisitoEnviadoRequerido == this.numeroTotalDeRequisitoRequerido) {
+                if (
+                  this.contadorTotalRequisitoEnviadoRequerido ==
+                  numeroTotalRequisitoRequerido
+                ) {
                   stepper.completed = true;
                 }
                 Swal.fire({
@@ -191,12 +219,68 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
                   type: "success",
                   timer: 2000,
                   text: "Se subieron correctamente los archivos"
-                })
-                this.cerrarBlock()
+                });
+                this.cerrarBlock();
               }
-            })*/
-          }
-        });
+            });
+
+          /*this.servicioSolicitadoService
+            .registrarServicioSolicitadoPorAlumnoYSemestreActual(
+              jsonServicioSolicitado
+            )
+            .pipe(
+              tap(servicioSolicitado => {
+                this.servicioSolicitadoActualPorAlumnoYSemestreActual = servicioSolicitado;
+              }),
+              flatMap((servicioSolicitadoRegistrado: obuServicios) => {
+                let json = {
+                  idServicioSolicitado: servicioSolicitadoRegistrado.id,
+                  idRequisito: requisito.id,
+                  codigoMatricula: servicioSolicitadoRegistrado.codigoMatricula
+                };
+                return this.servicioSolicitadoRequisitoService.registrarServicioSolicitadoRequisito(
+                  json
+                );
+              }),
+              flatMap(
+                (
+                  servicioSolicitadoRequisitoRegistrado: servicioSolicitadoRequisito
+                ) => {
+                  let formData = new FormData();
+                  formData.append("archivos", instanciaFotos.cachedFileArray);
+                  formData.append(
+                    "idServicioSolicitadoRegistrado",
+                    servicioSolicitadoRequisitoRegistrado.id.toString()
+                  );
+                  return this.filseService.guardarArchivo(formData);
+                }
+              )
+            )
+            .subscribe(respuesta => {
+              if (respuesta) {
+                matSteep.editable = false;
+                matSteep.interacted = true;
+                instanciaFotos.clearImagePreviewPanel();
+                this.render.addClass(boton, "disabled");
+                if (requisito.requerido) {
+                  this.contadorTotalRequisitoEnviadoRequerido++;
+                }
+                if (
+                  this.contadorTotalRequisitoEnviadoRequerido ==
+                  this.numeroTotalDeRequisitoRequerido
+                ) {
+                  stepper.completed = true;
+                }
+                Swal.fire({
+                  toast: true,
+                  type: "success",
+                  timer: 2000,
+                  text: "Se subieron correctamente los archivos"
+                });
+                this.cerrarBlock();
+              }
+            });*/
+        }
       } else {
         Swal.fire({
           title: "Error",
@@ -232,23 +316,24 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
       this.listaFotosParaSubir.push(new FileUploadWithPreview(idObjeto));
     }
   }
-  async changeSelectListaServicios(event: any) {
-    let respuesta = await Swal.fire({
+  async registerServices(listServices: any, step: any) {
+    const respuesta = await Swal.fire({
+      text: "Su solicitud se registrara , no se podra deshacer la operacion",
       type: "question",
-      text: "Se registrara la solicitud,con los servicios seleccionados",
       showCancelButton: true,
       showConfirmButton: true
     });
-    let obuSolicitud: obuServicios = await this.servicioSolicitadoActualPorAlumnoYSemestreActual$.toPromise();
-    if (!obuSolicitud && respuesta.value) {
+    if (respuesta.value) {
       let json = {
-        listaServiciosSolicitados: this.formControlListaServicio.value,
+        listaServiciosSolicitados: listServices,
         idAlumno: "1"
       };
+      this.servicioSolicitadoActualPorAlumnoYSemestreActual = await this.servicioSolicitadoService
+        .registrarServicioSolicitadoPorAlumnoYSemestreActual(json)
+        .toPromise();
       this.requisitoSandBox.listarRequisitosDeComedorYInternadoYTipoAlumno(
         json
       );
-
       this.listaFotosParaSubir = [];
     }
   }
@@ -292,8 +377,8 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
       });
   }
   async verificarExistenciaDeServicioSolicitado(idModalServicio: string) {
-    const obuServicio: obuServicios = await this.servicioSolicitadoActualPorAlumnoYSemestreActual$.toPromise();
-    if (obuServicio) {
+    // const obuServicio: obuServicios = await this.servicioSolicitadoActualPorAlumnoYSemestreActual$.toPromise();
+    if (this.servicioSolicitadoActualPorAlumnoYSemestreActual) {
       Swal.fire({
         html: "Ya cuenta con un servicio que esta en proceso de evaluacion",
         type: "info"
@@ -311,7 +396,20 @@ export class ListaServiciosComponent implements OnInit, AfterViewInit {
   abrilModal(id: string) {
     functionsGlobal.openModal(id);
   }
-  cerrarModal(id: string) {
-    functionsGlobal.closeModal(id);
+  async cerrarModal(id: string) {
+    if (id == "modalServicio") {
+      let respuesta = await Swal.fire({
+        title: "esta seguro de cerra la ventana",
+        type: "question",
+        position: "center",
+        showConfirmButton: true,
+        showCancelButton: true
+      });
+      if (respuesta.value) {
+        functionsGlobal.closeModal(id);
+      }
+    } else {
+      functionsGlobal.closeModal(id);
+    }
   }
 }

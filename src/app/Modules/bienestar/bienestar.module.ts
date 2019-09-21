@@ -23,6 +23,7 @@ import { RequisitoComponent } from './components/componentAdmin/requisito/requis
 import { JpImagePreloadModule } from '@jaspero/ng-image-preload';
 import { ListaRequisitoComponent } from './partialsComponent/lista-requisito/lista-requisito.component';
 import { SwiperModule } from 'angular2-useful-swiper';
+import { obuSolicitudRequisitoArchivos } from './services/obuSolicitud-requisitos-archivos.service';
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
@@ -47,6 +48,6 @@ import { SwiperModule } from 'angular2-useful-swiper';
     ReactiveFormsModule,
     MaterialModule],
   exports: [PrincipalComponent],
-  providers: [RequisitoService, TipoRequisitoService, ServicioService, ServicioSolicitadoService],
+  providers: [RequisitoService, TipoRequisitoService, obuSolicitudRequisitoArchivos,ServicioService, ServicioSolicitadoService],
 })
 export class BienestarModule { }
