@@ -12,7 +12,9 @@
               matTooltip="Nueva solicitud"
               class="btn-floating z-depth-3 btn-large waves-effect waves-light blue"
               (click)="verificarExistenciaDeServicioSolicitado(idModalServicio)"
-              [ngClass]="{disabled:this.servicioSolicitadoActualPorAlumnoYSemestreActual}"
+              [ngClass]="{
+                disabled: this.servicioSolicitadoActualPorAlumnoYSemestreActual
+              }"
             >
               <i class="material-icons">add</i>
             </a>
@@ -25,9 +27,7 @@
               <div class="col s12">
                 <div
                   class="card hoverable"
-                  *ngIf="
-                    servicioSolicitadoActualPorAlumnoYSemestreActual
-                                      "
+                  *ngIf="servicioSolicitadoActualPorAlumnoYSemestreActual"
                 >
                   <div class="card-title">
                     <h5 class="padding_4">
@@ -63,11 +63,14 @@
                   </div>
                   <div class="card-action right-align">
                     <a
+                      *ngIf="
+                        servicioSolicitadoActualPorAlumnoYSemestreActual
+                          .estado_servicio.nombre == 'REGISTRADO'
+                      "
                       matTooltip="Requisitos"
                       (click)="
-                        listaRequisitosPorAlumnoYSemestre(
-                          servicioSolicitadoActualPorAlumnoYSemestreActual
-                        )
+                        abrilModal(idModalServicio);
+                        setFormGroupListServices(servicios)
                       "
                       class="btn-floating btn-small waves-effect fondo-ocda"
                       ><i class="material-icons">
@@ -115,14 +118,14 @@
     class="modal modal-fixed-footer  overflow_x_hidde"
   >
     <div class="modal-content overflow_x_hidde">
-      <mat-horizontal-stepper linear="true">
-        <mat-step [stepControl]="formListService" #servicios editable="false">
+      <mat-horizontal-stepper linear="true" #servicios>
+        <mat-step [stepControl]="formListService" editable="false">
           <ng-template matStepLabel>Servicios</ng-template>
           <div class="row">
             <h4 class="col s12 m6">Elige el servicio</h4>
             <form
               [formGroup]="formListService"
-              (submit)="registerServices(formListService.value, servicios)"
+              (submit)="registerServices(servicios)"
             >
               <mat-form-field class="col s12 m6">
                 <mat-select
@@ -152,120 +155,27 @@
         </mat-step>
         <mat-step>
           <ng-template matStepLabel>Requisitos Requeridos</ng-template>
-
-          <blockquote class="valign-wrapper">
-            <i
-              class="material-icons  teal-text darken-1 small"
-              matTooltip="Requisitos"
-              >assignment</i
-            > <p>
-              {{contadorTotalRequisitoEnviadoRequerido | number}}/ {{numeroTotalDeRequisitoRequerido$ | async | number }}
-            </p>
-          </blockquote>
-          <mat-vertical-stepper #stepper>
-            <ng-container
-              *ngIf="
-                listaRequisitosPorServicio$
-                  | async as listaRequisitosPorServicio
-              "
-            >
-              <span>{{ listaRequisitosPorServicio.length }}</span>
-              <mat-step
-                #matStep
-                [stepControl]="formFile"
-                [matTooltip]="requisito.nombre"
-                class="position_relative"
-                [optional]="!requisito.requerido"
-                *ngFor="let requisito of listaRequisitosPorServicio"
+          <div *ngIf="this.servicioSolicitadoActualPorAlumnoYSemestreActual">
+            <p>
+              Lista De Servicios:
+              <i
+                [matTooltip]="servicioRegistrado.nombre"
+                class="material-icons"
+                *ngFor="
+                  let servicioRegistrado of servicioSolicitadoActualPorAlumnoYSemestreActual.servicios
+                "
               >
-                <ng-template matStepLabel>{{
-                  requisito.nombre | titlecase
-                }}</ng-template>
-                <swiper [config]="config">
-                  <div class="swiper-wrapper">
-                    <img
-                      class="swiper-slide"
-                      src="assets/loader.gif"
-                      *ngFor="let archivo of requisito.archivos"
-                      jpPreload="{{ 'http://localhost:8000' + archivo.url }}"
-                    />
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
-                    <div class="swiper-scrollbar"></div>
-                  </div>
-                </swiper>
-                <a
-                  #boton
-                  matTooltip="Registar Requisito"
-                  [ngClass]="{ disabled: !formFile.valid }"
-                  (click)="
-                    subirImagenFileWithPreview(
-                      requisito.id,
-                      requisito.tipoArchivo,
-                      requisito.nombreArchivo,
-                      requisito,
-                      stepper,
-                      matStep,
-                      boton
-                    )
-                  "
-                  class="btn-floating btn-small waves-effect waves-light red  position_absolute right_0 top_0"
-                  style="z-index: 100"
-                  ><i class="material-icons">cloud_upload</i></a
-                >
-
-                <div class="card" [matTooltip]="requisito.descripcion">
-                  <div class="card-content truncate ">
-                    {{ requisito.descripcion }}
-                  </div>
-                </div>
-
-                <form #formFile="ngForm">
-                  <div
-                    class="custom-file-container"
-                    [attr.data-upload-id]="requisito.id"
-                  >
-                    <label
-                      >Archivos:
-                      <a
-                        href="javascript:void(0)"
-                        class="custom-file-container__image-clear  red-text"
-                        title="Clear Image"
-                        ><i class="material-icons">cancel</i></a
-                      ></label
-                    >
-                    <label class="custom-file-container__custom-file">
-                      <input
-                        type="file"
-                        class="custom-file-container__custom-file__custom-file-input"
-                        [accept]="requisito.tipoArchivo"
-                        name="file"
-                        ngModel
-                        required
-                        multiple
-                        aria-label="Subir Archivos"
-                        (click)="crearInstanciaFileWithPreview(requisito.id)"
-                      />
-                      <input
-                        type="hidden"
-                        name="MAX_FILE_SIZE"
-                        value="12485760"
-                      />
-                      <span
-                        class="custom-file-container__custom-file__custom-file-control"
-                      ></span>
-                    </label>
-                    <div class="custom-file-container__image-preview"></div>
-                  </div>
-                </form>
-              </mat-step>
-            
-            </ng-container>
-          </mat-vertical-stepper>
+                {{ servicioRegistrado.icono }}
+              </i>
+            </p>
+            <app-lista-requisito
+              [servicioSolicitadoActualPorAlumnoYSemestreActual]="
+                this.servicioSolicitadoActualPorAlumnoYSemestreActual
+              "
+            ></app-lista-requisito>
+          </div>
         </mat-step>
-    
       </mat-horizontal-stepper>
-   
     </div>
     <div class="modal-footer">
       <a
@@ -273,12 +183,6 @@
         (click)="cerrarModal(idModalServicio)"
         ><i class="material-icons">close</i></a
       >
-      <a
-      class="waves-effect btn right waves-light fondo-ocda"
-      matTooltip="Registrar sevicios para su revision"
-      [ngClass]="{ disabled: !stepper.completed }"
-      (click)="registrarServiciosParaEvaluacion()"
-      ><i class="material-icons">send</i></a>
     </div>
   </div>
   <div [id]="modalListaRequisitoAlumno" class="modal modal-fixed-footer">
@@ -402,7 +306,25 @@
       >
     </div>
   </div>
-
+  <div [id]="modalListaRequisitos" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4 class="center-align">Requisitos Registrado</h4>
+      <div *ngIf="this.servicioSolicitadoActualPorAlumnoYSemestreActual">
+        <app-lista-requisito
+          [servicioSolicitadoActualPorAlumnoYSemestreActual]="
+            this.servicioSolicitadoActualPorAlumnoYSemestreActual
+          "
+        ></app-lista-requisito>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a
+        (click)="cerrarModal(modalListaRequisitoAlumno)"
+        class="modal-close waves-effect waves-light red btn-flat"
+        >cerrar</a
+      >
+    </div>
+  </div>
   <ng-template #efectoCarga>
     <mat-spinner></mat-spinner>
   </ng-template>

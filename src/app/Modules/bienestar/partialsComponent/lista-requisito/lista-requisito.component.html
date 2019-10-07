@@ -1,3 +1,108 @@
-<p>
-  lista-requisito works!
-</p>
+<blockquote class="valign-wrapper">
+  <i class="material-icons  teal-text darken-1" matTooltip="Requisitos"
+    >assignment</i
+  >
+  <p>
+    {{ contadorTotalRequisitoEnviadoRequerido | number }}/
+    <span>{{ numeroTotalDeRequisitoRequerido$ | async | number }}</span>
+  </p>
+</blockquote>
+<input
+  type="hidden"
+  #numeroTotalRequisitoRequerido
+  [value]="numeroTotalDeRequisitoRequerido$ | async | number"
+/>
+<mat-vertical-stepper #stepper>
+  <ng-container
+    *ngIf="listaRequisitosPorServicio$ | async as listaRequisitosPorServicio"
+  >
+    <span>{{ listaRequisitosPorServicio.length }}</span>
+    <mat-step
+      #matStep
+      [stepControl]="formFile"
+      [matTooltip]="requisito.nombre"
+      class="position_relative"
+      [optional]="!requisito.requerido"
+      *ngFor="let requisito of listaRequisitosPorServicio"
+    >
+      <ng-template matStepLabel>{{ requisito.nombre | titlecase }}</ng-template>
+      <swiper [config]="config">
+        <div class="swiper-wrapper">
+          <img
+            class="swiper-slide"
+            src="assets/loader.gif"
+            *ngFor="let archivo of requisito.archivos"
+            jpPreload="{{ 'http://localhost:8000' + archivo.url }}"
+          />
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-scrollbar"></div>
+        </div>
+      </swiper>
+      <a
+        #boton
+        matTooltip="Registar Requisito"
+        [ngClass]="{ disabled: !formFile.valid }"
+        (click)="
+          subirImagenFileWithPreview(
+            requisito.id,
+            requisito.tipoArchivo,
+            requisito.nombreArchivo,
+            requisito,
+            stepper,
+            matStep,
+            boton
+          )
+        "
+        class="btn-floating btn-small waves-effect waves-light red  position_absolute right_0 top_0"
+        style="z-index: 100"
+        ><i class="material-icons">cloud_upload</i></a
+      >
+
+      <div class="card" [matTooltip]="requisito.descripcion">
+        <div class="card-content truncate ">
+          {{ requisito.descripcion }}
+        </div>
+      </div>
+
+      <form #formFile="ngForm" novalidate>
+        <div class="custom-file-container" [attr.data-upload-id]="requisito.id">
+          <label
+            >Archivos:
+            <a
+              href="javascript:void(0)"
+              class="custom-file-container__image-clear  red-text"
+              title="Clear Image"
+              ><i class="material-icons">cancel</i></a
+            ></label
+          >
+          <label class="custom-file-container__custom-file">
+            <input
+              type="file"
+              class="custom-file-container__custom-file__custom-file-input"
+              [accept]="requisito.tipoArchivo"
+              name="file"
+              ngModel
+              required
+              multiple
+              aria-label="Subir Archivos"
+              (click)="crearInstanciaFileWithPreview(requisito.id)"
+            />
+            <input type="hidden" name="MAX_FILE_SIZE" value="12485760" />
+            <span
+              class="custom-file-container__custom-file__custom-file-control"
+            ></span>
+          </label>
+          <div class="custom-file-container__image-preview"></div>
+        </div>
+      </form>
+    </mat-step>
+  </ng-container>
+</mat-vertical-stepper>
+<a
+  class="waves-effect btn right waves-light fondo-ocda"
+  matTooltip="Registrar sevicios para su revision"
+  [ngClass]="{ disabled: !stepper.completed }"
+  (click)="registrarServiciosParaEvaluacion()"
+  ><i class="material-icons">send</i></a
+>

@@ -1,3 +1,4 @@
+import { archivoBase } from './../../../bienestar/Models/archivoBase';
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -408,7 +409,7 @@ export class RegistrotituladoComponent implements OnInit, AfterViewInit {
     //console.log(alumnoGraduadoTitulado)
 
   }
-  subirFotoAlumnoGraduado(file: File[]): Observable<string> {
+  subirFotoAlumnoGraduado(file: File[]): Observable<archivoBase> {
     return from(file).pipe(take(file.length), map((archivo: File) => {
       let formData = new FormData();
       formData.append("archivo", archivo)

@@ -5,14 +5,20 @@
         <div class="row">
           <mat-form-field class="col s12 m6">
             <mat-select placeholder="filtrado" [formControl]="controlFiltrado">
-              <mat-option [value]="filtrado.value" *ngFor="let filtrado of this.listaFiltroRequisito">
-                {{filtrado.label}}
+              <mat-option
+                [value]="filtrado.value"
+                *ngFor="let filtrado of this.listaFiltroRequisito"
+              >
+                {{ filtrado.label }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <div class="col s12 m6  center-align">
-            <a matTooltip="Nuevo Requisito" class="waves-effect button_create  btn-floating btn-large blue "
-              (click)="nuevoRequisito();abrirModal(idModalRegistroRequisito)">
+            <a
+              matTooltip="Nuevo Requisito"
+              class="waves-effect button_create  btn-floating btn-large blue "
+              (click)="nuevoRequisito(); abrirModal(idModalRegistroRequisito)"
+            >
               <i class="material-icons">add</i>
             </a>
           </div>
@@ -21,177 +27,316 @@
     </div>
   </div>
   <ng-container
-    *ngTemplateOutlet="((listaRequisito$ | async) && !(loadingListaRequisitos$ | async))?listaServicios:carga">
+    *ngTemplateOutlet="
+      (listaRequisito$ | async) && !(loadingListaRequisitos$ | async)
+        ? listaServicios
+        : carga
+    "
+  >
   </ng-container>
   <ng-template #listaServicios>
-    <div class="col s12 m4" *ngFor="let requisito of listaRequisito$ | async;let i=index">
+    <div
+      class="col s12 m4"
+      *ngFor="let requisito of listaRequisito$ | async; let i = index"
+    >
       <div class="card hoverable position_relative ">
-        <div class="fixed_action_btn_customize position_absolute left_0 top_0" id="floating">
-          <a class=" waves-effect z-depth-2 waves-light btn-small blue darken-2  btn-floating btn_triger"
-            (click)="activarFloating(ulButtons)">
+        <div
+          class="fixed_action_btn_customize position_absolute left_0 top_0"
+          id="floating"
+        >
+          <a
+            class=" waves-effect z-depth-2 waves-light btn-small blue darken-2  btn-floating btn_triger"
+            (click)="activarFloating(ulButtons)"
+          >
             <i class=" material-icons ">info_outline</i>
           </a>
           <ul class="buttons" #ulButtons>
-            <li *ngIf="requisito.requerido" matTooltip="requerido"><a class="btn-floating btn-small red"><i
-                  class="fas fa-asterisk  lighten-1"></i></a>
+            <li *ngIf="requisito.requerido" matTooltip="requerido">
+              <a class="btn-floating btn-small red"
+                ><i class="fas fa-asterisk  lighten-1"></i
+              ></a>
             </li>
-            <li *ngFor="let tipo of requisito.tipos" [popperApplyClass]="'amber,z_index,darken-1'"
-              [popperTrigger]="'click'" [popper]="listaActualizacion" popoverTitle="wdd" [popperShowOnStart]="false"
-              [popperPlacement]="'top'"><a class="btn-floating btn-small yellow darken-1" [matTooltip]="tipo.nombre"><i
-                  class=" fas  {{tipo.icono}}"></i></a>
+            <li
+              *ngFor="let tipo of requisito.tipos"
+              [popperApplyClass]="'amber,z_index,darken-1'"
+              [popperTrigger]="'click'"
+              [popper]="listaActualizacion"
+              popoverTitle="wdd"
+              [popperShowOnStart]="false"
+              [popperPlacement]="'top'"
+            >
+              <a
+                class="btn-floating btn-small yellow darken-1"
+                [matTooltip]="tipo.nombre"
+                ><i class=" fas  {{ tipo.icono }}"></i
+              ></a>
               <popper-content #listaActualizacion>
                 <div class="row">
-                  <mat-slide-toggle class="col s12 m3" color="primary" [checked]="tipo.pivot.actualizacion"
-                    #actualizacion>
+                  <mat-slide-toggle
+                    class="col s12 m3"
+                    color="primary"
+                    [checked]="tipo.pivot.actualizacion"
+                    #actualizacion
+                  >
                   </mat-slide-toggle>
                   <mat-form-field class="col s12 m5">
-                    <input matInput placeholder="Años" type="number" [disabled]="!actualizacion.checked" #tiempo
-                      [value]="tipo.pivot.numero_anios_actualizacion">
+                    <input
+                      matInput
+                      placeholder="Años"
+                      type="number"
+                      [disabled]="!actualizacion.checked"
+                      #tiempo
+                      [value]="tipo.pivot.numero_anios_actualizacion"
+                    />
                   </mat-form-field>
                   <div class="col s12 m4">
-                    <a class="btn-floating blue"
-                      (click)="cambiarActualizacion(actualizacion.checked,requisito.id,tipo.id,tiempo.value)"><i
-                        class="material-icons">cached</i></a>
+                    <a
+                      class="btn-floating blue"
+                      (click)="
+                        cambiarActualizacion(
+                          actualizacion.checked,
+                          requisito.id,
+                          tipo.id,
+                          tiempo.value
+                        )
+                      "
+                      ><i class="material-icons">cached</i></a
+                    >
                   </div>
                 </div>
               </popper-content>
             </li>
-            <li *ngFor="let servicio of requisito.servicios"><a [matTooltip]="servicio.nombre"
-                class="btn-floating btn-small green"><i class="fas  {{servicio.icono}} "></i></a></li>
+            <li *ngFor="let servicio of requisito.servicios">
+              <a
+                [matTooltip]="servicio.nombre"
+                class="btn-floating btn-small green"
+                ><i class="fas  {{ servicio.icono }} "></i
+              ></a>
+            </li>
             <li *ngIf="requisito.prioridad">
-              <a class="btn-floating btn-small  blue darken-4 " matTooltip="Prioritario"><i
-                  class="fas fa-star yellow-text"></i></a>
+              <a
+                class="btn-floating btn-small  blue darken-4 "
+                matTooltip="Prioritario"
+                ><i class="fas fa-star yellow-text"></i
+              ></a>
             </li>
           </ul>
         </div>
         <div class="card-stacked">
           <div class="card-action  position_relative center-align">
-            <span class="card-title truncate">{{requisito.nombre}}</span>
+            <span class="card-title truncate">{{ requisito.nombre }}</span>
           </div>
           <div class="divider"></div>
           <div class="card-content ">
-            {{requisito.descripcion? requisito.descripcion:'No tiene Descripcion' }}
+            {{
+              requisito.descripcion
+                ? requisito.descripcion
+                : "No tiene Descripcion"
+            }}
           </div>
           <div class="card-action right-align">
-            <a class="btn-floating btn-small waves-effect fondo-ocda"
-              (click)="seleccionarRequisito(requisito.id);listarArchivosPorRequisito()" matTooltip="Ver Archivos"><i
-                class="material-icons  cursor">
-                archive </i></a>
-            <a class="btn-floating btn-small waves-effect fondo-ocda"
-              (click)="seleccionarRequisito(requisito.id);visualizarRequisito()" matTooltip="Ver Requisito"><i
-                class="material-icons">
-                visibility </i></a>
-            <a class="btn-floating btn-small waves-effect fondo-ocda" matTooltip="Editar Requisito"
-              (click)="seleccionarRequisito(requisito.id);mostrarDatosFormularioRequisito();enabledFormularioRequisito();abrirModal(idModalRegistroRequisito)"><i
-                class="material-icons  cursor">edit
-              </i></a>
-            <a class="btn-floating btn-small waves-effect fondo-ocda" (click)="eliminarRequisito(requisito.id)"
-              matTooltip="Eliminar  Requisito"><i class="material-icons  cursor">
-                delete_forever </i></a>
-
+            <a
+              class="btn-floating btn-small waves-effect fondo-ocda"
+              (click)="
+                seleccionarRequisito(requisito.id); listarArchivosPorRequisito()
+              "
+              matTooltip="Ver Archivos"
+              ><i class="material-icons  cursor"> archive </i></a
+            >
+            <a
+              class="btn-floating btn-small waves-effect fondo-ocda"
+              (click)="
+                seleccionarRequisito(requisito.id); visualizarRequisito()
+              "
+              matTooltip="Ver Requisito"
+              ><i class="material-icons"> visibility </i></a
+            >
+            <a
+              class="btn-floating btn-small waves-effect fondo-ocda"
+              matTooltip="Editar Requisito"
+              (click)="
+                seleccionarRequisito(requisito.id);
+                mostrarDatosFormularioRequisito();
+                enabledFormularioRequisito();
+                abrirModal(idModalRegistroRequisito)
+              "
+              ><i class="material-icons  cursor">edit </i></a
+            >
+            <a
+              class="btn-floating btn-small waves-effect fondo-ocda"
+              (click)="eliminarRequisito(requisito.id)"
+              matTooltip="Eliminar  Requisito"
+              ><i class="material-icons  cursor"> delete_forever </i></a
+            >
           </div>
         </div>
       </div>
     </div>
-
   </ng-template>
-
 </div>
 
-
 <!--Modal de Registro de requisito-->
-<div [id]="idModalRegistroRequisito" class="modal modal-fixed-footer  overflow_x_hidde">
-  <form [formGroup]="formularioRequisito" (submit)="guardarYEditarRequisito(formularioRequisito.value)" class="col s12">
+<div
+  [id]="idModalRegistroRequisito"
+  class="modal modal-fixed-footer  overflow_x_hidde"
+>
+  <form
+    [formGroup]="formularioRequisito"
+    (submit)="guardarYEditarRequisito(formularioRequisito.value)"
+    class="col s12"
+  >
     <div class="modal-content overflow_x_hidde">
       <h4 class="center-align">Nuevo Requisito</h4>
-      <input type="hidden" formControlName="id">
+      <input type="hidden" formControlName="id" />
       <div class="row">
         <mat-form-field class="col s12">
-          <input matInput placeholder="requisito" formControlName="nombre">
+          <input matInput placeholder="requisito" formControlName="nombre" />
         </mat-form-field>
         <mat-form-field class="col s12">
-          <textarea matInput placeholder="Descripcion" formControlName="descripcion"></textarea>
+          <textarea
+            matInput
+            placeholder="Descripcion"
+            formControlName="descripcion"
+          ></textarea>
         </mat-form-field>
       </div>
       <div class="row">
         <mat-form-field class="col s6">
           <mat-select placeholder="restriccion" formControlName="requerido">
-            <mat-option value=true>Requerido</mat-option>
-            <mat-option value=false>Opcional</mat-option>
+            <mat-option value="true">Requerido</mat-option>
+            <mat-option value="false">Opcional</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col s6">
-          <mat-select placeholder="Tipo Archivo" #selectTipoArchivo formControlName="tipoArchivo"
-            [compareWith]="compareString">
+          <mat-select
+            placeholder="Tipo Archivo"
+            #selectTipoArchivo
+            formControlName="tipoArchivo"
+            [compareWith]="compareString"
+          >
             <mat-option value="image/*">Imagen</mat-option>
             <mat-option value="application/word">word</mat-option>
             <mat-option value="application/pdf">pdf</mat-option>
-
           </mat-select>
         </mat-form-field>
       </div>
       <div class="row">
         <div class="col s12">
           <div class="custom-file-container" data-upload-id="fileRequisito">
-            <label>Archivos: <a href="javascript:void(0)" class="custom-file-container__image-clear  red-text"
-                title="Clear Image"><i class="material-icons">cancel</i></a></label>
+            <label
+              >Archivos:
+              <a
+                href="javascript:void(0)"
+                class="custom-file-container__image-clear  red-text"
+                title="Clear Image"
+                ><i class="material-icons">cancel</i></a
+              ></label
+            >
             <label class="custom-file-container__custom-file">
-              <input type="file" class="custom-file-container__custom-file__custom-file-input" accept="*" multiple
-                aria-label="Subir Archivos">
+              <input
+                type="file"
+                class="custom-file-container__custom-file__custom-file-input"
+                accept="*"
+                multiple
+                aria-label="Subir Archivos"
+              />
               <input type="hidden" name="MAX_FILE_SIZE" value="10485760" />
-              <span class="custom-file-container__custom-file__custom-file-control"></span>
+              <span
+                class="custom-file-container__custom-file__custom-file-control"
+              ></span>
             </label>
             <div class="custom-file-container__image-preview"></div>
           </div>
         </div>
       </div>
       <div class="row">
-        <ng-container *ngIf="listaTipoRequisito$ | async;let listaTipoRequisito;else cargaDatos">
+        <ng-container
+          *ngIf="
+            listaTipoRequisito$ | async;
+            let listaTipoRequisito;
+            else: cargaDatos
+          "
+        >
           <mat-form-field class="col s12 m6">
-            <mat-select placeholder=" Aplica a:" class="filter-select" multiple formControlName="tipos">
-              <mat-option (onSelectionChange)="changeTipo($event)" *ngFor="let tipo of listaTipoRequisito"
-                [value]="tipo.id">
-                {{tipo.nombre}}
-                <i class="fas  {{tipo.icono}} "></i>
+            <mat-select
+              placeholder=" Aplica a:"
+              class="filter-select"
+              multiple
+              formControlName="tipos"
+            >
+              <mat-option
+                (onSelectionChange)="changeTipo($event)"
+                *ngFor="let tipo of listaTipoRequisito"
+                [value]="tipo.id"
+              >
+                {{ tipo.nombre }}
+                <i class="fas  {{ tipo.icono }} "></i>
               </mat-option>
             </mat-select>
           </mat-form-field>
         </ng-container>
         <mat-form-field class="col s12 m6">
           <mat-select placeholder="prioridad" formControlName="prioridad">
-            <mat-option value=true>Alta</mat-option>
-            <mat-option value=false>Normal</mat-option>
+            <mat-option value="true">Alta</mat-option>
+            <mat-option value="false">Normal</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
       <div class="row">
-        <ng-container *ngIf="listaServicio$ | async;let listaServicio;else cargaDatos">
+        <ng-container
+          *ngIf="listaServicio$ | async; let listaServicio; else: cargaDatos"
+        >
           <mat-form-field class="col s12 m6">
-            <mat-select placeholder="Servicios" multiple formControlName="servicios">
-              <mat-option [value]="servicio.id" (onSelectionChange)="changeServicio($event)"
-                *ngFor="let servicio of listaServicio">{{servicio.nombre}}
-                <i class="fas  {{servicio.icono}} "></i>
+            <mat-select
+              placeholder="Servicios"
+              multiple
+              formControlName="servicios"
+            >
+              <mat-option
+                [value]="servicio.id"
+                (onSelectionChange)="changeServicio($event)"
+                *ngFor="let servicio of listaServicio"
+                >{{ servicio.nombre }}
+                <i class="fas  {{ servicio.icono }} "></i>
               </mat-option>
             </mat-select>
           </mat-form-field>
         </ng-container>
       </div>
-
     </div>
     <div class="modal-footer">
-      <a (click)="closeModal('modal1')" class="waves-effect btn  waves-light red">Cancelar</a>
-      <button class="waves-effect btn waves-light fondo-ocda" type="submit"
-        [disabled]="!formularioRequisito.valid">{{this.estadoActualizarResgitrarFormularion?'Editar':'Guardar'}}</button>
+      <a
+        (click)="closeModal('modal1')"
+        class="waves-effect btn  waves-light red"
+        >Cancelar</a
+      >
+      <button
+        class="waves-effect btn waves-light fondo-ocda"
+        type="submit"
+        [disabled]="!formularioRequisito.valid"
+      >
+        {{ this.estadoActualizarResgitrarFormularion ? "Editar" : "Guardar" }}
+      </button>
     </div>
   </form>
 </div>
 <!--Fin Modal de Registro de requisito-->
 <div [id]="idModalArchivos" class="modal modal-fixed-footer">
   <div class="modal-content">
-    <h4 class="center-align" *ngIf="(requisitoSeleccionado$ | async) as requisitoSeleccionado">Archivos
-      <strong class="blue-text">/{{requisitoSeleccionado.nombre}}</strong></h4>
+    <h4
+      class="center-align"
+      *ngIf="requisitoSeleccionado$ | async as requisitoSeleccionado"
+    >
+      Archivos
+      <strong class="blue-text">/{{ requisitoSeleccionado.nombre }}</strong>
+    </h4>
     <ng-container
-      *ngTemplateOutlet="((requisitoSeleccionado$ | async) && !(loadingRequisito$ | async))?templateArchivos:carga">
+      *ngTemplateOutlet="
+        (requisitoSeleccionado$ | async) && !(loadingRequisito$ | async)
+          ? templateArchivos
+          : carga
+      "
+    >
     </ng-container>
   </div>
   <div class=" modal-footer">
@@ -201,18 +346,29 @@
 
 <ng-template #templateArchivos>
   <div class="row">
-    <div class="col  s12 m3" *ngFor="let archivo of (requisitoSeleccionado$ | async).archivos">
+    <div
+      class="col  s12 m3"
+      *ngFor="let archivo of (requisitoSeleccionado$ | async).archivos"
+    >
       <div class="card  position_relative">
         <div class="card-content">
           <div class="position_absolute diplay_flex right_0 top_0">
-            <a class="cursor" matTooltip="Eliminar Archivo" (click)="eliminarArchivo(archivo.id)"><i
-                class="material-icons red-text">
+            <a
+              class="cursor"
+              matTooltip="Eliminar Archivo"
+              (click)="eliminarArchivo(archivo.id)"
+              ><i class="material-icons red-text">
                 delete_forever
-              </i></a>
+              </i></a
+            >
           </div>
-          <img src="assets/loader.gif" jpPreload="{{'http://localhost:8000'+archivo.url}}" class="responsive-img">
+          <img
+            src="assets/lader.gif"
+            jpPreload="{{ 'http://localhost:8000' + archivo.url }}"
+            class="responsive-img"
+          />
           <div class="truncate center-align">
-            {{archivo.nombreOriginalArchivo | titlecase }}
+            {{ archivo.nombreOriginalArchivo | titlecase }}
           </div>
         </div>
       </div>

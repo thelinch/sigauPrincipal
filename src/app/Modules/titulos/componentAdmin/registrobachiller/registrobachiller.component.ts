@@ -44,6 +44,7 @@ import { FileService } from 'src/app/global/services/file.service';
 import { flatMap, map, take } from 'rxjs/operators';
 import { variables } from 'src/app/global/variablesGlobales';
 import { IfStmt } from '@angular/compiler';
+import { archivoBase } from 'src/app/Modules/bienestar/Models/archivoBase';
 
 @Component({
   selector: 'app-registrobachiller',
@@ -406,7 +407,7 @@ export class RegistrobachillerComponent implements OnInit, AfterViewInit {
     //console.log(alumnoGraduadoTitulado)
 
   }
-  subirFotoAlumnoGraduado(file: File[]): Observable<string> {
+  subirFotoAlumnoGraduado(file: File[]): Observable<archivoBase> {
     return from(file).pipe(take(file.length), map((archivo: File) => {
       let formData = new FormData();
       formData.append("archivo", archivo)
