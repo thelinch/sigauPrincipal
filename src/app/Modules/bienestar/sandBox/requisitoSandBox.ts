@@ -3,8 +3,8 @@ import { requisitoStore } from "../BD/store/Requisito.store";
 import { RequisitoService } from "../services/requisito.service";
 import { requisito } from "../Models/Requisito";
 import { VISIBILITY_FILTER } from "../filter/filterRequisito.model";
-import { ID, arrayRemove, arrayUpdate } from "@datorama/akita";
-import { take, map, flatMap, tap } from "rxjs/operators";
+import { ID, arrayRemove, arrayUpdate, transaction } from "@datorama/akita";
+import { take, map, flatMap, tap, switchMap, catchError } from "rxjs/operators";
 import { from, Subject, Observable } from "rxjs";
 import { FileService } from "src/app/global/services/file.service";
 import { NotificacionBusService } from "src/app/global/services/NotificacionBusService.service";
@@ -32,11 +32,28 @@ export class requisitoSandBox {
       this.store.set(listaRequisito);
     });
   }
+  
+  updateEditLoading() {
+    this.store.ui.updateActive(state => {
+      return {
+        ...state,
+        loadingUpdateRequisito: !state.loadingUpdateRequisito,
+        errorUpdateRequisito: null
+      };
+    });
+  }
+  setErrorEdit(error) {
+    this.store.ui.updateActive({ errorUpdateRequisito: error });
+  }
+  updateRequestEdit() {
+    this.store.ui.updateActive({});
+  }
+
   crearRequisito(requisito: requisito, archivos: File[]): void {
     this.requisitoService
       .gurdarRequisito(requisito)
       .pipe(
-        tap(requisitoCreado => (requisito= requisitoCreado)),
+        tap(requisitoCreado => (requisito = requisitoCreado)),
         flatMap(requisitoCreado => {
           return from(archivos ? archivos : []).pipe(
             take(archivos.length),
@@ -68,29 +85,20 @@ export class requisitoSandBox {
           );
         }
       });
-
-    /* .pipe(flatMap(requisitoCreado=>{
-           return  from(archivos ? archivos : [])
-           .pipe(take(archivos.length),
-           map((archivo: File) => {
-            let formData = new FormData();
-            formData.append("archivo", archivo)
-            formData.append("idRequisito", requisitoCreado.id.toString());
-            formData.append("nombreCarpeta", variables.carpetaOBUArchivoRequisitos)
-            return formData;
-        })
-        }))*/
   }
+
+  @transaction()
   setActive(idRequisito: ID) {
+    this.store.ui.setActive(idRequisito);
     this.store.setActive(idRequisito);
   }
-
   editarRequisito(requisito: requisito, archivos: File[]): void {
     this.requisitoService
       .editarRequisito(requisito)
-      .subscribe(requisitoEditado => {
-        from(archivos ? archivos : [])
-          .pipe(
+      .pipe(
+        tap(requisitoEditado => (requisito = requisitoEditado)),
+        flatMap(requisitoEditado => {
+          return from(archivos ? archivos : []).pipe(
             take(archivos.length),
             map((archivo: File) => {
               let formData = new FormData();
@@ -101,20 +109,24 @@ export class requisitoSandBox {
                 variables.carpetaOBUArchivoRequisitos
               );
               return formData;
-            }),
-            flatMap(formData =>
-              this.fileService.gurdarArchivoRequisito(formData)
-            )
-          )
-          .subscribe({
-            complete: () => {
-              this.store.update(requisitoEditado.id, requisitoEditado);
-              this.notificacionBusServicio.showSuccess(
-                "Se Registro correctamente el requisito " +
-                  requisitoEditado.nombre
-              );
-            }
-          });
+            })
+          );
+        }),
+        flatMap(formData => this.fileService.guardarArchivo(formData)),
+        flatMap(archivoGuardado => {
+          archivoGuardado = JSON.parse(archivoGuardado);
+          let json = { ...archivoGuardado, requisito_id: requisito.id };
+          return this.requisitoArchivoService.save(json);
+        })
+      )
+      .subscribe({
+        complete: () => {
+          this.store.update(requisito.id, requisito);
+          this.updateEditLoading();
+          this.notificacionBusServicio.showSuccess(
+            "Se Registro correctamente el requisito " + requisito.nombre
+          );
+        }
       });
   }
   eliminarArchivo(json: any) {
@@ -142,6 +154,7 @@ export class requisitoSandBox {
     this.requisitoService
       .editarOpcionTipo(json)
       .subscribe(requisitoActualizado => {
+        this.updateEditLoading();
         this.notificacionBusServicio.showInfo(
           "Se Actualizo correctamente el requisito " +
             requisitoActualizado.nombre
@@ -153,6 +166,7 @@ export class requisitoSandBox {
     this.requisitoService
       .editarOpcionServicio(json)
       .subscribe(requisitoActualizado => {
+        this.updateEditLoading();
         this.notificacionBusServicio.showInfo(
           "Se Actualizo correctamente el requisito " +
             requisitoActualizado.nombre

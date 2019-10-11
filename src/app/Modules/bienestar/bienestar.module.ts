@@ -24,6 +24,7 @@ import { JpImagePreloadModule } from '@jaspero/ng-image-preload';
 import { ListaRequisitoComponent } from './partialsComponent/lista-requisito/lista-requisito.component';
 import { SwiperModule } from 'angular2-useful-swiper';
 import { obuSolicitudRequisitoArchivos } from './services/obuSolicitud-requisitos-archivos.service';
+import { ListArchivosComponent } from './partialsComponent/list-archivos/list-archivos.component';
 @NgModule({
   declarations: [ReportesComponent,
     PrincipalComponent,
@@ -33,7 +34,8 @@ import { obuSolicitudRequisitoArchivos } from './services/obuSolicitud-requisito
     ListaServiciosComponent,
     ServiciosComponent,
     FilterEstadoActualPipe,
-    ListaRequisitoComponent
+    ListaRequisitoComponent,
+    ListArchivosComponent
   ],
   imports: [CommonModule,
     SwiperModule,

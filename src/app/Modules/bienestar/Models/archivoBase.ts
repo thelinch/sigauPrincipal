@@ -1,4 +1,4 @@
-export class archivoBase {
+export interface archivoBase {
   id: number;
   nombreOriginalArchivo: string;
   nombreSistemaArchivo: string;

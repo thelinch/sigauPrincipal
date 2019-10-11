@@ -313,8 +313,13 @@
       <button
         class="waves-effect btn waves-light fondo-ocda"
         type="submit"
-        [disabled]="!formularioRequisito.valid"
+        [disabled]="!formularioRequisito.valid || (isEditLoading() | async)"
       >
+        <img
+          *ngIf="isEditLoading() | async"
+          src="assets/loader-sin-fondo.gif"
+          class="content_100"
+        />
         {{ this.estadoActualizarResgitrarFormularion ? "Editar" : "Guardar" }}
       </button>
     </div>
@@ -322,59 +327,25 @@
 </div>
 <!--Fin Modal de Registro de requisito-->
 <div [id]="idModalArchivos" class="modal modal-fixed-footer">
-  <div class="modal-content">
-    <h4
-      class="center-align"
-      *ngIf="requisitoSeleccionado$ | async as requisitoSeleccionado"
-    >
+  <div
+    class="modal-content"
+    *ngIf="requisitoSeleccionado$ | async as requisitoSeleccionado"
+  >
+    <h4 class="center-align">
       Archivos
       <strong class="blue-text">/{{ requisitoSeleccionado.nombre }}</strong>
     </h4>
-    <ng-container
-      *ngTemplateOutlet="
-        (requisitoSeleccionado$ | async) && !(loadingRequisito$ | async)
-          ? templateArchivos
-          : carga
-      "
-    >
-    </ng-container>
+    <app-list-archivos
+      (EventemmiterDowloadFile)="downloadFile($event)"
+      (EventEmitterArchivoEliminate)="eliminarArchivo($event)"
+      [archivos]="requisitoSeleccionado.archivos"
+    ></app-list-archivos>
   </div>
   <div class=" modal-footer">
     <a class="modal-close waves-effect waves-green red btn">Salir</a>
   </div>
 </div>
 
-<ng-template #templateArchivos>
-  <div class="row">
-    <div
-      class="col  s12 m3"
-      *ngFor="let archivo of (requisitoSeleccionado$ | async).archivos"
-    >
-      <div class="card  position_relative">
-        <div class="card-content">
-          <div class="position_absolute diplay_flex right_0 top_0">
-            <a
-              class="cursor"
-              matTooltip="Eliminar Archivo"
-              (click)="eliminarArchivo(archivo.id)"
-              ><i class="material-icons red-text">
-                delete_forever
-              </i></a
-            >
-          </div>
-          <img
-            src="assets/lader.gif"
-            jpPreload="{{ 'http://localhost:8000' + archivo.url }}"
-            class="responsive-img"
-          />
-          <div class="truncate center-align">
-            {{ archivo.nombreOriginalArchivo | titlecase }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</ng-template>
 <ng-template #carga>
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </ng-template>

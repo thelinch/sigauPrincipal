@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="col  s12 m3" *ngFor="let archivo of archivos">
+    <a (click)="downloadFile(archivo.id)">
+      <div class="card  position_relative">
+        <div class="card-content">
+          <div class="position_absolute diplay_flex right_0 top_0">
+            <a
+              *ngIf="isButtonEliminateArchive"
+              class="cursor"
+              matTooltip="Eliminar Archivo"
+              (click)="eliminarArchivo(archivo.id)"
+              ><i class="material-icons red-text">
+                delete_forever
+              </i></a
+            >
+          </div>
+          <img
+            src="assets/lader.gif"
+            jpPreload="{{
+              archivo.extension == 'jpg' ||
+              archivo.extension == 'png' ||
+              archivo.extension == 'jpeg'
+                ? 'http://localhost:8000' + archivo.url
+                : 'assets/' + archivo.extension + '.jpg'
+            }}"
+            class="responsive-img"
+          />
+          <div class="truncate center-align">
+            {{ archivo.nombreOriginalArchivo | titlecase }}
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
