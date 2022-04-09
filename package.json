@@ -38,7 +38,7 @@
     "jquery": "^3.3.1",
     "materialize-css": "^1.0.0",
     "memo-decorator": "^1.0.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "ng-block-ui": "^2.1.1",
     "ngx-dropzone-wrapper": "^7.2.1",
     "ngx-popper": "^6.0.7",
